@@ -87,10 +87,11 @@ header.scrolled{background:rgba(20,17,13,.82);backdrop-filter:blur(12px);border-
              linear-gradient(180deg, rgba(20,17,13,0) 0%, rgba(20,17,13,.08) 24%, rgba(20,17,13,.34) 54%, rgba(20,17,13,.72) 78%, rgba(20,17,13,.93) 90%, var(--ink) 100%)}
 .hero .base-container,.page-hero .base-container{position:relative;z-index:2}
 
-/* Hero (home) — top padding 134px = 74px header + 60px min gap (HOOK). Compact so the loop marquee
-   below stays visible on load; height is content-driven (no forced 100vh). */
-.hero{padding:134px 0 72px;position:relative;overflow:hidden}
-@media(min-width:1280px){.hero{padding:150px 0 88px}}
+/* Hero (home) — top padding 194px = 74px header + 60px min gap (HOOK) + 60px extra breathing room;
+   bottom 132px = 72px + 60px extra. Compact so the loop marquee below stays visible on load;
+   height is content-driven (no forced 100vh). */
+.hero{padding:194px 0 132px;position:relative;overflow:hidden}
+@media(min-width:1280px){.hero{padding:210px 0 148px}}
 .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:28px}
 .eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
 .hero h1{font-family:var(--display);font-size:var(--t-display);line-height:1.2;font-weight:700;letter-spacing:-.03em;max-width:16ch;text-wrap:balance}
