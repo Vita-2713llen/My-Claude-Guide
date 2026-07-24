@@ -157,8 +157,12 @@ header.scrolled{background:rgba(20,17,13,.82);backdrop-filter:blur(12px);border-
 .split2 p + p{margin-top:16px}
 
 /* Story (about) — full-width media, then editorial copy (heading left, body right). Image is NOT a small side thumb. */
-.story-media{position:relative;width:100%;aspect-ratio:16/7;border-radius:var(--radius);overflow:hidden;background:var(--surface);isolation:isolate}
-.story-media img{width:100%;height:100%;object-fit:cover}
+.story-media{position:relative;width:100%;aspect-ratio:16/7;border-radius:var(--radius);overflow:hidden;background:var(--ink);isolation:isolate}
+/* Duotone grade — the photo is mapped onto the brand palette (accent -> ink) so its colours ALWAYS match the
+   digital site, whatever the source photo's own colours are. img uses luminosity over the brand gradient. */
+.story-media::before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(145deg,var(--accent) 0%, #8a341a 44%, var(--ink) 100%)}
+.story-media img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;mix-blend-mode:luminosity;opacity:.92}
+.story-media::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg, transparent 52%, rgba(20,17,13,.42))}
 .story-copy{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;margin-top:44px;align-items:start}
 .story-copy h2{font-family:var(--display);font-size:var(--t-h2);font-weight:700;letter-spacing:-.02em;line-height:1.2;max-width:16ch}
 .story-copy .body p{color:var(--muted);font-size:var(--t-body-l);max-width:56ch;text-wrap:pretty}
