@@ -177,8 +177,12 @@ header.scrolled{background:rgba(20,17,13,.82);backdrop-filter:blur(12px);border-
 .member h3{font-family:var(--display);font-size:var(--t-h3);font-weight:600;margin-top:16px}
 .member .role{color:var(--muted);font-size:14px;margin-top:4px}
 
+/* Decorative divider lines are their own data-reveal element (a CSS border on a static
+   container never animates) — .rule = in-container line, .frule = full-bleed edge-to-edge line */
+.rule{height:1px;width:100%;background:var(--line)}
+.frule{height:1px;width:100%;background:var(--line)}
+
 /* Services / principles list */
-.services{border-top:1px solid var(--line)}
 .srv{display:grid;grid-template-columns:80px 1.1fr 1.4fr;gap:24px;align-items:center;padding:32px 0;border-bottom:1px solid var(--line);transition:padding-left .35s,background .35s}
 .srv:hover{padding-left:16px}
 .srv .no{font-family:var(--display);font-size:20px;color:var(--accent);font-weight:600}
@@ -186,7 +190,7 @@ header.scrolled{background:rgba(20,17,13,.82);backdrop-filter:blur(12px);border-
 .srv p{color:var(--muted);font-size:15px;max-width:52ch;text-wrap:pretty}
 
 /* Stat band */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:48px 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding:48px 0}
 .stat .n{font-family:var(--display);font-size:56px;font-weight:700;letter-spacing:-.03em;line-height:1}
 @media(min-width:768px){.stat .n{font-size:72px}}
 .stat .l{color:var(--muted);font-size:15px;margin-top:10px}
@@ -197,7 +201,7 @@ header.scrolled{background:rgba(20,17,13,.82);backdrop-filter:blur(12px);border-
 .cta p{color:var(--muted);font-size:var(--t-body-l);margin:24px auto 36px;max-width:48ch}
 
 /* Footer — component */
-footer{border-top:1px solid var(--line);padding:64px 0 32px}
+footer{padding:64px 0 32px}
 .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:32px;padding-bottom:48px}
 .fcol h5{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
 .fcol a{display:inline-block;font-size:15px;padding:5px 0;color:var(--muted);transition:color .35s;will-change:transform}

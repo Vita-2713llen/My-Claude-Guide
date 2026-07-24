@@ -456,6 +456,13 @@ baseline reveal**:
 - **Applies to EVERYTHING** — sections themselves, headings, paragraphs, cards, images/media, **decorative lines**,
   and the **whole footer** (brand block, link columns, copyright row). If it's visible, it reveals. A common miss
   is leaving the footer and decorative rules static — that is a violation; check them explicitly.
+- **Decorative lines/dividers reveal too — no exceptions, even when the line is a CSS `border`.** A `border-top`/
+  `border-bottom` on a static container (e.g. `footer{border-top}`, `.stats{border-top;border-bottom}`) will **NOT**
+  animate, because the container it sits on never reveals. **The fix is mandatory:** make every decorative divider
+  its **own `data-reveal` element** — a 1px line `<div>`/`<i>` with `data-reveal` (e.g. `.rule{height:1px;background:var(--line)}`,
+  full-bleed variant for edge-to-edge footer/section rules) — and remove the static border. A line that carries
+  `data-reveal` on the element it belongs to (its opacity fades the border with it) is fine; a border on a
+  non-revealed parent is a **violation**. Sweep every rule/divider on the page and confirm each one animates.
 - The designer may **layer extra motion on top** (parallax, hero-specific timelines, staggers) — listen to them —
   but this baseline reveal on every element is **mandatory** and never removed. Respect `prefers-reduced-motion`.
 
