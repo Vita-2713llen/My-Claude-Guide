@@ -293,6 +293,17 @@ a set (team grids, avatars). When a media block sits directly above the next sec
 bottom gradient that fades the media fully into the next section's background — never a hard crop.
 - Reserve space to avoid layout shift (aspect-ratio / sized container).
 
+**Team / people photos — HOOK (ALWAYS).** When a set of people photos sits together (team grid, testimonials,
+avatars), the shots must read as **one uniform set** — never a ransom-note mix of tight close-ups next to
+full-body shots. Rules:
+- **Same framing for every photo in the set:** head-and-shoulders portraits, same orientation, same aspect-ratio
+  container. Source them with **consistent queries** (e.g. `corporate headshot … plain/neutral studio background
+  shoulders`) so every result is framed the same way — a plain/neutral background keeps them unified.
+- **Faces at the same scale and height** across the grid: identical `aspect-ratio` + `object-fit: cover` +
+  a shared `object-position` (e.g. `center 22%`) so every face sits at the same spot in its frame.
+- Pick photos that are **visually clean** (uncluttered background, even light). If one candidate is a wide/full-body
+  shot and the rest are close-ups, it breaks the set — reject it and re-query. Walk the whole set before shipping.
+
 ## Typography
 
 **Fonts are defined by the designer per project.** Mandatory rules:

@@ -139,7 +139,7 @@ if(G){
   // Wishlist toggle
   document.querySelectorAll('.fav').forEach(function(f){
     f.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation();
-      var on=f.classList.toggle('on'); f.textContent=on?'♥':'♡'; pop(f);
+      f.classList.toggle('on'); pop(f);
     });
   });
 

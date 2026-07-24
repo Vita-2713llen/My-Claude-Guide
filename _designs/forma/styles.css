@@ -141,8 +141,10 @@ section{padding:100px 0}
 .swatches{display:flex;gap:6px;margin-top:9px}
 .sw{width:15px;height:15px;border-radius:50%;border:1px solid var(--line);cursor:pointer;will-change:transform}
 .sw.on{outline:2px solid var(--ink);outline-offset:2px}
-.fav{cursor:pointer;font-size:16px;line-height:1;padding:0}
+.fav{cursor:pointer;line-height:1;padding:0}
+.fav svg{width:19px;height:19px;display:block}
 .fav.on{color:var(--red);border-color:var(--red)}
+.fav.on svg{fill:var(--red)}
 /* Quick add-to-bag on card image hover */
 .card .add{position:absolute;left:12px;right:12px;bottom:12px;z-index:4;opacity:0;transform:translateY(10px);
   background:var(--ink);color:#fff;border:0;border-radius:100px;padding:12px;font:inherit;font-weight:600;font-size:14px;
