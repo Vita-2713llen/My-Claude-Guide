@@ -284,9 +284,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 }
 
 /* shade swatch strip — signature element */
+.shades-cap{
+  position:relative;z-index:2;margin-top:52px;
+  font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.62);
+}
 .shades{
   position:relative;z-index:2;display:flex;align-items:center;gap:0;
-  margin-top:56px;border-top:0;
+  margin-top:16px;border-top:0;
 }
 .shade{
   flex:1;height:56px;position:relative;cursor:pointer;
@@ -503,6 +508,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{
           <a href="#feature" class="btn btn-light"><span>The ritual</span></a>
         </div>
       </div>
+      <div class="shades-cap" data-reveal>The shade range — Petal to Nocturne</div>
       <div class="shades" data-reveal aria-hidden="true">
         <div class="shade" data-name="Petal"   style="background:#e9b8c2"></div>
         <div class="shade" data-name="Rosewood" style="background:#c86b7f"></div>
