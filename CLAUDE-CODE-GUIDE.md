@@ -307,6 +307,14 @@ full-body shots. Rules:
   top-1 sourcing (e.g. Pexels), two near-identical queries return the **same** photo, so make each query
   meaningfully distinct (different hair, feature, build) and verify no two slots resolved to the same file.
 
+**Photo colours must match the site palette — HOOK (ALWAYS).** A sourced photo arrives with its own random
+colours that rarely match the brand. Don't rely on finding a photo that happens to fit — **grade it into the
+palette** so it always matches, whatever the source. Preferred technique: a **CSS duotone** — put a brand
+gradient (accent → ink) behind the image and blend the image over it with `mix-blend-mode: luminosity` (map the
+photo's luminance onto the brand hues). A lighter alternative is a brand-tinted overlay (`multiply`/`overlay`)
+plus mild `filter: saturate()/contrast()`. Either way the imagery reads as one system with the UI, not a
+foreign stock photo.
+
 ## Typography
 
 **Fonts are defined by the designer per project.** Mandatory rules:
