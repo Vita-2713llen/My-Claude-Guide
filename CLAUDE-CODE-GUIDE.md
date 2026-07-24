@@ -371,6 +371,10 @@ this two-line block:
 Scales (example): body text XXS 14 → XXL 24px; weights 300–800; line-height 1em→1.55; letter-spacing
 −1.5→0px.
 
+- **Line-height system — HARDCODE HOOK.** Headings **H1–H6**, **links** and **buttons** use **`line-height: 1.2`**;
+  **paragraphs / running text** use **`line-height: 1.5`**. Hardcode these two values — never leave line-height
+  to the browser default on these elements.
+
 - **Whole-integer sizes only — no fractional px on ANY breakpoint.** Never ship sizes like `13.5px`, `15.5px`
   or a fluid `66.4px`. Round every size to the nearest whole pixel.
 - **Prefer stepped sizes per breakpoint (media queries) over fluid `clamp()`.** `clamp(min, vw, max)` produces
@@ -418,6 +422,9 @@ Motion is a core part of the quality bar, not decoration bolted on at the end.
   respect `prefers-reduced-motion` (no motion when the user opts out); motion must have a reason (guide the eye,
   reveal hierarchy, give feedback) — never movement for its own sake. Excessive or symmetric same-type
   animation is still forbidden (see the AI-defaults rule).
+- **Hover transition duration = `350ms` (`.35s`) — HARDCODE HOOK.** Every hover/interaction transition uses
+  **350ms** across the whole site (buttons, links, cards, icons, nav underlines…) — one consistent timing, never
+  a mix of random durations.
 
 **Reveal on load + scroll — HARDCODE HOOK (ALWAYS, EVERY project).** Everything from **header to footer**
 animates in softly — nothing ships un-animated. On page load the reveal begins at the **banner** and cascades
