@@ -212,6 +212,11 @@ applies to **every element in the header**, not just the nav links.
 - Same principle for any other header element (search, region, icons): if it doesn't fit, it moves into the
   burger — it never breaks the row. Walk 1440 / 1280 / 1024 / 992 / 768 / 568 / 360 before shipping.
 
+**Burger logo — HARDCODE HOOK (ALWAYS).** The burger (mobile) menu **always** contains the site **logo** —
+never an empty top or a bare close button. The logo sits **top-left** and is **always vertically centered on
+the close (X) button**: same `top`, same height as the X, so the two align on one axis. Never omit the logo, and
+never let it drift off-centre from the X.
+
 ## Section structure (single for all pages)
 
 ```html
@@ -413,6 +418,18 @@ Motion is a core part of the quality bar, not decoration bolted on at the end.
   respect `prefers-reduced-motion` (no motion when the user opts out); motion must have a reason (guide the eye,
   reveal hierarchy, give feedback) — never movement for its own sake. Excessive or symmetric same-type
   animation is still forbidden (see the AI-defaults rule).
+
+**Reveal on load + scroll — HARDCODE HOOK (ALWAYS, EVERY project).** Everything from **header to footer**
+animates in softly — nothing ships un-animated. On page load the reveal begins at the **banner** and cascades
+down; as the user scrolls, **each element** reveals when it enters the viewport. Every element uses the **same
+baseline reveal**:
+- **opacity 0% → 100%** + a light move **from `y: -15px` → `0`**,
+- **duration `0.8s`**, **delay `0.45s`**, eased (e.g. `power3.out`), plays **once**.
+- **Applies to EVERYTHING** — sections themselves, headings, paragraphs, cards, images/media, **decorative lines**,
+  and the **whole footer** (brand block, link columns, copyright row). If it's visible, it reveals. A common miss
+  is leaving the footer and decorative rules static — that is a violation; check them explicitly.
+- The designer may **layer extra motion on top** (parallax, hero-specific timelines, staggers) — listen to them —
+  but this baseline reveal on every element is **mandatory** and never removed. Respect `prefers-reduced-motion`.
 
 ## ⛔ Components — a single master element
 
