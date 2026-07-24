@@ -175,10 +175,26 @@ min-height is just the floor. Base is `730px` and cascades up to Large; the over
 @media (max-width: 767px)  { .hero { min-height: 630px; } }    /* Small + Tiny (568, 360) */
 ```
 
-**Banner text — max 2 lines (strict).** In the hero, the H1 title and its paragraph are each **no more than
-2 lines**. Write copy that fits in ≤2 lines at the given size, and cap it in CSS as a hard guard
-(`display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden`). Never let hero
-text run to 3+ lines.
+**Banner text — 2 lines on desktop, NEVER truncated — HOOK (ALWAYS).** In the hero, aim for the H1 title (and
+its paragraph) to sit on **2 lines on desktop** — but achieve this **ONLY** by tuning the **copy length**, the
+container **`max-width`**, and `text-wrap: balance`. The full sentence must ALWAYS be visible and wrap normally.
+
+⛔ **STRICTLY FORBIDDEN — never cut a sentence with an ellipsis.** Do **NOT** use `-webkit-line-clamp`,
+`text-overflow: ellipsis`, `white-space: nowrap`, or a truncating `overflow: hidden` on any title, lead, or body
+text — anywhere, on any breakpoint. Clipping text so it ends in `...` is a bug, not a design choice.
+
+✅ **From 768 down to 360 the title/lead text is ALWAYS fully visible and wraps cleanly.** If the copy needs 3+
+lines to fit at a smaller width, that is correct — **the complete sentence always wins over the "2 lines" target.**
+Let the text reflow; never physically clip it.
+
+```css
+/* RIGHT — 2 lines by copy + width, full text always visible */
+.hero__title { max-width: 14ch; text-wrap: balance; }   /* tune max-width/ch, not a clamp */
+
+/* WRONG — bans below; these physically cut the sentence into "..." */
+/* .hero__title { -webkit-line-clamp: 2; overflow: hidden; }        ✗ */
+/* .hero__title { white-space: nowrap; text-overflow: ellipsis; }   ✗ */
+```
 
 **Header over the hero — HOOK (ALWAYS).** The header is **`position: fixed`** (out of the flow — like
 `absolute`), so it **lays over** the banner. The header and banner are **NOT coupled** by any margin — never
@@ -535,10 +551,14 @@ Run these checks every time:
    modern formats, no unused code) and **proactively offer to optimise the site** — never assume it's already done.
 4. **Responsive / adaptivity.** Walk all 7 breakpoints; confirm nothing breaks, overflows, or loses the layout —
    header included (it must never break; burger from 768).
-5. **Structure rules.** Confirm the page still obeys our skeleton: `<section>` + `section*`, `base-container`,
+5. **No truncated text (⛔ hard fail).** Scan every title, lead and body block from **768 down to 360** for clipped
+   copy — any `...` ending, `-webkit-line-clamp`, `text-overflow: ellipsis`, `white-space: nowrap`, or truncating
+   `overflow: hidden` on text. A sentence cut into an ellipsis is a **bug**: the full text must be visible and wrap
+   normally (3+ lines is fine). Flag every instance and fix by copy/`max-width`/`text-wrap`, never by clamping.
+6. **Structure rules.** Confirm the page still obeys our skeleton: `<section>` + `section*`, `base-container`,
    max 2 classes, every element has its own class (no descendant selectors), buttons are `<a>`, components are
    single-master and identical everywhere, reveal animation on every element, footer copyright + UPQODE, etc.
-6. **Anything else off-system.** Typography scale, line-heights (1.2 / 1.5), hover 350ms, image palette grading,
+7. **Anything else off-system.** Typography scale, line-heights (1.2 / 1.5), hover 350ms, image palette grading,
    uniform team photos — if it drifts from the guide, raise it.
 
 **The behaviour:** don't quietly pass. For each deviation, **ask the designer** ("this spacing / this contrast /
@@ -555,6 +575,7 @@ check is run and its questions are resolved.
 - [ ] Render matches the layout; 0 console errors; all 7 breakpoints checked.
 - [ ] Sections = `<section>` + `section*`; content in `base-container`; maximum 2 classes.
 - [ ] **🦴 Spacing skeleton:** 15px heading→text · 40px text→button · 60px title→content (→40px on 568 & 360); no doubled same-bg section gap.
+- [ ] **⛔ No truncated text:** banner title = 2 lines on desktop via copy + `max-width` + `text-wrap:balance` — NEVER `-webkit-line-clamp`/`text-overflow:ellipsis`/`nowrap`. From 768→360 every title/lead is fully visible and wraps (3+ lines OK); no sentence ends in `...`.
 - [ ] **🔍 Page-check ran:** spacing, WCAG contrast, minification/optimisation offered, all 7 breakpoints, structure rules — deviations raised with the designer.
 - [ ] Buttons = `<a>` with a class; text without its own margin/padding — spacing via flex/grid on wrappers.
 - [ ] **(Webflow export)** Custom properties empty; CSS in longhand; `grid-*-gap` instead of `gap`; no descendant selectors.

@@ -1,6 +1,6 @@
 ---
 name: page-check
-description: QA gate for a finished, client+designer-approved page (homepage or ANY page). Run when the user types /page-check, or says "перевір сторінку", "запусти пейдж-чек", "фінальна перевірка", "page check", "QA the page", "готова сторінка — перевір". This skill ONLY audits and reports — it NEVER edits the design on its own. It scans the page against the guide's HOOKs (spacing skeleton, WCAG contrast, minification/optimisation, responsive/adaptivity, structure rules, reveal animation, line-height, hover, palette-graded imagery, footer/UPQODE) and returns a checklist plus confirmation questions for every deviation. Nothing is changed until the designer approves each fix.
+description: QA gate for a finished, client+designer-approved page (homepage or ANY page). Run when the user types /page-check, or says "перевір сторінку", "запусти пейдж-чек", "фінальна перевірка", "page check", "QA the page", "готова сторінка — перевір". This skill ONLY audits and reports — it NEVER edits the design on its own. It scans the page against the guide's HOOKs (spacing skeleton, WCAG contrast, minification/optimisation, responsive/adaptivity, no truncated/ellipsis text from 768→360, structure rules, reveal animation, line-height, hover, palette-graded imagery, footer/UPQODE) and returns a checklist plus confirmation questions for every deviation. Nothing is changed until the designer approves each fix.
 ---
 
 # PAGE-CHECK — QA gate (audit only, never auto-edit)
@@ -30,14 +30,18 @@ which line, what's wrong, what the guide says it should be):
    code. **Proactively offer to optimise** — never assume it's done.
 4. **Responsive / adaptivity.** Walk all 7 breakpoints (1920/1440/1280/992/768/568/360). Header must never break
    (burger from 768). Note any overflow, break, or lost layout.
-5. **Reveal animation.** Everything from header to footer reveals (opacity 0→1 + y −15→0, .8s, delay .45s), incl.
+5. **No truncated text (⛔ hard fail).** From **768 down to 360**, scan every title/lead/body block for clipped copy —
+   any `...` ending, `-webkit-line-clamp`, `text-overflow: ellipsis`, `white-space: nowrap`, or truncating
+   `overflow: hidden` on text. The full sentence must be visible and wrap normally (3+ lines is fine). Banner title
+   should hit 2 lines on desktop via **copy + `max-width` + `text-wrap:balance`**, never a clamp. Flag every instance.
+6. **Reveal animation.** Everything from header to footer reveals (opacity 0→1 + y −15→0, .8s, delay .45s), incl.
    sections, **decorative lines/dividers** (even CSS borders — must be their own `data-reveal` element), and the
    whole footer. Flag anything static.
-6. **Structure rules.** `<section>` + `section*`; content in `base-container`; max 2 classes; every element has its
+7. **Structure rules.** `<section>` + `section*`; content in `base-container`; max 2 classes; every element has its
    own class (no descendant selectors); buttons are `<a>`; components are single-master + identical everywhere.
-7. **System details.** Line-heights (1.2 headings/links/buttons, 1.5 paragraphs); hover transitions 350ms; images
+8. **System details.** Line-heights (1.2 headings/links/buttons, 1.5 paragraphs); hover transitions 350ms; images
    graded to the brand palette; uniform + non-duplicate team photos; footer copyright + UPQODE (3 links, `{Project Name}`).
-8. **Anything else off-system.** Typography scale (whole-integer px), max 2 fonts, text-balance, base-container 15px, etc.
+9. **Anything else off-system.** Typography scale (whole-integer px), max 2 fonts, text-balance, base-container 15px, etc.
 
 ## Step 2 — Report as a checklist + questions (do not fix yet)
 
