@@ -315,6 +315,24 @@ photo's luminance onto the brand hues). A lighter alternative is a brand-tinted 
 plus mild `filter: saturate()/contrast()`. Either way the imagery reads as one system with the UI, not a
 foreign stock photo.
 
+## Footer
+
+**Footer copyright + UPQODE credit — HARDCODE HOOK (ALWAYS).** Every site's footer **must** contain, verbatim,
+this two-line block:
+
+> © {Project Name}. All Rights Reserved.
+> Web Design and Development by UPQODE.
+
+- **`{Project Name}` is a variable** = the project's name. At the **start** of every new design Claude may ask the
+  designer how the project should be named in the copyright, and uses that value here. Default to the site/brand
+  name if the designer doesn't specify.
+- **Three mandatory links, exact URLs** (open in a new tab, `rel="noopener"`):
+  - **Web Design** → `https://upqode.com/web-design/`
+  - **Development** → `https://upqode.com/wordpress-development/`
+  - **UPQODE** → `https://upqode.com/`
+- The year and small styling are at the designer's discretion, but the text, the credit and the three links are
+  **non-negotiable** — never omit, reword, or relink them. Walk the footer before shipping to confirm it's present.
+
 ## Typography
 
 **Fonts are defined by the designer per project.** Mandatory rules:
