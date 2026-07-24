@@ -267,6 +267,27 @@ never let it drift off-centre from the X.
 > **Never** hack this with inline `style="padding-top:0"` — it must be a class (naming rules below). Before
 > shipping, walk every section boundary top-to-bottom: same bg + full `section` on both sides = **defect, fix it**.
 
+### 🦴 SPACING SKELETON — HARDCODE HOOK (ALWAYS, EVERY project)
+
+Spacing **inside** a section is not free-hand — it follows one unified, rhythmic system. This is the **skeleton**
+of every layout; the designer refines it only where a specific block genuinely needs it, never as a default.
+The three mandatory steps:
+
+| From → To | Gap | Notes |
+|---|---|---|
+| **H1–H6 → its text / paragraph** | **15px** | The gap between any heading and the copy directly under it. |
+| **Text content → button(s)** | **40px** | Gap from the running copy (and the title block in general) down to its CTA/button. |
+| **Title block → main content** | **60px** | From the top-title group (headings **+** paragraphs **+** buttons together) down to the section body — the actual content that follows: portfolio, blog, services, cards, any fill. |
+
+- The **title block** = the heading(s), its paragraph(s) **and** its button(s) as one unit. The **60px** is measured
+  from the bottom of that whole unit to the top of the section's main content.
+- **Responsive:** the **60px** title→content step **drops to 40px at 568 and at 360**. The 15px and 40px steps stay
+  as-is unless the designer decides otherwise.
+- Apply these with spacing **utility classes** (e.g. `title-spacer` / `content-spacer`) or the block's own class —
+  **never** inline styles, never ad-hoc one-off values that break the system.
+- This is the baseline rhythm. **Where a block needs it, the designer adjusts** — but the default everywhere is
+  15 / 40 / 60 (→40 on 568 & 360). Anything that silently deviates is a defect to flag (see the page-check HOOK).
+
 ## Class naming
 
 - **lowercase-hyphen**, section prefix: `trust-head`, `approach-title`, `foot-grid`.
@@ -489,6 +510,36 @@ value, sizes ±1px with group separation (font-size → Typography, spacing → 
 
 ---
 
+# 🔍 PAGE-CHECK — HARDCODE HOOK (ALWAYS, every finished page)
+
+When a page is **done** — the design is built **and approved by both client and designer** — run a full logical
+review of the **whole page** before it is treated as final. This is a mandatory gate, not an optional pass, and
+it runs on the homepage **and every other finished page**. Scan the page top-to-bottom and **ask the designer about
+anything that deviates** — do not silently "fix" and do not silently skip. Report findings and get a decision.
+
+Run these checks every time:
+
+1. **Spacing / uniformity.** Verify the spacing skeleton (15px heading→text · 40px text→button · 60px title→content,
+   →40px on 568 & 360) and the section-spacing rules (no doubled gap between same-bg sections). Flag **anything** that
+   breaks the system and ask whether it's intentional.
+2. **Colour & contrast.** Check every real text/background and UI combination against **WCAG** (≥4.5:1 body,
+   ≥3:1 large headings/UI). Call out any pair that fails and propose a compliant fix.
+3. **Optimisation / weight.** **Ask whether everything is minified/compressed** (CSS, JS, images right-sized and in
+   modern formats, no unused code) and **proactively offer to optimise the site** — never assume it's already done.
+4. **Responsive / adaptivity.** Walk all 7 breakpoints; confirm nothing breaks, overflows, or loses the layout —
+   header included (it must never break; burger from 768).
+5. **Structure rules.** Confirm the page still obeys our skeleton: `<section>` + `section*`, `base-container`,
+   max 2 classes, every element has its own class (no descendant selectors), buttons are `<a>`, components are
+   single-master and identical everywhere, reveal animation on every element, footer copyright + UPQODE, etc.
+6. **Anything else off-system.** Typography scale, line-heights (1.2 / 1.5), hover 350ms, image palette grading,
+   uniform team photos — if it drifts from the guide, raise it.
+
+**The behaviour:** don't quietly pass. For each deviation, **ask the designer** ("this spacing / this contrast /
+this isn't minified — intentional, or fix it?") and offer the concrete fix. The page is final only after this
+check is run and its questions are resolved.
+
+---
+
 # Final checklist
 
 - [ ] **⛔ Uniqueness:** Awwwards-level design, no AI defaults; **no eyebrow/subtitle above any section heading unless explicitly requested**; a signature element present.
@@ -496,6 +547,8 @@ value, sizes ±1px with group separation (font-size → Typography, spacing → 
 - [ ] **🌐 Language:** all page content is in English.
 - [ ] Render matches the layout; 0 console errors; all 7 breakpoints checked.
 - [ ] Sections = `<section>` + `section*`; content in `base-container`; maximum 2 classes.
+- [ ] **🦴 Spacing skeleton:** 15px heading→text · 40px text→button · 60px title→content (→40px on 568 & 360); no doubled same-bg section gap.
+- [ ] **🔍 Page-check ran:** spacing, WCAG contrast, minification/optimisation offered, all 7 breakpoints, structure rules — deviations raised with the designer.
 - [ ] Buttons = `<a>` with a class; text without its own margin/padding — spacing via flex/grid on wrappers.
 - [ ] **(Webflow export)** Custom properties empty; CSS in longhand; `grid-*-gap` instead of `gap`; no descendant selectors.
 - [ ] **(Webflow export)** Animation attributes placed; gradients/grids moved to Head Code.
