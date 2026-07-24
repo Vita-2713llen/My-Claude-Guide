@@ -196,6 +196,22 @@ bottom**. **Always COMPUTE the resulting header min-height** = `padding-top + co
 hero's negative margin and the hero top padding above). Re-compute it whenever the control's size or the header
 padding changes; never leave a stale hardcoded header height behind.
 
+**Header NEVER breaks — HARDCODE HOOK (ALWAYS).** The header must **never** visually break at **any** breakpoint
+— no overflow, no wrapping onto two rows, no items overlapping or getting cramped/cut. This is non-negotiable and
+applies to **every element in the header**, not just the nav links.
+- **Burger menu from 768 inclusive.** By the **768** breakpoint (the ≤991 Medium band) the full navigation is
+  collapsed into a **burger menu** — always. Collapse **earlier** if the header would break sooner (commonly at
+  `≤1080`, which also covers **1024** cleanly). Never let the header stay in its desktop layout past the point it
+  starts to break.
+- **1024 must be deliberately handled.** 1024 sits in the Base 992–1279 band — check it explicitly and make it
+  adaptive; it must never be an afterthought that breaks.
+- **The header CTA button ALWAYS collapses into the burger from 768.** The "Start a project" / primary button is
+  **hidden from the header** at ≤ the collapse width and **moved into the burger menu** — never leave it floating,
+  shrinking, or wrapping in the header on small screens.
+- The burger menu itself holds the **full nav + the CTA button + the mandatory logo** (see the burger-logo HOOK).
+- Same principle for any other header element (search, region, icons): if it doesn't fit, it moves into the
+  burger — it never breaks the row. Walk 1440 / 1280 / 1024 / 992 / 768 / 568 / 360 before shipping.
+
 ## Section structure (single for all pages)
 
 ```html
