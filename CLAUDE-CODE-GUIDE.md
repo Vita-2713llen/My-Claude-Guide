@@ -192,9 +192,9 @@ header (overlays the hero media) and a solid header alike.
 **Header height is NEVER a fixed value — HOOK (ALWAYS).** Set the header `height: auto`. Its height is built
 from **equal top and bottom padding around its tallest control** (the CTA button) — default **8px top / 8px
 bottom**. **Always COMPUTE the resulting header min-height** = `padding-top + control-height + padding-bottom`,
-**ROUND it to a whole pixel**, and use that single rounded number everywhere the header height is needed (the
-hero's negative margin and the hero top padding above). Re-compute it whenever the control's size or the header
-padding changes; never leave a stale hardcoded header height behind.
+**ROUND it to a whole pixel**, and use that single rounded number as the base of the hero's top padding
+(`header-height + a minimum 60px gap`, per the HOOK above). Re-compute it whenever the control's size or the
+header padding changes; never leave a stale hardcoded header height behind.
 
 **Header NEVER breaks — HARDCODE HOOK (ALWAYS).** The header must **never** visually break at **any** breakpoint
 — no overflow, no wrapping onto two rows, no items overlapping or getting cramped/cut. This is non-negotiable and
