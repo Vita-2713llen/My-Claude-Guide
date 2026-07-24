@@ -7,5 +7,7 @@
 !.claude/skills/localhost-up/**
 !.claude/skills/style-guide/
 !.claude/skills/style-guide/**
+!.claude/skills/page-check/
+!.claude/skills/page-check/**
 
 node_modules/
