@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aveline — Modern Beauty, Consciously Made</title>
+<meta name="description" content="Aveline is a modern women's beauty house — skincare, colour and fragrance built on clean, high-performance formulas and a palette made for real skin." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   AVELINE — design tokens (single source of truth)
+   ============================================================ */
+:root{
+  /* colour roles */
+  --ink:#1b1013;
+  --ink-2:#2c1a20;
+  --off-white:#faf5f4;
+  --white:#ffffff;
+  --accent:#c0295a;
+  --accent-dark:#8e1b44;
+  --accent-soft:#f7e6ec;
+  --muted:rgba(27,16,19,.64);
+  --line:rgba(27,16,19,.12);
+  --line-dark:rgba(255,255,255,.16);
+  --on-dark-muted:rgba(255,255,255,.70);
+
+  /* type */
+  --font-display:'Fraunces',Georgia,serif;
+  --font-body:'Instrument Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+
+  /* radius */
+  --r-xs:4px; --r-s:6px; --r-m:8px; --r-l:10px; --r-pill:100px;
+
+  /* layout */
+  --container:1280px;
+  --header-h:60px;          /* computed: 8 + 44 + 8 = 60px */
+  --hover:.35s;             /* hardcoded hover timing */
+}
+
+/* ============================================================
+   Reset / base
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-body);
+  background:var(--off-white);
+  color:var(--ink);
+  line-height:1.5;
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);line-height:1.2;font-weight:400;letter-spacing:-.01em}
+p{line-height:1.5;text-wrap:pretty}
+
+/* focus visible */
+a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+  border-radius:var(--r-xs);
+}
+
+/* ============================================================
+   Layout primitives
+   ============================================================ */
+.base-container{
+  max-width:var(--container);
+  width:100%;
+  margin:0 auto;
+  padding-left:15px;
+  padding-right:15px;
+}
+
+/* Section padding scale */
+.section{padding:100px 0}
+.section-top{padding:100px 0 0}
+.section-bot{padding:0 0 100px}
+@media(min-width:1280px){
+  .section{padding:130px 0}
+  .section-top{padding:130px 0 0}
+  .section-bot{padding:0 0 130px}
+}
+@media(max-width:991px){
+  .section{padding:80px 0}
+  .section-top{padding:80px 0 0}
+  .section-bot{padding:0 0 80px}
+}
+@media(max-width:767px){
+  .section{padding:60px 0}
+  .section-top{padding:60px 0 0}
+  .section-bot{padding:0 0 60px}
+}
+
+/* backgrounds */
+.bg-white{background:var(--white)}
+.bg-ink{background:var(--ink);color:var(--white)}
+.bg-rose{background:var(--accent-soft)}
+
+/* Spacing skeleton */
+.section-head{display:flex;flex-direction:column;gap:15px;max-width:640px;margin-bottom:60px}
+.section-head.center{margin-left:auto;margin-right:auto;text-align:center;align-items:center}
+@media(max-width:567px){.section-head{margin-bottom:40px}}
+
+.lead{font-size:18px;color:var(--muted);max-width:52ch;text-wrap:pretty}
+.on-dark .lead,.bg-ink .lead{color:var(--on-dark-muted)}
+
+.rule{height:1px;width:100%;background:var(--line)}
+.rule.on-dark{background:var(--line-dark)}
+
+/* Type scale (whole-integer px per breakpoint) */
+.h-display{font-size:52px}
+.h2{font-size:32px}
+.h3{font-size:22px}
+.eyebrow-num{font-family:var(--font-body)}
+@media(min-width:1280px){.h-display{font-size:64px}.h2{font-size:40px}.h3{font-size:24px}}
+@media(min-width:1440px){.h-display{font-size:76px}}
+@media(max-width:991px){.h-display{font-size:44px}.h2{font-size:30px}.h3{font-size:21px}}
+@media(max-width:567px){.h-display{font-size:36px}.h2{font-size:27px}}
+
+.high{color:var(--accent);font-style:italic}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-body);font-weight:600;font-size:15px;line-height:1.2;
+  padding:13px 26px;border-radius:var(--r-pill);
+  cursor:pointer;border:1px solid transparent;
+  position:relative;overflow:hidden;
+  transition:background var(--hover) ease,color var(--hover) ease,border-color var(--hover) ease;
+  white-space:nowrap;
+}
+.btn>span{position:relative;z-index:1}
+.btn .btn-arrow{transition:transform var(--hover) ease;position:relative;z-index:1}
+.btn:hover .btn-arrow{transform:translateX(4px)}
+
+.btn-primary{background:var(--accent);color:var(--white)}
+.btn-primary:hover{background:var(--accent-dark)}
+
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+
+.btn-light{background:var(--white);color:var(--ink)}
+.btn-light:hover{background:var(--accent);color:var(--white)}
+
+/* text link */
+.more{
+  display:inline-flex;align-items:center;gap:8px;
+  font-weight:600;font-size:15px;color:var(--accent);
+  background-image:linear-gradient(var(--accent),var(--accent));
+  background-size:0% 1px;background-position:0 100%;background-repeat:no-repeat;
+  transition:background-size var(--hover) ease;
+  padding-bottom:2px;
+}
+.more:hover{background-size:100% 1px}
+.more .btn-arrow{transition:transform var(--hover) ease}
+.more:hover .btn-arrow{transform:translateX(4px)}
+
+/* ============================================================
+   Header (fixed, overlays hero)
+   ============================================================ */
+.header{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  height:auto;
+  padding:8px 0;
+  transition:background var(--hover) ease,box-shadow var(--hover) ease,border-color var(--hover) ease;
+  border-bottom:1px solid transparent;
+}
+.header.is-scrolled{
+  background:rgba(250,245,244,.86);
+  backdrop-filter:blur(14px);
+  border-bottom-color:var(--line);
+}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{
+  font-family:var(--font-display);font-weight:500;font-size:26px;letter-spacing:.04em;
+  color:var(--white);transition:color var(--hover) ease;
+}
+.header.is-scrolled .logo{color:var(--ink)}
+.logo b{color:var(--accent);font-weight:500}
+
+.nav{display:flex;align-items:center;gap:34px}
+.nav-link{
+  font-size:15px;font-weight:500;color:var(--white);
+  position:relative;padding:4px 0;line-height:1.2;
+  transition:color var(--hover) ease;
+}
+.header.is-scrolled .nav-link{color:var(--ink)}
+.nav-link::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
+  background:currentColor;transform:scaleX(0);transform-origin:left;
+  transition:transform var(--hover) ease;
+}
+.nav-link:hover::after{transform:scaleX(1)}
+
+.header-cta{color:var(--white);border-color:rgba(255,255,255,.42)}
+.header-cta:hover{background:var(--white);color:var(--ink);border-color:var(--white)}
+.header.is-scrolled .header-cta{color:var(--ink);border-color:var(--line)}
+.header.is-scrolled .header-cta:hover{background:var(--accent);color:var(--white);border-color:var(--accent)}
+
+.burger{
+  display:none;flex-direction:column;gap:5px;width:44px;height:44px;
+  align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;
+}
+.burger span{display:block;width:24px;height:2px;background:var(--white);transition:transform var(--hover) ease,opacity var(--hover) ease}
+.header.is-scrolled .burger span{background:var(--ink)}
+
+/* mobile menu panel */
+.menu{
+  position:fixed;inset:0;z-index:70;background:var(--ink);color:var(--white);
+  padding:16px 0 40px;display:flex;flex-direction:column;
+  transform:translateY(-100%);opacity:0;visibility:hidden;
+  transition:transform .5s cubic-bezier(.6,.05,.1,1),opacity .4s ease,visibility .5s;
+}
+.menu.is-open{transform:translateY(0);opacity:1;visibility:visible}
+.menu-top{display:flex;align-items:center;justify-content:space-between}
+.menu .logo{color:var(--white)}
+.menu-close{width:44px;height:44px;background:transparent;border:0;cursor:pointer;position:relative}
+.menu-close::before,.menu-close::after{
+  content:"";position:absolute;left:11px;top:21px;width:22px;height:2px;background:var(--white);
+}
+.menu-close::before{transform:rotate(45deg)}
+.menu-close::after{transform:rotate(-45deg)}
+.menu-nav{display:flex;flex-direction:column;gap:4px;margin-top:48px;flex:1}
+.menu-link{
+  font-family:var(--font-display);font-size:34px;padding:14px 0;
+  border-bottom:1px solid var(--line-dark);transition:color var(--hover) ease;
+}
+.menu-link:hover{color:var(--accent)}
+.menu-cta{margin-top:32px}
+.menu-cta .btn{width:100%;justify-content:center}
+
+@media(max-width:1080px){
+  .nav,.header .header-cta{display:none}
+  .burger{display:flex}
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero{
+  position:relative;min-height:730px;height:auto;
+  display:flex;align-items:flex-end;
+  padding-top:calc(var(--header-h) + 60px);
+  padding-bottom:64px;
+  overflow:hidden;
+  background:var(--ink);
+}
+@media(min-width:1440px){.hero{min-height:100vh}}
+@media(max-width:991px){.hero{min-height:700px}}
+@media(max-width:767px){.hero{min-height:630px;padding-bottom:48px}}
+
+/* duotone hero media (graded into palette; gradient is the guaranteed fallback) */
+.hero-media{position:absolute;inset:0;z-index:0;background:linear-gradient(135deg,#3a1524 0%,#1b1013 62%,#40182b 100%)}
+.hero-media img{
+  width:100%;height:100%;object-fit:cover;object-position:center 26%;
+  mix-blend-mode:luminosity;opacity:.72;
+}
+.hero-media::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(27,16,19,.55) 0%,rgba(27,16,19,.18) 42%,rgba(27,16,19,.82) 100%);
+}
+.hero-inner{position:relative;z-index:2;width:100%}
+.hero-content{max-width:760px}
+.hero-title{
+  color:var(--white);max-width:15ch;text-wrap:balance;
+  font-weight:400;letter-spacing:-.02em;
+}
+.hero-lead{
+  color:rgba(255,255,255,.82);font-size:19px;max-width:46ch;text-wrap:pretty;
+  margin-top:22px;
+}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:40px}
+@media(max-width:567px){
+  .hero-lead{font-size:17px}
+  .hero-actions{margin-top:32px}
+  .hero-actions .btn{flex:1;justify-content:center}
+}
+
+/* shade swatch strip — signature element */
+.shades{
+  position:relative;z-index:2;display:flex;align-items:center;gap:0;
+  margin-top:56px;border-top:0;
+}
+.shade{
+  flex:1;height:56px;position:relative;cursor:pointer;
+  transition:flex var(--hover) ease,transform var(--hover) ease;
+}
+.shade:first-child{border-top-left-radius:var(--r-s);border-bottom-left-radius:var(--r-s)}
+.shade:last-child{border-top-right-radius:var(--r-s);border-bottom-right-radius:var(--r-s)}
+.shade::after{
+  content:attr(data-name);position:absolute;left:0;right:0;top:-26px;text-align:center;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.0);
+  transition:color var(--hover) ease;
+}
+.shade:hover{flex:1.9}
+.shade:hover::after{color:rgba(255,255,255,.85)}
+@media(max-width:567px){.shade::after{display:none}.shade{height:44px}}
+
+/* ============================================================
+   Categories / edit
+   ============================================================ */
+.edit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:991px){.edit-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:567px){.edit-grid{grid-template-columns:1fr}}
+
+.cat-card{
+  position:relative;border-radius:var(--r-l);overflow:hidden;
+  aspect-ratio:3/4;display:flex;align-items:flex-end;
+  isolation:isolate;
+}
+.cat-media{position:absolute;inset:0;z-index:0;background:linear-gradient(150deg,var(--accent) 0%,var(--ink) 90%)}
+.cat-media img{width:100%;height:100%;object-fit:cover;mix-blend-mode:luminosity;opacity:.82;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.cat-card:hover .cat-media img{transform:scale(1.05)}
+.cat-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(27,16,19,0) 34%,rgba(27,16,19,.86) 100%)}
+.cat-body{position:relative;z-index:2;padding:26px;color:var(--white);width:100%}
+.cat-name{font-size:24px;color:var(--white)}
+.cat-count{font-size:14px;color:rgba(255,255,255,.7);margin-top:8px}
+.cat-body .more{color:var(--white);background-image:linear-gradient(#fff,#fff);margin-top:16px}
+
+/* ============================================================
+   Signature feature
+   ============================================================ */
+.feature{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+@media(max-width:991px){.feature{grid-template-columns:1fr;gap:36px}}
+.feature-media{position:relative;border-radius:var(--r-l);overflow:hidden;aspect-ratio:4/5;background:linear-gradient(150deg,#e7b8c6 0%,var(--accent) 100%)}
+.feature-media img{width:100%;height:100%;object-fit:cover;object-position:center 30%;mix-blend-mode:luminosity;opacity:.9}
+.feature-tag{
+  display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+  font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  background:var(--accent-soft);padding:8px 14px;border-radius:var(--r-pill);font-weight:600;
+}
+.feature-title{margin-top:20px}
+.feature-copy{color:var(--muted);font-size:17px;margin-top:15px;max-width:46ch}
+.feature-list{list-style:none;margin-top:28px;display:flex;flex-direction:column;gap:14px}
+.feature-list li{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--ink)}
+.feature-list .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:7px;flex:none}
+.feature-cta{margin-top:40px}
+
+/* ============================================================
+   Bestsellers
+   ============================================================ */
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media(max-width:991px){.prod-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:567px){.prod-grid{grid-template-columns:1fr 1fr;gap:12px}}
+.prod{display:flex;flex-direction:column}
+.prod-media{position:relative;border-radius:var(--r-m);overflow:hidden;aspect-ratio:1/1;background:linear-gradient(150deg,#f0d6de 0%,#d68fa5 100%)}
+.prod-media img{width:100%;height:100%;object-fit:cover;mix-blend-mode:luminosity;opacity:.92;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.prod:hover .prod-media img{transform:scale(1.06)}
+.prod-fav{
+  position:absolute;top:12px;right:12px;z-index:2;width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;
+  color:var(--accent);font-size:15px;transition:background var(--hover) ease,color var(--hover) ease;
+}
+.prod:hover .prod-fav{background:var(--accent);color:#fff}
+.prod-info{padding-top:16px;display:flex;flex-direction:column;gap:6px}
+.prod-cat{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.prod-name{font-family:var(--font-display);font-size:19px;line-height:1.2}
+.prod-price{font-size:15px;font-weight:600;color:var(--accent);margin-top:2px}
+
+/* ============================================================
+   Clean beauty (dark) — values + stats
+   ============================================================ */
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+@media(max-width:767px){.values-grid{grid-template-columns:1fr}}
+.value{padding:34px 32px;border-left:1px solid var(--line-dark)}
+.value:first-child{border-left:0;padding-left:0}
+@media(max-width:767px){.value{border-left:0;border-top:1px solid var(--line-dark);padding:28px 0}.value:first-child{border-top:0;padding-top:0}}
+.value-num{font-family:var(--font-display);font-size:46px;color:var(--white);line-height:1}
+.value-num .high{font-style:italic}
+.value-label{font-size:15px;color:var(--on-dark-muted);margin-top:14px;max-width:26ch}
+
+/* ============================================================
+   Testimonials
+   ============================================================ */
+.quote-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:991px){.quote-grid{grid-template-columns:1fr}}
+.quote{background:var(--white);border:1px solid var(--line);border-radius:var(--r-l);padding:32px;display:flex;flex-direction:column;gap:22px}
+.quote-stars{color:var(--accent);letter-spacing:3px;font-size:14px}
+.quote-text{font-family:var(--font-display);font-size:20px;line-height:1.4;color:var(--ink)}
+.quote-person{display:flex;align-items:center;gap:14px;margin-top:auto}
+.quote-avatar{width:48px;height:48px;border-radius:50%;overflow:hidden;flex:none;background:linear-gradient(150deg,var(--accent),var(--ink))}
+.quote-avatar img{width:100%;height:100%;object-fit:cover;object-position:center 22%}
+.quote-name{font-weight:600;font-size:15px}
+.quote-role{font-size:13px;color:var(--muted)}
+
+/* ============================================================
+   Journal
+   ============================================================ */
+.journal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:991px){.journal-grid{grid-template-columns:1fr}}
+.post{display:flex;flex-direction:column}
+.post-media{position:relative;border-radius:var(--r-l);overflow:hidden;aspect-ratio:16/11;background:linear-gradient(150deg,#e7c3ce 0%,var(--accent) 100%)}
+.post-media img{width:100%;height:100%;object-fit:cover;mix-blend-mode:luminosity;opacity:.9;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.post:hover .post-media img{transform:scale(1.05)}
+.post-cat{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-top:20px}
+.post-title{font-family:var(--font-display);font-size:22px;line-height:1.25;margin-top:12px;transition:color var(--hover) ease}
+.post:hover .post-title{color:var(--accent)}
+.post-meta{font-size:13px;color:var(--muted);margin-top:12px}
+
+/* ============================================================
+   Newsletter
+   ============================================================ */
+.news{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:767px){.news{grid-template-columns:1fr;gap:28px}}
+.news-form{display:flex;gap:12px;margin-top:40px;max-width:460px}
+@media(max-width:479px){.news-form{flex-direction:column}}
+.news-input{
+  flex:1;padding:14px 20px;border-radius:var(--r-pill);border:1px solid var(--line);
+  background:var(--white);font-family:var(--font-body);font-size:15px;color:var(--ink);
+  transition:border-color var(--hover) ease;
+}
+.news-input::placeholder{color:var(--muted)}
+.news-input:focus{border-color:var(--accent);outline:none}
+.news-note{font-size:13px;color:var(--muted);margin-top:16px}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer{background:var(--ink);color:var(--white);padding:80px 0 40px}
+.foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+@media(max-width:991px){.foot-top{grid-template-columns:1fr 1fr}}
+@media(max-width:567px){.foot-top{grid-template-columns:1fr}}
+.foot-brand .logo{color:var(--white);font-size:30px}
+.foot-tag{color:var(--on-dark-muted);font-size:15px;margin-top:18px;max-width:34ch}
+.foot-col-title{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:20px}
+.foot-links{display:flex;flex-direction:column;gap:12px}
+.foot-link{font-size:15px;color:var(--on-dark-muted);width:fit-content;transition:color var(--hover) ease}
+.foot-link:hover{color:var(--white)}
+.foot-rule{margin:48px 0 28px}
+.foot-bottom{display:flex;flex-direction:column;gap:6px}
+.foot-copy{font-size:14px;color:var(--on-dark-muted)}
+.foot-copy a{color:var(--white);text-decoration:underline;text-underline-offset:3px;transition:color var(--hover) ease}
+.foot-copy a:hover{color:var(--accent)}
+
+/* reduced motion */
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .hero-media img,.cat-media img,.prod-media img,.post-media img{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ======================= HEADER ======================= -->
+<header class="header" id="header">
+  <div class="base-container">
+    <div class="header-inner">
+      <a href="#" class="logo" aria-label="Aveline home">Ave<b>line</b></a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#edit" class="nav-link">Shop</a>
+        <a href="#feature" class="nav-link">Skincare</a>
+        <a href="#best" class="nav-link">Bestsellers</a>
+        <a href="#journal" class="nav-link">Journal</a>
+      </nav>
+      <a href="#news" class="btn btn-ghost header-cta"><span>Shop now</span><span class="btn-arrow" aria-hidden="true">→</span></a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- burger menu -->
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="base-container">
+    <div class="menu-top">
+      <a href="#" class="logo" aria-label="Aveline home">Ave<b>line</b></a>
+      <button class="menu-close" id="menuClose" aria-label="Close menu"></button>
+    </div>
+    <nav class="menu-nav" aria-label="Mobile">
+      <a href="#edit" class="menu-link">Shop</a>
+      <a href="#feature" class="menu-link">Skincare</a>
+      <a href="#best" class="menu-link">Bestsellers</a>
+      <a href="#journal" class="menu-link">Journal</a>
+    </nav>
+    <div class="menu-cta">
+      <a href="#news" class="btn btn-primary"><span>Shop now</span><span class="btn-arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= HERO ======================= -->
+<section class="hero" id="top">
+  <div class="hero-media">
+    <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1600&q=80&auto=format&fit=crop"
+         alt="Portrait of a woman with luminous, dewy skin in soft directional light"
+         onerror="this.style.display='none'">
+  </div>
+  <div class="hero-inner">
+    <div class="base-container">
+      <div class="hero-content" data-reveal>
+        <h1 class="hero-title h-display" data-reveal>Beauty that behaves like <span class="high">skincare</span>.</h1>
+        <p class="hero-lead" data-reveal>Aveline builds high-performance colour and care around real skin — clean formulas, refillable objects, and a palette that flatters every undertone.</p>
+        <div class="hero-actions" data-reveal>
+          <a href="#edit" class="btn btn-primary"><span>Explore the edit</span><span class="btn-arrow" aria-hidden="true">→</span></a>
+          <a href="#feature" class="btn btn-light"><span>The ritual</span></a>
+        </div>
+      </div>
+      <div class="shades" data-reveal aria-hidden="true">
+        <div class="shade" data-name="Petal"   style="background:#e9b8c2"></div>
+        <div class="shade" data-name="Rosewood" style="background:#c86b7f"></div>
+        <div class="shade" data-name="Berry"   style="background:#c0295a"></div>
+        <div class="shade" data-name="Plum"    style="background:#7a2a49"></div>
+        <div class="shade" data-name="Currant" style="background:#5a1f34"></div>
+        <div class="shade" data-name="Nocturne" style="background:#2c1a20"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= EDIT / CATEGORIES ======================= -->
+<section class="section" id="edit">
+  <div class="base-container">
+    <div class="section-head" data-reveal>
+      <h2 class="h2">The edit — three ways to begin.</h2>
+      <p class="lead">Whether you build from bare skin or a bold lip, every Aveline object is formulated to layer, refill and last.</p>
+    </div>
+    <div class="edit-grid">
+      <a href="#best" class="cat-card" data-reveal>
+        <div class="cat-media">
+          <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&q=80&auto=format&fit=crop" alt="Minimal skincare serums and creams on a soft pink surface" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <div class="cat-body">
+          <h3 class="cat-name">Skincare</h3>
+          <div class="cat-count">Serums · moisturisers · SPF</div>
+          <span class="more">Shop skincare <span class="btn-arrow" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+      <a href="#best" class="cat-card" data-reveal>
+        <div class="cat-media">
+          <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80&auto=format&fit=crop" alt="Assortment of lipsticks and colour cosmetics arranged neatly" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <div class="cat-body">
+          <h3 class="cat-name">Colour</h3>
+          <div class="cat-count">Lip · cheek · eye</div>
+          <span class="more">Shop colour <span class="btn-arrow" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+      <a href="#best" class="cat-card" data-reveal>
+        <div class="cat-media">
+          <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&q=80&auto=format&fit=crop" alt="A glass fragrance bottle catching warm light" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <div class="cat-body">
+          <h3 class="cat-name">Fragrance</h3>
+          <div class="cat-count">Eau de parfum · body</div>
+          <span class="more">Shop fragrance <span class="btn-arrow" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= SIGNATURE FEATURE (white) ======================= -->
+<section class="section bg-white" id="feature">
+  <div class="base-container">
+    <div class="feature">
+      <div class="feature-media" data-reveal>
+        <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1000&q=80&auto=format&fit=crop" alt="Woman applying a facial serum, close on glowing cheek and hand" loading="lazy" onerror="this.style.display='none'">
+      </div>
+      <div class="feature-text">
+        <span class="feature-tag" data-reveal>Signature · The Glass Serum</span>
+        <h2 class="feature-title h2" data-reveal>One drop of care <span class="high">under</span> every shade you wear.</h2>
+        <p class="feature-copy" data-reveal>Our hero serum pairs 5% niacinamide with squalane and a triple-hyaluronic blend — the quiet layer that lets colour sit on skin that's already cared for.</p>
+        <ul class="feature-list">
+          <li data-reveal><span class="dot"></span><span>Barrier-first formula, fragrance-free and non-comedogenic.</span></li>
+          <li data-reveal><span class="dot"></span><span>Refillable glass — keep the bottle, replace the core.</span></li>
+          <li data-reveal><span class="dot"></span><span>Dermatologist-tested on every skin tone and undertone.</span></li>
+        </ul>
+        <div class="feature-cta" data-reveal>
+          <a href="#best" class="btn btn-primary"><span>Add the ritual — $52</span><span class="btn-arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= BESTSELLERS ======================= -->
+<section class="section" id="best">
+  <div class="base-container">
+    <div class="section-head" data-reveal>
+      <h2 class="h2">Loved on repeat.</h2>
+      <p class="lead">The pieces our community reorders most — restocked weekly, refillable for life.</p>
+    </div>
+    <div class="prod-grid">
+      <a href="#" class="prod" data-reveal>
+        <div class="prod-media">
+          <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80&auto=format&fit=crop" alt="Frosted glass serum dropper bottle" loading="lazy" onerror="this.style.display='none'">
+          <span class="prod-fav" aria-hidden="true">♡</span>
+        </div>
+        <div class="prod-info">
+          <span class="prod-cat">Skincare</span>
+          <span class="prod-name">The Glass Serum</span>
+          <span class="prod-price">$52</span>
+        </div>
+      </a>
+      <a href="#" class="prod" data-reveal>
+        <div class="prod-media">
+          <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=600&q=80&auto=format&fit=crop" alt="Satin lipstick bullet in a berry tone" loading="lazy" onerror="this.style.display='none'">
+          <span class="prod-fav" aria-hidden="true">♡</span>
+        </div>
+        <div class="prod-info">
+          <span class="prod-cat">Colour</span>
+          <span class="prod-name">Soft Matte Lip — Berry</span>
+          <span class="prod-price">$28</span>
+        </div>
+      </a>
+      <a href="#" class="prod" data-reveal>
+        <div class="prod-media">
+          <img src="https://images.unsplash.com/photo-1571875257727-256c39da42af?w=600&q=80&auto=format&fit=crop" alt="Cream blush compact open on a pale surface" loading="lazy" onerror="this.style.display='none'">
+          <span class="prod-fav" aria-hidden="true">♡</span>
+        </div>
+        <div class="prod-info">
+          <span class="prod-cat">Colour</span>
+          <span class="prod-name">Cheek Melt Cream Blush</span>
+          <span class="prod-price">$26</span>
+        </div>
+      </a>
+      <a href="#" class="prod" data-reveal>
+        <div class="prod-media">
+          <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600&q=80&auto=format&fit=crop" alt="Amber glass fragrance bottle on linen" loading="lazy" onerror="this.style.display='none'">
+          <span class="prod-fav" aria-hidden="true">♡</span>
+        </div>
+        <div class="prod-info">
+          <span class="prod-cat">Fragrance</span>
+          <span class="prod-name">Nocturne Eau de Parfum</span>
+          <span class="prod-price">$88</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CLEAN BEAUTY (dark) ======================= -->
+<section class="section bg-ink on-dark" id="values">
+  <div class="base-container">
+    <div class="section-head" data-reveal>
+      <h2 class="h2" style="color:#fff">Clean isn't a claim. It's the recipe.</h2>
+      <p class="lead">Every formula is made to a published standard — no guesswork, no greenwash, no compromise on how it performs.</p>
+    </div>
+    <div class="rule on-dark" data-reveal></div>
+    <div class="values-grid" style="margin-top:44px">
+      <div class="value" data-reveal>
+        <div class="value-num">1,800<span class="high">+</span></div>
+        <div class="value-label">Questionable ingredients we refuse to formulate with.</div>
+      </div>
+      <div class="value" data-reveal>
+        <div class="value-num">100<span class="high">%</span></div>
+        <div class="value-label">Refillable core packaging across the full range.</div>
+      </div>
+      <div class="value" data-reveal>
+        <div class="value-num">Never</div>
+        <div class="value-label">Tested on animals — cruelty-free and Leaping Bunny certified.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TESTIMONIALS ======================= -->
+<section class="section" id="loved">
+  <div class="base-container">
+    <div class="section-head" data-reveal>
+      <h2 class="h2">Worn by real routines.</h2>
+      <p class="lead">Thousands of five-star reviews from people who came for the colour and stayed for the skin.</p>
+    </div>
+    <div class="quote-grid">
+      <figure class="quote" data-reveal>
+        <div class="quote-stars" aria-hidden="true">★★★★★</div>
+        <blockquote class="quote-text">"The serum genuinely changed my texture in a month — and the berry lip is the only one that doesn't dry me out."</blockquote>
+        <figcaption class="quote-person">
+          <span class="quote-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80&auto=format&fit=crop" alt="Portrait of Maya, a smiling customer" loading="lazy" onerror="this.parentElement.style.display='none'"></span>
+          <span><span class="quote-name">Maya R.</span><br><span class="quote-role">Verified · skincare edit</span></span>
+        </figcaption>
+      </figure>
+      <figure class="quote" data-reveal>
+        <div class="quote-stars" aria-hidden="true">★★★★★</div>
+        <blockquote class="quote-text">"Refilling instead of rebuying feels good — and honestly the glass bottle just looks beautiful on the shelf."</blockquote>
+        <figcaption class="quote-person">
+          <span class="quote-avatar"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80&auto=format&fit=crop" alt="Portrait of Elena, a smiling customer" loading="lazy" onerror="this.parentElement.style.display='none'"></span>
+          <span><span class="quote-name">Elena K.</span><br><span class="quote-role">Verified · refill member</span></span>
+        </figcaption>
+      </figure>
+      <figure class="quote" data-reveal>
+        <div class="quote-stars" aria-hidden="true">★★★★★</div>
+        <blockquote class="quote-text">"Finally a brand where every shade suited my undertone. The cream blush is my everyday, no exceptions."</blockquote>
+        <figcaption class="quote-person">
+          <span class="quote-avatar"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80&auto=format&fit=crop" alt="Portrait of Priya, a smiling customer" loading="lazy" onerror="this.parentElement.style.display='none'"></span>
+          <span><span class="quote-name">Priya S.</span><br><span class="quote-role">Verified · colour edit</span></span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= JOURNAL (white) ======================= -->
+<section class="section bg-white" id="journal">
+  <div class="base-container">
+    <div class="section-head" data-reveal>
+      <h2 class="h2">From the Journal.</h2>
+      <p class="lead">Notes on formulation, ritual and the science behind a good glow.</p>
+    </div>
+    <div class="journal-grid">
+      <a href="#" class="post" data-reveal>
+        <div class="post-media">
+          <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=800&q=80&auto=format&fit=crop" alt="Flatlay of skincare bottles and a linen cloth" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <span class="post-cat">Skincare</span>
+        <h3 class="post-title">The five-step ritual that survives a busy morning.</h3>
+        <div class="post-meta">6 min read · Jul 2026</div>
+      </a>
+      <a href="#" class="post" data-reveal>
+        <div class="post-media">
+          <img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=800&q=80&auto=format&fit=crop" alt="Hand holding an open lipstick against a plain wall" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <span class="post-cat">Colour</span>
+        <h3 class="post-title">How to find your perfect berry — by undertone.</h3>
+        <div class="post-meta">4 min read · Jul 2026</div>
+      </a>
+      <a href="#" class="post" data-reveal>
+        <div class="post-media">
+          <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=800&q=80&auto=format&fit=crop" alt="Refillable cosmetic packaging arranged on a shelf" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <span class="post-cat">Sustainability</span>
+        <h3 class="post-title">Why we refill: the case against buying the bottle twice.</h3>
+        <div class="post-meta">5 min read · Jun 2026</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= NEWSLETTER (rose) ======================= -->
+<section class="section bg-rose" id="news">
+  <div class="base-container">
+    <div class="news">
+      <div class="news-text">
+        <h2 class="h2" data-reveal>Get 15% off your first ritual.</h2>
+        <p class="lead" data-reveal style="margin-top:15px">Join the list for early shade drops, refill reminders and formulation notes — no noise, just the good stuff.</p>
+        <p class="news-note" data-reveal>Unsubscribe anytime. We never share your details.</p>
+      </div>
+      <form class="news-form" data-reveal onsubmit="return false">
+        <input type="email" class="news-input" placeholder="Your email address" aria-label="Email address" required>
+        <button type="submit" class="btn btn-primary"><span>Join</span><span class="btn-arrow" aria-hidden="true">→</span></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="footer">
+  <div class="base-container">
+    <div class="foot-top">
+      <div class="foot-brand" data-reveal>
+        <a href="#top" class="logo">Ave<b>line</b></a>
+        <p class="foot-tag">Modern beauty, consciously made. Colour and care for real skin, refillable for life.</p>
+      </div>
+      <div data-reveal>
+        <div class="foot-col-title">Shop</div>
+        <div class="foot-links">
+          <a href="#edit" class="foot-link">Skincare</a>
+          <a href="#edit" class="foot-link">Colour</a>
+          <a href="#edit" class="foot-link">Fragrance</a>
+          <a href="#best" class="foot-link">Bestsellers</a>
+        </div>
+      </div>
+      <div data-reveal>
+        <div class="foot-col-title">About</div>
+        <div class="foot-links">
+          <a href="#values" class="foot-link">Our standard</a>
+          <a href="#journal" class="foot-link">Journal</a>
+          <a href="#values" class="foot-link">Sustainability</a>
+          <a href="#loved" class="foot-link">Reviews</a>
+        </div>
+      </div>
+      <div data-reveal>
+        <div class="foot-col-title">Care</div>
+        <div class="foot-links">
+          <a href="#news" class="foot-link">Contact</a>
+          <a href="#news" class="foot-link">Refill programme</a>
+          <a href="#news" class="foot-link">Shipping & returns</a>
+          <a href="#news" class="foot-link">FAQ</a>
+        </div>
+      </div>
+    </div>
+    <div class="rule on-dark foot-rule" data-reveal></div>
+    <div class="foot-bottom" data-reveal>
+      <p class="foot-copy">© Aveline. All Rights Reserved.</p>
+      <p class="foot-copy">
+        <a href="https://upqode.com/web-design/" target="_blank" rel="noopener">Web Design</a> and
+        <a href="https://upqode.com/wordpress-development/" target="_blank" rel="noopener">Development</a> by
+        <a href="https://upqode.com/" target="_blank" rel="noopener">UPQODE</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ======================= JS ======================= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var header=document.getElementById('header');
+  var burger=document.getElementById('burger');
+  var menu=document.getElementById('menu');
+  var menuClose=document.getElementById('menuClose');
+
+  /* header scrolled state */
+  function onScroll(){
+    if(window.scrollY>40){header.classList.add('is-scrolled');}
+    else{header.classList.remove('is-scrolled');}
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  /* burger menu */
+  function openMenu(){menu.classList.add('is-open');burger.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}
+  function closeMenu(){menu.classList.remove('is-open');burger.setAttribute('aria-expanded','false');document.body.style.overflow='';}
+  burger.addEventListener('click',openMenu);
+  menuClose.addEventListener('click',closeMenu);
+  menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeMenu);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu();});
+
+  /* reveal animation — baseline: opacity 0->1, y -15->0, 0.8s, delay .45s, power3.out, once */
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els=[].slice.call(document.querySelectorAll('[data-reveal]'));
+
+  if(reduce || typeof gsap==='undefined'){
+    els.forEach(function(el){el.style.opacity='';el.style.transform='';});
+    return;
+  }
+  if(window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);}
+
+  gsap.set(els,{opacity:0,y:-15});
+
+  // hero (above the fold) cascades on load
+  var heroEls=[].slice.call(document.querySelectorAll('.hero [data-reveal]'));
+  gsap.to(heroEls,{opacity:1,y:0,duration:0.8,delay:0.45,ease:'power3.out',stagger:0.12});
+
+  // everything else reveals on scroll
+  els.forEach(function(el){
+    if(heroEls.indexOf(el)>-1) return;
+    gsap.to(el,{
+      opacity:1,y:0,duration:0.8,delay:0.45,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 88%',once:true}
+    });
+  });
+})();
+</script>
+</body>
+</html>
