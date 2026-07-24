@@ -303,6 +303,9 @@ full-body shots. Rules:
   a shared `object-position` (e.g. `center 22%`) so every face sits at the same spot in its frame.
 - Pick photos that are **visually clean** (uncluttered background, even light). If one candidate is a wide/full-body
   shot and the rest are close-ups, it breaks the set — reject it and re-query. Walk the whole set before shipping.
+- **Never reuse / repeat the same image** inside a set — every person is a different photo. With deterministic
+  top-1 sourcing (e.g. Pexels), two near-identical queries return the **same** photo, so make each query
+  meaningfully distinct (different hair, feature, build) and verify no two slots resolved to the same file.
 
 ## Typography
 

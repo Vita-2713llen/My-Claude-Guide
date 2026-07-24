@@ -100,12 +100,14 @@ header.scrolled{background:rgba(20,17,13,.82);backdrop-filter:blur(12px);border-
 .hero-sub p{font-size:var(--t-body-l);color:var(--muted);max-width:46ch;text-wrap:pretty}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
 
-/* Page hero (inner pages) — top padding 134px = 74px header + 60px min gap (HOOK); content CENTERED (both axes) */
-.page-hero{padding:134px 0 90px;min-height:520px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
-@media(min-width:1280px){.page-hero{padding:150px 0 110px;min-height:560px}}
-/* Bottom mask — the warm inner-hero video melts fully into the next section's ink, soft (no visible crop/seam) */
-.page-hero::before{content:"";position:absolute;left:0;right:0;bottom:0;height:58%;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg, transparent 0%, rgba(20,17,13,.4) 38%, rgba(20,17,13,.82) 70%, var(--ink) 100%)}
+/* Page hero (inner pages) — top padding 134px = 74px header + 60px min gap (HOOK). Content-driven height
+   (NO min-height — a fixed min-height + centering left a huge empty void before the next section). Centered. */
+.page-hero{padding:134px 0 96px;display:flex;flex-direction:column;align-items:center;text-align:center}
+@media(min-width:1280px){.page-hero{padding:150px 0 120px}}
+/* Overlay on the video — top 10% black -> bottom 100% black (full ink). Masks the video's hard bottom crop so it
+   melts completely into the next section (per request: low: 100% black, high: 10%). Covers the whole banner. */
+.page-hero::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg, rgba(20,17,13,.1) 0%, rgba(20,17,13,.12) 24%, rgba(20,17,13,.5) 58%, rgba(20,17,13,.88) 82%, var(--ink) 100%)}
 .page-hero h1{font-family:var(--display);font-size:var(--t-display);line-height:1.2;font-weight:700;letter-spacing:-.03em;max-width:18ch;text-wrap:balance;margin:20px auto 0}
 .page-hero p{font-size:var(--t-body-l);color:var(--muted);max-width:56ch;margin:26px auto 0;text-wrap:pretty}
 
