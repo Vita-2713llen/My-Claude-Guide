@@ -235,7 +235,10 @@ footer .brand{color:#fff}
 .ph-copy h1{font-size:var(--t-display);line-height:1.2;font-weight:600;letter-spacing:-.035em;color:var(--ink);max-width:14ch;text-wrap:balance}
 .ph-copy p{font-size:var(--t-body-l);color:var(--muted);margin-top:18px;max-width:48ch;text-wrap:pretty}
 .ph-cta{margin-top:28px}
-.ph-media{position:relative;aspect-ratio:4/3.8;width:100%;border-radius:var(--radius);overflow:hidden;background:var(--surface);isolation:isolate}
-.ph-media img{width:100%;height:100%;object-fit:cover}
-@media(max-width:820px){.ph-grid{grid-template-columns:1fr;gap:26px}.ph-media{aspect-ratio:16/12}}
+/* Hero media = a 3-photo collage (one tall + two stacked) so the banner reads energetic, not a single flat shot */
+.ph-media{position:relative;aspect-ratio:4/3.8;width:100%;display:grid;grid-template-columns:1.15fr .85fr;grid-template-rows:1fr 1fr;gap:14px}
+.ph-media .shot{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--surface);isolation:isolate}
+.ph-media .shot.big{grid-row:1 / span 2}
+.ph-media .shot img{width:100%;height:100%;object-fit:cover}
+@media(max-width:820px){.ph-grid{grid-template-columns:1fr;gap:26px}.ph-media{aspect-ratio:16/11;gap:10px}}
 .mainnav a.current{color:var(--red);font-weight:600}
