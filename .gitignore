@@ -29,3 +29,7 @@
 !.claude/skills/slides/**
 
 node_modules/
+
+# Python bytecode caches (generated when skill scripts run)
+__pycache__/
+*.pyc
