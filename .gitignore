@@ -9,6 +9,8 @@
 !.claude/skills/style-guide/**
 !.claude/skills/page-check/
 !.claude/skills/page-check/**
+!.claude/skills/seo-check/
+!.claude/skills/seo-check/**
 
 # Mandatory design skills (SUPER-HARD HOOK) — ship with the project for everyone.
 !.claude/skills/frontend-design/
