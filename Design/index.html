@@ -74,7 +74,9 @@ section{position:relative}
 .hg{display:grid;grid-template-columns:1fr 1.02fr;gap:clamp(30px,4.5vw,66px);align-items:center}
 .hl .kick{display:block;margin-bottom:26px}
 .hl .h1{margin-bottom:30px}
-.hl .h1 .wl{display:block;overflow:hidden}
+.hl .h1{line-height:1.06}
+.hl .h1 .wl{display:block;overflow:hidden;padding:.04em 0 .16em}
+.hl .h1 .wl:not(:last-child){margin-bottom:-.14em}
 .hl .h1 .wl>span{display:block}
 .hl .lead{margin-bottom:40px}
 .hb{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
