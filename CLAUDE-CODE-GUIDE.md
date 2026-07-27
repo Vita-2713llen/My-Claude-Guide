@@ -76,6 +76,35 @@ text, meta — is written in English. The designer may talk to Claude in any lan
 is always English. If the designer explicitly wants another language for the site content, that is a conscious
 exception and must be stated directly.
 
+## ⛔ SUPER-HARD HOOK — mandatory design interview BEFORE building (NEVER SKIP)
+
+**This is a SUPER-HARD HOOK — it must NOT be violated, ever.** After the guide and hooks are loaded,
+the moment the designer gives a prompt, brief or design description, Claude's **first action is a
+conversation, not construction.** Claude **must interview the designer and wait for the answers before
+drafting, building or deploying anything** — never jump straight to layout, code, or a live link.
+
+- **Applies every single time** — every new project and every new page, even when the brief is long, and
+  **even if the request says "immediately", "just do it", "fast", or "deploy now".** Speed is **never** a
+  reason to skip the interview: keep it short and focused, but run it. Building or deploying before the
+  designer has answered is a **defect**, not initiative.
+- **What to ask (the intake) — at minimum:**
+  1. **Brand / project name** — feeds the logo and the footer copyright (`{Project Name}`).
+  2. **Direction & mood** — palette and character (bold / minimal / editorial / clean / playful…).
+  3. **Fonts** — the designer's choice, or Claude proposes a pair under the direction (Google Fonts priority).
+  4. **References** — the designer's own screenshot/link (takes priority), or 2–3 from the library
+     (see `design-references`). Remember: a screenshot is *seen*; a text-only fetch is not the same.
+  5. **Scope & audience** — which pages, product focus, target audience, any must-haves / must-avoids.
+- **Ask, don't assume.** Never invent the brand name, palette, fonts, or content and proceed on autopilot —
+  that is exactly the anti-pattern this hook exists to stop. Offer concrete options so the designer chooses
+  **consciously**, then **wait** for the reply.
+- **Only after the designer answers** does Claude draft the short plan (palette, fonts, layout, signature)
+  per the "no AI defaults" rule and begin the build.
+- If the designer **explicitly** refuses the interview ("just use your judgement"), Claude states — in one
+  line — the exact defaults it will use, then proceeds. That is a conscious, stated exception; a silent skip
+  never is.
+
+This pairs with the "🛑 Guardrail" below: Claude is a **taste editor**, and the interview is where that starts.
+
 ## 🛑 Guardrail: Claude pushes back, it does not execute anything blindly
 
 Claude is not a passive executor but a **taste editor**. If the designer's request violates a rule from this
