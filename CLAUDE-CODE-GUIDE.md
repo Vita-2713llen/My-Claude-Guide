@@ -160,10 +160,12 @@ The design system below is a **technical markup skeleton**, not a visual recipe.
 be **unique and creative, at the level of Awwwards work**.
 
 **By default, typical AI elements are not used:**
-- ❌ Eyebrow / kicker / small subtitle above a section heading — **forbidden by default**. Do NOT add a small
-  label, tagline, or `• LABEL` line above an `<h2>` (or any section title). The default state is: **no eyebrow,
-  no subtitle**. Add one ONLY when the designer asks for it by name in that specific request; never infer it,
-  never add it "for balance", "for rhythm", or because a section "looks empty". If in doubt, leave it out.
+- ❌ **Eyebrow / kicker / small subtitle above a heading — ⛔ SUPER-HARD HOOK, forbidden by default.** Do NOT add
+  a small label, tagline, ALL-CAPS kicker, `• LABEL`, or any short line sitting above an `<h1>`, `<h2>`, section
+  title, or menu item. The default state is **no eyebrow and no subtitle, anywhere on the page**. Add one ONLY
+  when the designer asks for it **by name** in that specific request; never infer it, never add it "for balance",
+  "for rhythm", or because a section "looks empty". If in doubt, leave it out. (This is easy to re-introduce by
+  habit on a fresh build — check every section heading and the mobile menu before shipping.)
 - ❌ Numbers `01/02/03` when the content is not a real sequence.
 - ❌ The templated hero "big number + label + gradient".
 - ❌ Stock AI palettes (cream + serif + terracotta; black background + acid accent; "newspaper" hairline
@@ -447,21 +449,34 @@ foreign stock photo.
 
 ## Footer
 
-**Footer copyright + UPQODE credit — HARDCODE HOOK (ALWAYS).** Every site's footer **must** contain, verbatim,
-this two-line block:
+**⛔ Footer copyright + UPQODE credit — SUPER-HARD HOOK (ALWAYS · NEVER VIOLATE).** Every site's footer **must**
+contain, verbatim, this two-line block — the **only** part that is ever allowed to change is `{Project Name}`:
 
 > © {Project Name}. All Rights Reserved.
 > Web Design and Development by UPQODE.
 
-- **`{Project Name}` is a variable** = the project's name. At the **start** of every new design Claude may ask the
-  designer how the project should be named in the copyright, and uses that value here. Default to the site/brand
-  name if the designer doesn't specify.
+- **`{Project Name}` is the ONE and ONLY variable** = the project's name. Nothing else in these two lines may
+  change — not a word, not the punctuation, not the casing (`All Rights Reserved`, never `all rights reserved`),
+  not the credit wording (`Web Design and Development by UPQODE.`). At the **start** of every new design Claude
+  may ask how the project should be named here; default to the site/brand name if unspecified.
+- **Never** substitute your own wording (e.g. `Design & build by…`, `© 2026 …`, or `Privacy · Terms` in place of
+  the credit). Rewriting, shortening, translating, relinking, or "improving" this block is a **defect**, not a
+  style choice. If you catch yourself paraphrasing it, stop and paste the block above exactly.
 - **Three mandatory links, exact URLs** (open in a new tab, `rel="noopener"`):
   - **Web Design** → `https://upqode.com/web-design/`
   - **Development** → `https://upqode.com/wordpress-development/`
   - **UPQODE** → `https://upqode.com/`
-- The year and small styling are at the designer's discretion, but the text, the credit and the three links are
-  **non-negotiable** — never omit, reword, or relink them. Walk the footer before shipping to confirm it's present.
+- A year is optional and small styling is at the designer's discretion, but the text, the credit and the three
+  links are **non-negotiable**. Walk the footer before shipping and confirm it is present and verbatim.
+
+**⛔ Footer layout — compact & friendly-adaptive, NO empty space — SUPER-HARD HOOK (ALWAYS).** Footers must stay
+**compact** at every breakpoint — never a tall stack of full-width blocks with dead space beside them.
+- **Keep link columns side by side as long as they fit.** Where the columns fit in **2 (or more) columns** on a
+  narrower screen, use them — do **not** collapse everything into a single full-width column that leaves large
+  empty gaps. Short link lists (3–4 groups) should stay multi-column **down to small phones**.
+- The brand block may span full width on top; the link columns sit beneath it in a tight grid. Tighten
+  padding/gaps on mobile; stack the copyright row only when there is genuinely no room.
+- Walk **768 → 360** and confirm there are **no empty regions** and no wasted vertical whitespace.
 
 ## Typography
 
@@ -520,6 +535,16 @@ None (=0)**. Radius: XS 4 (tags) · S 6 (inputs) · M 8 (cards) · L 10 (panels)
 ## 🎬 Animation — cinematic, never default-simple
 
 Motion is a core part of the quality bar, not decoration bolted on at the end.
+
+**⛔ Smoothness is MANDATORY — SUPER-HARD HOOK (ALWAYS · NEVER VIOLATE).** Every animation **and the scroll itself**
+must feel **buttery-smooth**, never abrupt, janky, or "poppy". This is non-negotiable:
+- **Smooth scrolling is ON** (Lenis or equivalent) and **synced** with scroll-driven animation (call
+  `ScrollTrigger.update` on the smooth-scroll's `scroll` event) so parallax and reveals track the scroll fluidly.
+- **Every transition is eased** (cubic-bezier / power curve) — never `linear` for UI motion. Reveal ≈ `0.8s`,
+  hover `0.35s`, with tasteful stagger on grouped items.
+- **Animate only GPU-friendly properties** (`transform` / `opacity`); add `will-change` on parallax and large
+  moving media; hold 60fps. Never animate layout properties (`width`/`height`/`top`/`left`) — that causes jank.
+- A choppy, instant, or "pop-in" motion where smoothness is expected is a **defect**, not a style choice.
 
 - **Nothing default-simple.** No cheap, generic effects. Use **cinematic, smooth motion** (eased, purposeful,
   well-timed) — GSAP / ScrollTrigger (or equivalent), with proper easing curves and staggering.
