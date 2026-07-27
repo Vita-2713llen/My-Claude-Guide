@@ -33,3 +33,7 @@ node_modules/
 # Python bytecode caches (generated when skill scripts run)
 __pycache__/
 *.pyc
+
+# Local/secret config — never commit (MCP keys, tokens)
+.claude/settings.local.json
+.mcp.json
