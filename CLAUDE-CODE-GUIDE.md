@@ -284,6 +284,16 @@ never an empty top or a bare close button. The logo sits **top-left** and is **a
 the close (X) button**: same `top`, same height as the X, so the two align on one axis. Never omit the logo, and
 never let it drift off-centre from the X.
 
+**Burger button — modern, `width:auto`, 15px to the edge — HARDCODE HOOK (ALWAYS).**
+- **Never the outdated 3-stripe icon.** Use a **modern 2-line** burger (e.g. two bars, the lower one shorter, with
+  a subtle hover that extends it) — or another contemporary treatment — but **never** three equal stripes.
+- **The button width is `auto`** (the bars define the width) — never a fixed square. This is so the bars sit
+  **flush** to the container edge, not centred inside a wide box that pushes them inward.
+- **Exactly 15px to the right of the burger icon AND of the close (X)** on every breakpoint — the same `15px`
+  as the `base-container` side padding. The bars'/X's **right edge** aligns to that padding, so the gap to the
+  screen edge is a strict `15px`; never more (no extra right padding inside the button), never less. Keep the tap
+  height comfortable (~44px) while the width stays auto.
+
 ## Section structure (single for all pages)
 
 ```html
@@ -354,6 +364,17 @@ The three mandatory steps:
   **never** inline styles, never ad-hoc one-off values that break the system.
 - This is the baseline rhythm. **Where a block needs it, the designer adjusts** — but the default everywhere is
   15 / 40 / 60 (→40 on 568 & 360). Anything that silently deviates is a defect to flag (see the page-check HOOK).
+
+## ⛔ SUPER-HARD HOOK — card grids collapse to ONE column on phone (≤767)
+
+**This is a SUPER-HARD HOOK.** Any grid of **cards** (products, categories, blog/journal, testimonials, team,
+feature tiles — anything card-like) **must drop to a single column on phones (≤767px) — never two-up.** Two
+narrow cards side-by-side on a phone create visual noise and cramping: squeezed text, tiny images, clipped copy.
+- Desktop 3–4 up → tablet (768–991) may stay 2 up → **phone (≤767) is 1 up, always.**
+- Put the single-column override at **`max-width:767px`** (not 568), so **both** phone bands (568–767 and
+  360–567) get one clean column.
+- A horizontal **scroll / carousel** (one near-full-width card with scroll-snap) is an acceptable alternative to a
+  vertical single column — but a **static 2-column card grid on a phone is a defect to fix.**
 
 ## Class naming
 
