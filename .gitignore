@@ -10,4 +10,22 @@
 !.claude/skills/page-check/
 !.claude/skills/page-check/**
 
+# Mandatory design skills (SUPER-HARD HOOK) — ship with the project for everyone.
+!.claude/skills/frontend-design/
+!.claude/skills/frontend-design/**
+!.claude/skills/ui-ux-pro-max/
+!.claude/skills/ui-ux-pro-max/**
+!.claude/skills/ui-styling/
+!.claude/skills/ui-styling/**
+!.claude/skills/design/
+!.claude/skills/design/**
+!.claude/skills/design-system/
+!.claude/skills/design-system/**
+!.claude/skills/brand/
+!.claude/skills/brand/**
+!.claude/skills/banner-design/
+!.claude/skills/banner-design/**
+!.claude/skills/slides/
+!.claude/skills/slides/**
+
 node_modules/

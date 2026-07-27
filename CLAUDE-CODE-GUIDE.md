@@ -32,7 +32,9 @@ the session working directory, and Claude gains access to all materials.
 ### Step 3. Load the guide and hooks
 
 Instruct Claude: "Run the guide and hooks." Claude loads the Part II ruleset and runs the session hooks, so
-every subsequent action follows the design rules.
+every subsequent action follows the design rules. On this same "Run", the mandatory design skills
+(`ui-ux-pro-max` and `frontend-design`) are installed and activated automatically for everyone — see the
+"mandatory skills" SUPER-HARD HOOK in Part II.
 
 If your environment doesn't have the two localhost skills yet, also tell Claude: **"Install my skills."** The
 `local-preview` and `localhost-up` skills ship with the project (in `.claude/skills/`), so Claude sets them up
@@ -122,6 +124,26 @@ decoration without function, deviation from the grid/breakpoints, and so on.
 
 The goal is to keep a weak decision from landing in the layout "on autopilot". The final word is always the
 designer's, but **consciously**, not by default.
+
+## ⛔ SUPER-HARD HOOK — mandatory skills installed & running on every "Run" (NEVER SKIP)
+
+**This is a SUPER-HARD HOOK — it must NOT be violated, ever.** Two design skills are **mandatory** on this
+project and must be **installed and active for everyone** the first time the designer says **"Run the guide
+and hooks"** — and on every session afterwards:
+
+1. **`ui-ux-pro-max`** — design-intelligence skill family (styles, colour palettes, font pairings, UX rules,
+   stacks). Installed via its official npm CLI: `npx -p ui-ux-pro-max-cli uipro init --ai claude`.
+2. **`frontend-design`** — Anthropic's skill for distinctive, non-templated visual design
+   (`anthropics/skills`).
+
+- Both **ship vendored** in `.claude/skills/`, so a fresh clone already has them. The SessionStart hook
+  **`install-skills.sh`** runs on every "Run", confirms they are present, and **re-installs any that are
+  missing** (npm for `ui-ux-pro-max`, the `anthropics/skills` repo for `frontend-design`). Never delete them,
+  never skip the install step, never let a session start without them.
+- **Use them.** For ANY UI / layout / visual / component work, Claude consults **`frontend-design`** for
+  aesthetic direction and **`ui-ux-pro-max`** for concrete styles / palettes / typography / UX — **alongside,
+  never replacing,** the rules in this Part II (on any conflict, Part II wins). If a skill is unavailable,
+  Claude says so and installs it **before** continuing.
 
 ## 🫀 One system: Style Guide ⇄ site
 
