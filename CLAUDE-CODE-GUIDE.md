@@ -145,6 +145,20 @@ and hooks"** — and on every session afterwards:
   never replacing,** the rules in this Part II (on any conflict, Part II wins). If a skill is unavailable,
   Claude says so and installs it **before** continuing.
 
+## ⛔ SUPER-HARD HOOK — designs live in `Design/` on a separate branch, NEVER on `main`
+
+**This is a SUPER-HARD HOOK — it must NOT be violated.** `main` holds **only the guide and the installer** —
+this `CLAUDE-CODE-GUIDE.md`, the `.claude/` hooks + skills, `.gitignore` and `design-references`. `main` is the
+**portable payload** the designer pushes into other repos, so it must **never** carry a built design.
+
+- **Every built design goes into a folder named `Design/`** (never `site/`, never the repo root) and is
+  committed **only on a dedicated design branch** (default name `design`) — **never on `main`.** The design is
+  a **draft (чернетка)** that stays with the designer.
+- **Before starting any design/build, Claude switches to (or creates) the design branch first**, then builds
+  into `Design/`. Claude **never** commits `Design/` — or any built page/asset — onto `main`.
+- Result: whenever the designer takes `main` into another project, it is **guide + installer only**, by
+  construction — the design never rides along.
+
 ## 🫀 One system: Style Guide ⇄ site
 
 The **Style Guide is the single source of truth** for the design system, and the site is built from the same
