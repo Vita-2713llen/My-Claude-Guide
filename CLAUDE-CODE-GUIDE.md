@@ -618,6 +618,38 @@ check is run and its questions are resolved.
 
 ---
 
+# ⛔ SEO & PERFORMANCE — SUPER-HARD HOOK (ALWAYS, right AFTER page-check)
+
+**This is a SUPER-HARD HOOK — it must NOT be skipped.** Immediately **after** the page-check passes, every page
+goes through an **SEO & performance setup** step. It is a core part of finishing a design, not an afterthought,
+and it runs via the **`seo-check` skill**. Like the design interview, it is **a conversation**: Claude **agrees
+each item with the designer** (favicon, share image, titles, descriptions…) before finalising — it never invents
+or silently skips them.
+
+**Agree with the designer, then implement — on every page:**
+
+1. **Favicon** — a real favicon set (SVG + PNG `32`/`180`/`192`/`512`, `apple-touch-icon`, `site.webmanifest`,
+   `theme-color`). Ask the designer for the mark/source; never ship the browser default.
+2. **Open Graph / social "graph" image** — a `1200×630` share image plus `og:title` / `og:description` /
+   `og:image` / `og:url` / `og:type`, and `twitter:card=summary_large_image`. Confirm the visual with the designer.
+3. **Meta title** — unique per page, ≈50–60 chars, brand-suffixed. Approve the wording with the designer.
+4. **Meta description** — unique per page, ≈140–160 chars, compelling. Approve the wording.
+5. **Head essentials** — exactly one `<h1>` per page, correct heading order, `lang`, `charset`, `viewport`,
+   `canonical`, and JSON-LD structured data where relevant (Organization / Product / Article).
+6. **PageSpeed — top scores (MANDATORY).** Target the **highest** Core Web Vitals: images right-sized + modern
+   format (WebP/AVIF) with `width`/`height` (no CLS); `loading="lazy"` below the fold and an eager LCP image;
+   minified CSS/JS; `preconnect` for fonts + `font-display:swap`; no render-blocking resources; no unused code.
+7. **Links — every link carries proper attributes.** Never a bare link: descriptive text or `aria-label`;
+   `rel="noopener"` (+`noreferrer` for external); `target` only when needed; correct internal/external handling.
+8. **Images — every image has alt + attributes.** Meaningful `alt` (empty `alt=""` **only** for purely
+   decorative), plus `width`/`height`, `loading`, `decoding="async"`. Never `alt="image"` or placeholder text.
+
+**Behaviour:** run the **`seo-check` skill** on every finished page; for each item **ask the designer** and get a
+decision (especially favicon, share image, titles, descriptions), then implement. A page is shippable **only
+after page-check AND this SEO/performance step are both resolved.**
+
+---
+
 # Final checklist
 
 - [ ] **⛔ Uniqueness:** Awwwards-level design, no AI defaults; **no eyebrow/subtitle above any section heading unless explicitly requested**; a signature element present.
@@ -628,6 +660,7 @@ check is run and its questions are resolved.
 - [ ] **🦴 Spacing skeleton:** 15px heading→text · 40px text→button · 60px title→content (→40px on 568 & 360); no doubled same-bg section gap.
 - [ ] **⛔ No truncated text:** banner title = 2 lines on desktop via copy + `max-width` + `text-wrap:balance` — NEVER `-webkit-line-clamp`/`text-overflow:ellipsis`/`nowrap`. From 768→360 every title/lead is fully visible and wraps (3+ lines OK); no sentence ends in `...`.
 - [ ] **🔍 Page-check ran:** spacing, WCAG contrast, minification/optimisation offered, all 7 breakpoints, structure rules — deviations raised with the designer.
+- [ ] **⛔ SEO & performance ran (after page-check):** favicon set, OG/graph share image, unique meta title + description, one `<h1>` + canonical + structured data, top PageSpeed/Core Web Vitals, every link with proper attributes, every image with meaningful `alt` — each agreed with the designer via the `seo-check` skill.
 - [ ] Buttons = `<a>` with a class; text without its own margin/padding — spacing via flex/grid on wrappers.
 - [ ] **(Webflow export)** Custom properties empty; CSS in longhand; `grid-*-gap` instead of `gap`; no descendant selectors.
 - [ ] **(Webflow export)** Animation attributes placed; gradients/grids moved to Head Code.
