@@ -200,6 +200,20 @@ uniquely. Two projects should never look like siblings.
 Styles set on Base cascade both up and down. **An override is applied only where the value differs from Base.**
 All points are subject to checking: **1920 / 1440 / 1280 / 992 / 768 / 568 / 360**.
 
+## Full-bleed sections & full-width imagery — premium-impact HOOK
+
+Premium, editorial sites breathe. Use **full-bleed** moments deliberately to break the rhythm of contained
+sections and give the page a cinematic, high-end feel:
+- **Full-bleed image band(s).** Include at least one **edge-to-edge (`100vw`)** photo section — for people-led
+  brands a large, beautiful face/portrait — with a short overlaid line of copy and a soft gradient scrim for
+  legibility. Give it real height (`min-height` ≈ `clamp(460px, 84vh, 800px)`) and a **smooth scrub parallax**
+  on the image (per the smoothness hook).
+- **Full-width galleries.** Key image grids may run **edge-to-edge** (only the base-container's 15px side
+  padding), not capped to the content max-width, so the imagery feels immersive.
+- **Contain by default, bleed by intention.** Text and most content still sit inside the `base-container`; the
+  full-bleed is a chosen accent, not the norm. A bled section must **never** cause horizontal scroll — keep the
+  page `overflow-x` safe (`body{overflow-x:hidden}` + `width:100%`, never `100vw` that ignores the scrollbar).
+
 ## Hero / banner — min-height (hardcoded, HOMEPAGE ONLY)
 
 ⚠️ **These values apply to the HOMEPAGE hero/banner only — strictly.** Inner pages (about, product, listing,
