@@ -231,10 +231,27 @@ function updateProgress(){
   document.getElementById('pct').textContent=Math.round(n/NICHES.length*100)+'%';
   document.getElementById('fill').style.width=(n/NICHES.length*100)+'%';
 }
+function fallbackCopy(t){
+  const ta=document.createElement('textarea');
+  ta.value=t;ta.setAttribute('readonly','');
+  ta.style.cssText='position:fixed;top:0;left:0;opacity:0';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  ta.setSelectionRange(0,t.length);
+  try{document.execCommand('copy')}catch(e){}
+  document.body.removeChild(ta);
+}
+function copyText(t){
+  try{
+    if(navigator.clipboard&&window.isSecureContext){
+      navigator.clipboard.writeText(t).catch(()=>fallbackCopy(t));return;
+    }
+  }catch(e){}
+  fallbackCopy(t);
+}
 rowsEl.addEventListener('click',e=>{
   const name=e.target.closest('.name');
   if(name){
-    navigator.clipboard&&navigator.clipboard.writeText(name.textContent);
+    copyText(name.textContent);
     document.querySelectorAll('.name.copied').forEach(el=>el.classList.remove('copied'));
     name.classList.add('copied');
     setTimeout(()=>name.classList.remove('copied'),1100);
