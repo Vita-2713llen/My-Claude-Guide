@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Framer Marketplace — 50 прибуткових ніш</title>
+<title>Framer Marketplace — 50 прибуткових ніш + назви</title>
 <style>
   :root{
     --bg:#0f1420; --panel:#161d2c; --panel-2:#1c2536; --line:#28324a;
@@ -13,19 +13,19 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
-    font-family:'Space Grotesk',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;
     background:radial-gradient(1100px 560px at 85% -12%,#17224a 0%,transparent 58%),var(--bg);
-    color:var(--ink);line-height:1.5;padding:28px 18px 80px;
+    color:var(--ink);line-height:1.5;padding:28px 18px 90px;
   }
-  .wrap{max-width:1080px;margin:0 auto}
+  .wrap{max-width:1120px;margin:0 auto}
   header{margin-bottom:22px}
   .eyebrow{color:var(--accent);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
   h1{font-size:clamp(26px,4vw,40px);font-weight:700;letter-spacing:-.02em;margin:6px 0 8px}
-  .sub{color:var(--muted);max-width:640px;font-size:15px}
+  .sub{color:var(--muted);max-width:660px;font-size:15px}
 
   .toolbar{
     position:sticky;top:12px;z-index:5;margin:20px 0 16px;
-    background:rgba(22,29,44,.82);backdrop-filter:blur(10px);
+    background:rgba(22,29,44,.85);backdrop-filter:blur(10px);
     border:1px solid var(--line);border-radius:var(--radius);
     padding:14px 16px;display:flex;flex-wrap:wrap;gap:14px;align-items:center
   }
@@ -35,41 +35,30 @@
   .progress-top span{color:var(--muted);font-size:13px}
   .bar{height:9px;background:var(--panel-2);border-radius:999px;overflow:hidden}
   .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3b82ff,#6fa8ff);border-radius:999px;transition:width .35s cubic-bezier(.4,0,.2,1)}
-  .search{
-    flex:1;min-width:180px;background:var(--panel-2);border:1px solid var(--line);
-    color:var(--ink);padding:10px 14px;border-radius:10px;font:inherit;font-size:14px
-  }
+  .search{flex:1;min-width:180px;background:var(--panel-2);border:1px solid var(--line);color:var(--ink);padding:10px 14px;border-radius:10px;font:inherit;font-size:14px}
   .search::placeholder{color:var(--muted)}
-  .btn{
-    background:var(--panel-2);border:1px solid var(--line);color:var(--muted);
-    padding:10px 14px;border-radius:10px;font:inherit;font-size:13px;cursor:pointer;transition:.2s
-  }
+  .btn{background:var(--panel-2);border:1px solid var(--line);color:var(--muted);padding:10px 14px;border-radius:10px;font:inherit;font-size:13px;cursor:pointer;transition:.2s;white-space:nowrap}
   .btn:hover{color:var(--ink);border-color:var(--accent)}
 
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-  .chip{
-    background:var(--panel);border:1px solid var(--line);color:var(--muted);
-    padding:7px 13px;border-radius:999px;font-size:12.5px;cursor:pointer;transition:.2s;font-weight:500
-  }
+  .chip{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:7px 13px;border-radius:999px;font-size:12.5px;cursor:pointer;transition:.2s;font-weight:500}
   .chip:hover{color:var(--ink)}
   .chip.active{background:var(--accent-soft);border-color:var(--accent);color:#cfe0ff}
 
   table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
-  thead th{
-    text-align:left;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-    font-weight:600;padding:14px 16px;background:var(--panel-2);border-bottom:1px solid var(--line)
-  }
+  thead th{text-align:left;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:14px 16px;background:var(--panel-2);border-bottom:1px solid var(--line)}
   tbody td{padding:13px 16px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
-  tbody tr:last-child td{border-bottom:none}
-  tbody tr{transition:background .15s}
-  tbody tr:hover{background:var(--panel-2)}
-  tbody tr.done{opacity:.5}
-  tbody tr.done .niche{text-decoration:line-through}
+  tbody tr.main{cursor:pointer;transition:background .15s}
+  tbody tr.main:hover{background:var(--panel-2)}
+  tbody tr.main.done{opacity:.5}
+  tbody tr.main.done .niche{text-decoration:line-through}
   .num{color:var(--muted);font-variant-numeric:tabular-nums;width:34px}
-  .niche{font-weight:600}
+  .niche{font-weight:600;display:flex;align-items:center;gap:8px}
+  .caret{color:var(--muted);font-size:11px;transition:transform .2s;display:inline-block}
+  tr.main.open .caret{transform:rotate(90deg);color:var(--accent)}
   .cat{color:var(--muted);font-size:12.5px}
-  .why{color:#c3ccdf;font-size:13px;max-width:340px}
-  .demand{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
+  .why{color:#c3ccdf;font-size:13px;max-width:320px}
+  .demand{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px}
   .d-high{background:rgba(61,220,132,.14);color:var(--high)}
   .d-med{background:rgba(245,181,68,.14);color:var(--med)}
   .d-low{background:rgba(139,151,179,.14);color:var(--low)}
@@ -78,20 +67,28 @@
   .cb:hover{border-color:var(--accent)}
   .cb:checked{background:var(--accent);border-color:var(--accent)}
   .cb:checked::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+
+  tr.detail td{padding:0;border-bottom:1px solid var(--line);background:#121826}
+  .names-wrap{padding:16px 16px 18px 50px;display:none}
+  tr.detail.open .names-wrap{display:block}
+  .names-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .names{display:flex;flex-wrap:wrap;gap:9px}
+  .name{background:var(--panel-2);border:1px solid var(--line);color:#dbe4f5;padding:8px 14px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;position:relative}
+  .name:hover{border-color:var(--accent);color:#fff;transform:translateY(-1px)}
+  .name.copied{border-color:var(--high);color:var(--high)}
+  .name.copied::after{content:"скопійовано";position:absolute;left:50%;top:-24px;transform:translateX(-50%);font-size:10px;font-weight:600;color:var(--high);background:var(--panel);border:1px solid var(--line);padding:2px 7px;border-radius:6px;white-space:nowrap}
+
   .empty{padding:40px;text-align:center;color:var(--muted)}
   footer{margin-top:22px;color:var(--muted);font-size:12.5px;text-align:center}
-  @media(max-width:720px){
-    .why,.col-cat{display:none}
-    thead .col-cat{display:none}
-  }
+  @media(max-width:760px){.why,.col-cat,thead .col-cat,thead .col-why{display:none}.names-wrap{padding-left:16px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <div class="eyebrow">Framer Marketplace</div>
-    <h1>50 прибуткових ніш для темплейтів</h1>
-    <p class="sub">Підбірка найпопулярніших і найкомерційніших ніш на Framer-маркетплейсі. Відмічай зроблені — прогрес зберігається у твоєму браузері. Клікай по фільтрах або шукай.</p>
+    <h1>50 прибуткових ніш + 350 назв</h1>
+    <p class="sub">Найкомерційніші ніші Framer-маркетплейсу. Клікни на нішу — розгорнуться <b>7 унікальних креативних назв</b> (клік по назві копіює її). Відмічай зроблені — прогрес зберігається у браузері.</p>
   </header>
 
   <div class="toolbar">
@@ -99,7 +96,8 @@
       <div class="progress-top"><b><span id="done">0</span> / 50 зроблено</b><span id="pct">0%</span></div>
       <div class="bar"><i id="fill"></i></div>
     </div>
-    <input id="search" class="search" placeholder="Пошук ніші…" autocomplete="off">
+    <input id="search" class="search" placeholder="Пошук ніші або назви…" autocomplete="off">
+    <button id="expandAll" class="btn">Розгорнути всі</button>
     <button id="reset" class="btn">Скинути</button>
   </div>
 
@@ -109,7 +107,7 @@
     <thead>
       <tr>
         <th class="num">#</th>
-        <th>Ніша</th>
+        <th>Ніша · 7 назв</th>
         <th class="col-cat">Категорія</th>
         <th>Попит</th>
         <th class="col-why">Чому продається</th>
@@ -120,68 +118,70 @@
   </table>
   <div id="empty" class="empty" style="display:none">Нічого не знайдено 🔍</div>
 
-  <footer>Прогрес зберігається локально (localStorage) на цьому пристрої · 50 ніш</footer>
+  <footer>Прогрес зберігається локально (localStorage) · 50 ніш · 350 назв · назви — ідеї, перед публікацією варто перевірити на маркетплейсі</footer>
 </div>
 
 <script>
 const NICHES=[
-  {n:"SaaS / Software landing",c:"Tech & SaaS",d:"high",w:"Найбільший і найплатоспроможніший сегмент — компанії постійно оновлюють лендінги."},
-  {n:"AI-продукт / AI SaaS",c:"Tech & SaaS",d:"high",w:"Найгарячіший тренд — попит зростає щомісяця, готові платити за сучасний вигляд."},
-  {n:"Developer tool / API",c:"Tech & SaaS",d:"high",w:"Технічні бренди цінують чисті docs-style лендінги; висока конверсія покупців."},
-  {n:"Mobile app landing",c:"Tech & SaaS",d:"high",w:"Кожен застосунок потребує промо-сторінку — величезний обсяг попиту."},
-  {n:"Analytics / Dashboard",c:"Tech & SaaS",d:"med",w:"Data-продукти люблять графіки й таблиці — можна показати експертизу."},
-  {n:"Cybersecurity",c:"Tech & SaaS",d:"med",w:"Trust-орієнтований дизайн, преміальні бюджети, мало якісних темплейтів."},
-  {n:"No-code / Automation",c:"Tech & SaaS",d:"med",w:"Зростаюча аудиторія творців; люблять яскраві product-лендінги."},
-  {n:"Стартап / Tech startup",c:"Стартапи та бізнес",d:"high",w:"Стартапам треба швидко й дешево — темплейти купують масово."},
-  {n:"Business consulting",c:"Стартапи та бізнес",d:"med",w:"Стабільний B2B-попит; солідний авторитетний вигляд продає."},
-  {n:"Marketing agency",c:"Стартапи та бізнес",d:"high",w:"Агенції — топ-покупці: багато проєктів, потрібні свіжі макети."},
-  {n:"Creative / Design agency",c:"Стартапи та бізнес",d:"high",w:"Один із найпопулярніших жанрів; сміливі анімації добре продаються."},
-  {n:"Branding studio",c:"Стартапи та бізнес",d:"med",w:"Естетичні студії шукають виразні, типографічні макети."},
-  {n:"Coworking space",c:"Стартапи та бізнес",d:"low",w:"Ніша вужча, але мало конкуренції — легше вирізнитись."},
-  {n:"VC fund / Investors",c:"Стартапи та бізнес",d:"med",w:"Преміальний сегмент, мінімалістичний «розумний» вигляд, високі бюджети."},
-  {n:"Designer portfolio",c:"Портфоліо та особисте",d:"high",w:"Вічнозелений бестселер — величезний ринок дизайнерів."},
-  {n:"Developer portfolio",c:"Портфоліо та особисте",d:"high",w:"Розробники хочуть готове рішення без верстки — стабільні продажі."},
-  {n:"Personal brand / Creator",c:"Портфоліо та особисте",d:"high",w:"Креатори та інфлюенсери — зростаюча платоспроможна аудиторія."},
-  {n:"Photographer portfolio",c:"Портфоліо та особисте",d:"high",w:"Візуальні професії цінують галереї й плавність — легко вражати."},
-  {n:"Videographer / Film studio",c:"Портфоліо та особисте",d:"med",w:"Відео-фон і кінематографічність виглядають дорого й продають."},
-  {n:"Resume / CV",c:"Портфоліо та особисте",d:"med",w:"Простий продукт, масовий попит, швидко зробити — гарна маржа."},
-  {n:"Freelancer",c:"Портфоліо та особисте",d:"high",w:"Мільйони фрилансерів потребують сайту-візитівки."},
-  {n:"Fintech / Finance app",c:"Фінанси",d:"high",w:"Високі бюджети, trust-дизайн, стабільно топова категорія."},
-  {n:"Crypto / Web3",c:"Фінанси",d:"high",w:"Активна ніша з дорогими проєктами; футуристичний стиль у ціні."},
-  {n:"Accounting / Bookkeeping",c:"Фінанси",d:"med",w:"Нудна ніша = мало гарних темплейтів = легко продати кращий."},
-  {n:"Insurance",c:"Фінанси",d:"med",w:"Консервативний B2C з бюджетами; довіра й ясність вирішують."},
-  {n:"Personal finance / Budget app",c:"Фінанси",d:"med",w:"Тренд на фінграмотність; молода аудиторія любить сучасний UI."},
-  {n:"Wellness / Meditation",c:"Здоров'я та велнес",d:"high",w:"Швидко зростає; м'яка естетика добре конвертує."},
-  {n:"Fitness / Gym",c:"Здоров'я та велнес",d:"high",w:"Багато студій і тренерів; енергійний дизайн продає."},
-  {n:"Yoga / Pilates studio",c:"Здоров'я та велнес",d:"med",w:"Естетична ніша з лояльною аудиторією; красиві макети в попиті."},
-  {n:"Medical clinic / Healthcare",c:"Здоров'я та велнес",d:"med",w:"Стабільний локальний бізнес; чистий, довірливий вигляд."},
-  {n:"Dental clinic",c:"Здоров'я та велнес",d:"med",w:"Клініки мають бюджети; вузька ніша — менше конкурентів."},
-  {n:"Therapy / Mental health",c:"Здоров'я та велнес",d:"med",w:"Зростає попит; тепла, спокійна естетика вирізняє."},
-  {n:"Real estate / Property",c:"Локальні та послуги",d:"high",w:"Великі бюджети, багато лістингів — CMS-темплейти цінні."},
-  {n:"Architecture firm",c:"Локальні та послуги",d:"med",w:"Візуальна ніша; мінімалізм і великі фото виглядають преміально."},
-  {n:"Interior design studio",c:"Локальні та послуги",d:"med",w:"Естетичний бізнес, готовий платити за красиву подачу."},
-  {n:"Law firm / Legal",c:"Локальні та послуги",d:"med",w:"Консервативний, платоспроможний сегмент; авторитет продає."},
-  {n:"Restaurant / Cafe",c:"Локальні та послуги",d:"med",w:"Масовий локальний попит; апетитні фото й меню-секції."},
-  {n:"Beauty salon / Spa",c:"Локальні та послуги",d:"med",w:"Багато закладів; бронювання й галерея — ключові блоки."},
-  {n:"Barbershop / Tattoo",c:"Локальні та послуги",d:"low",w:"Стильна ніша; сміливий дизайн легко вирізняється."},
-  {n:"Construction / Trades",c:"Локальні та послуги",d:"med",w:"Практичний B2B; мало сучасних темплейтів — просто продати кращий."},
-  {n:"Blog / Magazine",c:"Контент та спільнота",d:"med",w:"CMS-heavy темплейти цінні; вічнозелений формат."},
-  {n:"Newsletter / Substack",c:"Контент та спільнота",d:"med",w:"Бум креаторських розсилок; проста сторінка підписки в попиті."},
-  {n:"Podcast",c:"Контент та спільнота",d:"med",w:"Зростаючий формат; аудіо-плеєр і епізоди як фішка."},
-  {n:"Online course / E-learning",c:"Контент та спільнота",d:"high",w:"EdTech-бум; продажі курсів = високий LTV, готові платити."},
-  {n:"Coaching / Course creator",c:"Контент та спільнота",d:"high",w:"Коучі — активні покупці; лендінг для запуску продукту."},
-  {n:"Event / Conference",c:"Контент та спільнота",d:"med",w:"Кожна подія — новий сайт; програма й спікери як блоки."},
-  {n:"Community / Membership",c:"Контент та спільнота",d:"med",w:"Тренд на платні спільноти; сторінка вступу конвертує."},
-  {n:"E-commerce / DTC store",c:"Комерція та бренди",d:"high",w:"Величезний ринок; продуктові сітки й кошик — must-have."},
-  {n:"Fashion / Clothing brand",c:"Комерція та бренди",d:"med",w:"Візуальні бренди платять за виразну естетику й лукбуки."},
-  {n:"Skincare / Cosmetics (DTC)",c:"Комерція та бренди",d:"med",w:"Прибуткова DTC-ніша; чиста, «дорога» подача продукту."}
+ {n:"SaaS / Software landing",c:"Tech & SaaS",d:"high",w:"Найбільший і найплатоспроможніший сегмент — лендінги оновлюють постійно.",names:["Flowdeck","Stackr","Onboardly","Upshift","Craftbase","Nimbly","Sudobase"]},
+ {n:"AI-продукт / AI SaaS",c:"Tech & SaaS",d:"high",w:"Найгарячіший тренд — попит росте щомісяця.",names:["Synthex","Neuronest","Cognita","Prompta","Mindforge","Latent","Oraclon"]},
+ {n:"Developer tool / API",c:"Tech & SaaS",d:"high",w:"Технічні бренди люблять чисті docs-style лендінги.",names:["Devlane","Forkable","Shipyard","Codeglass","Byteworks","Endpointe","Runtime"]},
+ {n:"Mobile app landing",c:"Tech & SaaS",d:"high",w:"Кожен застосунок потребує промо-сторінку.",names:["Tapdown","Appline","Pocketful","Onetap","Screenly","Swiftfold","Liftoff"]},
+ {n:"Analytics / Dashboard",c:"Tech & SaaS",d:"med",w:"Data-продукти люблять графіки — покажи експертизу.",names:["Datawell","Metricly","Insighto","Charthaus","Pulsegrid","Numera","Cohorta"]},
+ {n:"Cybersecurity",c:"Tech & SaaS",d:"med",w:"Trust-дизайн, преміальні бюджети, мало якісних темплейтів.",names:["Sentinela","Ironclad","Cipherly","Vaultline","Bastion","Redshield","Zeroday"]},
+ {n:"No-code / Automation",c:"Tech & SaaS",d:"med",w:"Зростаюча аудиторія творців любить яскраві product-лендінги.",names:["Blocksmith","Autoflow","Nodely","Zapline","Buildless","Loopworks","Draggable"]},
+ {n:"Стартап / Tech startup",c:"Стартапи та бізнес",d:"high",w:"Стартапам треба швидко й дешево — купують масово.",names:["Venturely","Seedhaus","Launchline","Foundry","Nextbase","Runway","Boldstart"]},
+ {n:"Business consulting",c:"Стартапи та бізнес",d:"med",w:"Стабільний B2B; солідний авторитетний вигляд продає.",names:["Advisora","Northmark","Braxton","Meridia","Clariton","Vantable","Counselcraft"]},
+ {n:"Marketing agency",c:"Стартапи та бізнес",d:"high",w:"Агенції — топ-покупці: багато проєктів, потрібні свіжі макети.",names:["Amplifi","Growthlab","Reachly","Campaignhaus","Boldpixel","Brightwave","Kickpost"]},
+ {n:"Creative / Design agency",c:"Стартапи та бізнес",d:"high",w:"Один із найпопулярніших жанрів; сміливі анімації продають.",names:["Formcraft","Kithe","Chroma","Atelierx","Nordform","Vividhaus","Monoco"]},
+ {n:"Branding studio",c:"Стартапи та бізнес",d:"med",w:"Естетичні студії шукають виразні типографічні макети.",names:["Marque","Brandline","Signia","Emblem","Namesake","Idento","Craftmark"]},
+ {n:"Coworking space",c:"Стартапи та бізнес",d:"low",w:"Вужча ніша, але мало конкуренції — легше вирізнитись.",names:["Deskhaus","Hivework","Commons","Nooklab","Openfloor","Coworkly","Loftline"]},
+ {n:"VC fund / Investors",c:"Стартапи та бізнес",d:"med",w:"Преміум-сегмент, мінімалізм, високі бюджети.",names:["Ventureline","Northcap","Seedline","Capitalis","Foundershaus","Everline","Backd"]},
+ {n:"Designer portfolio",c:"Портфоліо та особисте",d:"high",w:"Вічнозелений бестселер — величезний ринок дизайнерів.",names:["Foliohaus","Casely","Craftself","Showreel","Persona","Madely","Studioself"]},
+ {n:"Developer portfolio",c:"Портфоліо та особисте",d:"high",w:"Розробники хочуть готове рішення без верстки.",names:["Hackself","Commitlog","Buildlog","Devhaus","Sourcely","Terminalist","Stackself"]},
+ {n:"Personal brand / Creator",c:"Портфоліо та особисте",d:"high",w:"Креатори — зростаюча платоспроможна аудиторія.",names:["Meco","Ownvoice","Creatorhaus","Solohaus","Byline","Limelight","Frontface"]},
+ {n:"Photographer portfolio",c:"Портфоліо та особисте",d:"high",w:"Візуальні професії цінують галереї й плавність.",names:["Exposé","Framewell","Shutterhaus","Silverlens","Focalist","Grainhaus","Frameline"]},
+ {n:"Videographer / Film studio",c:"Портфоліо та особисте",d:"med",w:"Кінематографічність виглядає дорого й продає.",names:["Reelhaus","Motionist","Framerate","Filmwell","Cutshop","Cineform","Silverframe"]},
+ {n:"Resume / CV",c:"Портфоліо та особисте",d:"med",w:"Простий продукт, масовий попит, гарна маржа.",names:["Resuma","Hireable","Onepage","Careerly","Proffile","Standout","Firstpage"]},
+ {n:"Freelancer",c:"Портфоліо та особисте",d:"high",w:"Мільйони фрилансерів потребують сайту-візитівки.",names:["Solowork","Gigline","Handywork","Loneworks","Independo","Forhire","Sologig"]},
+ {n:"Fintech / Finance app",c:"Фінанси",d:"high",w:"Високі бюджети, trust-дизайн, стабільно топова категорія.",names:["Ledgerly","Fintone","Payline","Mintbase","Vaulton","Current","Ledgr"]},
+ {n:"Crypto / Web3",c:"Фінанси",d:"high",w:"Активна ніша з дорогими проєктами; футуризм у ціні.",names:["Blockhaus","Chainly","Tokenform","Onchain","Mintworks","Web3haus","Satoform"]},
+ {n:"Accounting / Bookkeeping",c:"Фінанси",d:"med",w:"Нудна ніша = мало гарних темплейтів = легко продати кращий.",names:["Bookly","Balanced","Countly","Taxwell","Figurely","Tallyhaus","Reckonly"]},
+ {n:"Insurance",c:"Фінанси",d:"med",w:"Консервативний B2C з бюджетами; довіра вирішує.",names:["Assurely","Coverline","Safenest","Shieldwell","Policyhaus","Indemna","Trustcover"]},
+ {n:"Personal finance / Budget app",c:"Фінанси",d:"med",w:"Тренд на фінграмотність; молода аудиторія любить сучасний UI.",names:["Budgetly","Pennyline","Savewell","Nestegg","Spendly","Mintful","Cashwell"]},
+ {n:"Wellness / Meditation",c:"Здоров'я та велнес",d:"high",w:"Швидко зростає; м'яка естетика добре конвертує.",names:["Calmwell","Stiller","Breathly","Sereno","Mindwell","Zenhaus","Innerly"]},
+ {n:"Fitness / Gym",c:"Здоров'я та велнес",d:"high",w:"Багато студій і тренерів; енергійний дизайн продає.",names:["Ironhaus","Repline","Fitforge","Sweatlab","Pulsefit","Gritwork","Movewell"]},
+ {n:"Yoga / Pilates studio",c:"Здоров'я та велнес",d:"med",w:"Естетична ніша з лояльною аудиторією.",names:["Flowhaus","Prana","Stillform","Bendwell","Lotusline","Breathspace","Poised"]},
+ {n:"Medical clinic / Healthcare",c:"Здоров'я та велнес",d:"med",w:"Стабільний локальний бізнес; чистий довірливий вигляд.",names:["Medwell","Curely","Vitalis","Medihaus","Clinico","Wellpoint","Careline"]},
+ {n:"Dental clinic",c:"Здоров'я та велнес",d:"med",w:"Клініки мають бюджети; вузька ніша — менше конкурентів.",names:["Brightbite","Dentwell","Pearline","Smilecraft","Toothhaus","Enamel","Freshbite"]},
+ {n:"Therapy / Mental health",c:"Здоров'я та велнес",d:"med",w:"Зростає попит; тепла спокійна естетика вирізняє.",names:["Unburden","Soothely","Mindsafe","Innerwork","Reframely","Havenly","Quietmind"]},
+ {n:"Real estate / Property",c:"Локальні та послуги",d:"high",w:"Великі бюджети, багато лістингів — CMS-темплейти цінні.",names:["Abode","Keyhaus","Propline","Dwellwell","Nesthaus","Realmly","Doorstep"]},
+ {n:"Architecture firm",c:"Локальні та послуги",d:"med",w:"Візуальна ніша; мінімалізм і великі фото — преміально.",names:["Archform","Structura","Formworks","Drafthaus","Concreta","Elevation","Bauline"]},
+ {n:"Interior design studio",c:"Локальні та послуги",d:"med",w:"Естетичний бізнес, готовий платити за красиву подачу.",names:["Interia","Roomcraft","Dwellform","Nestwell","Palettehaus","Furnish","Homeform"]},
+ {n:"Law firm / Legal",c:"Локальні та послуги",d:"med",w:"Консервативний платоспроможний сегмент; авторитет продає.",names:["Lawline","Counselwell","Verdicta","Barhaus","Legalis","Advoca","Statute"]},
+ {n:"Restaurant / Cafe",c:"Локальні та послуги",d:"med",w:"Масовий локальний попит; апетитні фото й меню.",names:["Tableside","Forkline","Savora","Bistrohaus","Platewell","Morsel","Feastly"]},
+ {n:"Beauty salon / Spa",c:"Локальні та послуги",d:"med",w:"Багато закладів; бронювання й галерея — ключові блоки.",names:["Glowhaus","Lumière","Silkwell","Beauté","Radia","Pamperly","Bloomsalon"]},
+ {n:"Barbershop / Tattoo",c:"Локальні та послуги",d:"low",w:"Стильна ніша; сміливий дизайн легко вирізняється.",names:["Fadehaus","Sharpline","Inkwell","Bladeline","Cleancut","Needlework","Barberhaus"]},
+ {n:"Construction / Trades",c:"Локальні та послуги",d:"med",w:"Практичний B2B; мало сучасних темплейтів.",names:["Buildwell","Groundworks","Trusshaus","Hardhat","Brickline","Solidbuild","Framecraft"]},
+ {n:"Blog / Magazine",c:"Контент та спільнота",d:"med",w:"CMS-heavy темплейти цінні; вічнозелений формат.",names:["Readly","Columna","Inkpost","Storyhaus","Dispatch","Longform","Bylinehaus"]},
+ {n:"Newsletter / Substack",c:"Контент та спільнота",d:"med",w:"Бум креаторських розсилок; проста сторінка підписки.",names:["Sendly","Inboxly","Missive","Digestly","Broadsheet","Subline","Letterhaus"]},
+ {n:"Podcast",c:"Контент та спільнота",d:"med",w:"Зростаючий формат; аудіо-плеєр і епізоди як фішка.",names:["Airwave","Micline","Episodio","Soundhaus","Onair","Waveform","Podline"]},
+ {n:"Online course / E-learning",c:"Контент та спільнота",d:"high",w:"EdTech-бум; продаж курсів = високий LTV.",names:["Learnly","Coursehaus","Skillwell","Academ","Lessonlab","Tutorly","Mastered"]},
+ {n:"Coaching / Course creator",c:"Контент та спільнота",d:"high",w:"Коучі — активні покупці; лендінг для запуску.",names:["Coachly","Mentora","Guidewell","Elevately","Roadmapped","Leveled","Ownexpert"]},
+ {n:"Event / Conference",c:"Контент та спільнота",d:"med",w:"Кожна подія — новий сайт; програма й спікери.",names:["Gatherly","Eventhaus","Convene","Summitline","Lineup","Rsvply","Backstage"]},
+ {n:"Community / Membership",c:"Контент та спільнота",d:"med",w:"Тренд на платні спільноти; сторінка вступу конвертує.",names:["Circly","Tribehaus","Memberly","Kinship","Belong","Insiders","Fellowship"]},
+ {n:"E-commerce / DTC store",c:"Комерція та бренди",d:"high",w:"Величезний ринок; продуктові сітки й кошик — must-have.",names:["Cartwell","Storely","Merchhaus","Checkoutly","Bazaar","Restock","Soldly"]},
+ {n:"Fashion / Clothing brand",c:"Комерція та бренди",d:"med",w:"Візуальні бренди платять за виразну естетику й лукбуки.",names:["Threadhaus","Vesté","Wearwell","Cladline","Coutura","Wardly","Seams"]},
+ {n:"Skincare / Cosmetics (DTC)",c:"Комерція та бренди",d:"med",w:"Прибуткова DTC-ніша; чиста «дорога» подача продукту.",names:["Skinhaus","Dewline","Glowform","Serumly","Bareskin","Lumea","Radiantly"]}
 ];
 
 const rowsEl=document.getElementById('rows');
 const chipsEl=document.getElementById('chips');
 const KEY='framer-niches-done-v1';
 let done=JSON.parse(localStorage.getItem(KEY)||'{}');
+let openSet=new Set();
 let activeCat='Усі', query='';
+const dLabel={high:'Високий',med:'Середній',low:'Нижчий'};
 
 const cats=['Усі',...[...new Set(NICHES.map(x=>x.c))]];
 cats.forEach(c=>{
@@ -192,26 +192,35 @@ cats.forEach(c=>{
   chipsEl.appendChild(b);
 });
 
-const dLabel={high:'Високий',med:'Середній',low:'Нижчий'};
-
 function render(){
   rowsEl.innerHTML='';
   let shown=0;
   NICHES.forEach((x,i)=>{
     const id='n'+i;
+    const matchText=(x.n+' '+x.c+' '+x.w+' '+x.names.join(' ')).toLowerCase();
     if(activeCat!=='Усі'&&x.c!==activeCat)return;
-    if(query&&!(x.n.toLowerCase().includes(query)||x.c.toLowerCase().includes(query)||x.w.toLowerCase().includes(query)))return;
+    if(query&&!matchText.includes(query))return;
     shown++;
+    const open=openSet.has(id);
     const tr=document.createElement('tr');
-    if(done[id])tr.classList.add('done');
+    tr.className='main'+(done[id]?' done':'')+(open?' open':'');
+    tr.dataset.id=id;
     tr.innerHTML=`
       <td class="num">${String(i+1).padStart(2,'0')}</td>
-      <td class="niche">${x.n}</td>
+      <td><div class="niche"><span class="caret">▶</span>${x.n}</div></td>
       <td class="col-cat cat">${x.c}</td>
       <td><span class="demand d-${x.d}">${dLabel[x.d]}</span></td>
       <td class="col-why why">${x.w}</td>
       <td class="col-check"><input type="checkbox" class="cb" data-id="${id}" ${done[id]?'checked':''}></td>`;
     rowsEl.appendChild(tr);
+
+    const dr=document.createElement('tr');
+    dr.className='detail'+(open?' open':'');
+    dr.innerHTML=`<td colspan="6"><div class="names-wrap">
+      <div class="names-label">7 назв для «${x.n}» — клік копіює</div>
+      <div class="names">${x.names.map(nm=>`<span class="name">${nm}</span>`).join('')}</div>
+    </div></td>`;
+    rowsEl.appendChild(dr);
   });
   document.getElementById('empty').style.display=shown?'none':'block';
   updateProgress();
@@ -222,16 +231,40 @@ function updateProgress(){
   document.getElementById('pct').textContent=Math.round(n/NICHES.length*100)+'%';
   document.getElementById('fill').style.width=(n/NICHES.length*100)+'%';
 }
+rowsEl.addEventListener('click',e=>{
+  const name=e.target.closest('.name');
+  if(name){
+    navigator.clipboard&&navigator.clipboard.writeText(name.textContent);
+    document.querySelectorAll('.name.copied').forEach(el=>el.classList.remove('copied'));
+    name.classList.add('copied');
+    setTimeout(()=>name.classList.remove('copied'),1100);
+    return;
+  }
+  if(e.target.classList.contains('cb'))return;
+  const row=e.target.closest('tr.main');
+  if(row){
+    const id=row.dataset.id;
+    openSet.has(id)?openSet.delete(id):openSet.add(id);
+    render();
+  }
+});
 rowsEl.addEventListener('change',e=>{
   if(e.target.classList.contains('cb')){
     const id=e.target.dataset.id;
     done[id]=e.target.checked;
     localStorage.setItem(KEY,JSON.stringify(done));
-    e.target.closest('tr').classList.toggle('done',e.target.checked);
     updateProgress();
+    e.target.closest('tr.main').classList.toggle('done',e.target.checked);
   }
 });
 document.getElementById('search').addEventListener('input',e=>{query=e.target.value.toLowerCase().trim();render()});
+let allOpen=false;
+document.getElementById('expandAll').addEventListener('click',e=>{
+  allOpen=!allOpen;
+  openSet=allOpen?new Set(NICHES.map((_,i)=>'n'+i)):new Set();
+  e.target.textContent=allOpen?'Згорнути всі':'Розгорнути всі';
+  render();
+});
 document.getElementById('reset').addEventListener('click',()=>{
   if(confirm('Скинути всі відмітки?')){done={};localStorage.setItem(KEY,'{}');render()}
 });
