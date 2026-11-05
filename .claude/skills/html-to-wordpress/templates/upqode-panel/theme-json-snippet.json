@@ -1,0 +1,55 @@
+{
+	"$comment": "Merge into the theme's theme.json. Every element reads its --type-* tokens, so Styles → Typography per screen reaches it. fontSizes stays empty on purpose: presets turn the size field into lettered buttons; sizes are tokens edited per screen.",
+	"settings": {
+		"typography": {
+			"fluid": false,
+			"defaultFontSizes": false,
+			"fontSizes": []
+		},
+		"spacing": {
+			"defaultSpacingSizes": false
+		},
+		"color": {
+			"defaultPalette": false
+		}
+	},
+	"styles": {
+		"typography": {
+			"fontSize": "var(--type-body-size)",
+			"lineHeight": "var(--type-body-lh)",
+			"letterSpacing": "var(--type-body-ls)",
+			"fontWeight": "var(--type-body-fw)"
+		},
+		"elements": {
+			"heading": {
+				"typography": {
+					"lineHeight": "var(--type-heading-lh)",
+					"letterSpacing": "var(--type-heading-ls)",
+					"fontWeight": "var(--type-heading-fw)"
+				}
+			},
+			"h1": { "typography": { "fontSize": "var(--type-h1-size)", "lineHeight": "var(--type-h1-lh)", "letterSpacing": "var(--type-h1-ls)", "fontWeight": "var(--type-h1-fw)" } },
+			"h2": { "typography": { "fontSize": "var(--type-h2-size)", "lineHeight": "var(--type-h2-lh)", "letterSpacing": "var(--type-h2-ls)", "fontWeight": "var(--type-h2-fw)" } },
+			"h3": { "typography": { "fontSize": "var(--type-h3-size)", "lineHeight": "var(--type-h3-lh)", "letterSpacing": "var(--type-h3-ls)", "fontWeight": "var(--type-h3-fw)" } },
+			"h4": { "typography": { "fontSize": "var(--type-h4-size)", "lineHeight": "var(--type-h4-lh)", "letterSpacing": "var(--type-h4-ls)", "fontWeight": "var(--type-h4-fw)" } },
+			"h5": { "typography": { "fontSize": "var(--type-h5-size)", "lineHeight": "var(--type-h5-lh)", "letterSpacing": "var(--type-h5-ls)", "fontWeight": "var(--type-h5-fw)" } },
+			"h6": { "typography": { "fontSize": "var(--type-h6-size)", "lineHeight": "var(--type-h6-lh)", "letterSpacing": "var(--type-h6-ls)", "fontWeight": "var(--type-h6-fw)" } },
+			"button": {
+				"typography": {
+					"fontSize": "var(--type-button-size)",
+					"lineHeight": "var(--type-button-lh)",
+					"letterSpacing": "var(--type-button-ls)",
+					"fontWeight": "var(--type-button-fw)"
+				}
+			},
+			"caption": {
+				"typography": {
+					"fontSize": "var(--type-caption-size)",
+					"lineHeight": "var(--type-caption-lh)",
+					"letterSpacing": "var(--type-caption-ls)",
+					"fontWeight": "var(--type-caption-fw)"
+				}
+			}
+		}
+	}
+}

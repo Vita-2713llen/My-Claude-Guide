@@ -1,0 +1,142 @@
+/**
+ * The tokens the panel reads — a skeleton to fill from the source.
+ *
+ * Not installed: copy the parts you need into the theme's tokens file
+ * (XXP_PANEL_TOKENS_FILE, default assets/css/tokens.css) and replace every
+ * number with the design's, read off the extractor at each of the seven
+ * screens. The panel shows these numbers in grey and keeps only overrides.
+ *
+ * Rules the reader depends on:
+ *   - the middle screen is outside any @media;
+ *   - the other six use these queries exactly, nothing else — a block under
+ *     an off-grid query belongs to no screen and is not read;
+ *   - a screen restates only what changes there; the rest cascades.
+ *
+ * Whole pixels only. No clamp() for type.
+ */
+
+:root {
+	/* ---- colours: the palette is the source, the hex is the fallback ---- */
+	--c-ink: var(--wp--preset--color--ink, #111111);
+	--c-accent: var(--wp--preset--color--accent, #0162ff);
+	/* --rgb-<slug> is computed by the panel for every palette colour */
+
+	/* ---- type: every heading starts from these three ---- */
+	--type-heading-lh: 1.2;
+	--type-heading-ls: -0.02em;
+	--type-heading-fw: 600;
+
+	--type-h1-size: 68px;
+	--type-h1-lh: var(--type-heading-lh);
+	--type-h1-ls: var(--type-heading-ls);
+	--type-h1-fw: var(--type-heading-fw);
+
+	--type-h2-size: 48px;
+	--type-h2-lh: var(--type-heading-lh);
+	--type-h2-ls: var(--type-heading-ls);
+	--type-h2-fw: var(--type-heading-fw);
+
+	--type-h3-size: 32px;
+	--type-h3-lh: var(--type-heading-lh);
+	--type-h3-ls: var(--type-heading-ls);
+	--type-h3-fw: var(--type-heading-fw);
+
+	--type-h4-size: 24px;
+	--type-h4-lh: var(--type-heading-lh);
+	--type-h4-ls: var(--type-heading-ls);
+	--type-h4-fw: var(--type-heading-fw);
+
+	--type-h5-size: 20px;
+	--type-h5-lh: var(--type-heading-lh);
+	--type-h5-ls: var(--type-heading-ls);
+	--type-h5-fw: var(--type-heading-fw);
+
+	--type-h6-size: 18px;
+	--type-h6-lh: var(--type-heading-lh);
+	--type-h6-ls: var(--type-heading-ls);
+	--type-h6-fw: var(--type-heading-fw);
+
+	/* ---- text: Body is the body; Small and Large start as the body's ---- */
+	--type-body-size: 16px;
+	--type-body-lh: 1.5;
+	--type-body-ls: 0em;
+	--type-body-fw: 400;
+
+	--type-text-sm-size: 14px;
+	--type-text-sm-lh: var(--type-body-lh);
+	--type-text-sm-ls: var(--type-body-ls);
+	--type-text-sm-fw: var(--type-body-fw);
+
+	--type-text-lg-size: 18px;
+	--type-text-lg-lh: var(--type-body-lh);
+	--type-text-lg-ls: var(--type-body-ls);
+	--type-text-lg-fw: var(--type-body-fw);
+
+	--type-button-size: 16px;
+	--type-button-lh: 1.2;
+	--type-button-ls: 0em;
+	--type-button-fw: 500;
+
+	--type-caption-size: 14px;
+	--type-caption-lh: 1.5;
+	--type-caption-ls: 0em;
+	--type-caption-fw: 400;
+
+	/* ---- form fields: Default; Focus and Error fall back to it ---- */
+	--field-bg: var(--c-white, #ffffff);
+	--field-border: rgba(17, 17, 17, 0.16);
+	--field-border-w: 1px;
+	--field-radius: 6px;
+	--field-text: var(--c-ink);
+	--field-placeholder: rgba(17, 17, 17, 0.62);
+	--field-size: var(--type-body-size);
+	--field-line-height: normal;
+	--field-letter-spacing: inherit;
+	--field-weight: 400;
+	--field-case: none;
+
+	--field-focus-border: var(--c-accent);
+	--field-error-border: #d93025;
+	--field-error-border-focus: #d93025;
+	--field-error-msg: #d93025;
+}
+
+/* The six other screens — only what changes, only these queries. */
+
+@media (min-width: 1280px) {
+	:root {
+		--type-h1-size: 72px;
+	}
+}
+
+@media (min-width: 1440px) {
+	:root {
+	}
+}
+
+@media (min-width: 1920px) {
+	:root {
+		--type-h1-size: 80px;
+	}
+}
+
+@media (max-width: 991px) {
+	:root {
+		--type-h1-size: 56px;
+		--type-h2-size: 40px;
+	}
+}
+
+@media (max-width: 767px) {
+	:root {
+		--type-h1-size: 44px;
+		--type-h2-size: 32px;
+	}
+}
+
+@media (max-width: 567px) {
+	:root {
+		--type-h1-size: 36px;
+		--type-h2-size: 28px;
+	}
+}

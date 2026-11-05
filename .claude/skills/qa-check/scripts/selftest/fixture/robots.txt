@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+Sitemap: __BASE__/sitemap.xml

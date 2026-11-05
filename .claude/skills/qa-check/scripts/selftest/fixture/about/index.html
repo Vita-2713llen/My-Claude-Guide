@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About Brand — our studio and how we work</title>
+<meta name="description" content="Meet the Brand studio: a small team that plans, sources and finishes calm rooms for homes and small offices.">
+<meta property="og:title" content="About Brand — our studio and how we work">
+<meta property="og:image" content="/img/og.png">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-row">
+    <a class="site-logo" href="/"><img src="/img/logo.svg" alt="Brand" width="120" height="32"></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="/about/">About</a></li>
+        <!-- TEXT-06: the menu says "Prices", the page is titled "Pricing" -->
+        <li><a href="/pricing/">Prices</a></li>
+        <li><a href="/events/">Events</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </nav>
+    <!-- A11Y-02: the panel below has no role=dialog / aria-modal and focus stays on this button -->
+    <button class="site-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<div id="menu-panel" class="menu-panel">
+  <ul>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/pricing/">Prices</a></li>
+    <li><a href="/events/">Events</a></li>
+    <li><a href="/faq/">FAQ</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+</div>
+<main>
+
+<section>
+  <div class="container">
+    <h1>About Brand</h1>
+    <!-- TEXT-03: UK spelling ("colour") on a US English site -->
+    <p>We choose every colour with the light of the room in mind, and we test samples on site before anything is ordered.</p>
+    <p>Our team is small on purpose: the person who plans your room is the person who finishes it.</p>
+    <div class="btn-row"><a class="btn" href="/contact/">Start Your Project</a></div>
+  </div>
+</section>
+<section class="process">
+  <div class="container">
+    <h2>How we work</h2>
+    <!-- clean (A11Y-04): tabs with role=tablist / tab and aria-selected -->
+    <div class="tabs tabs-aria" role="tablist" aria-label="Process">
+      <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="p-plan" data-panel="p-plan" id="t-plan">Plan</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="p-build" data-panel="p-build" id="t-build">Build</button>
+    </div>
+    <div class="tab-panel" id="p-plan" role="tabpanel" aria-labelledby="t-plan"><p>We measure, sketch and agree a budget.</p></div>
+    <div class="tab-panel" id="p-build" role="tabpanel" aria-labelledby="t-build" hidden><p>We order, install and style the room.</p></div>
+  </div>
+</section>
+<section class="projects">
+  <div class="container">
+    <h2>Projects</h2>
+    <!-- clean (INT-03): the next arrow is disabled on the last slide -->
+    <div class="slider" aria-label="Projects" data-fixture-slider>
+      <div class="slider-track">
+        <div class="slide"><p>A reading corner in a city flat.</p></div>
+        <div class="slide"><p>A studio kitchen with open shelves.</p></div>
+        <div class="slide"><p>A garden office facing the trees.</p></div>
+      </div>
+    </div>
+    <div class="slider-nav">
+      <button class="slider-prev" type="button" aria-label="Previous slide">&lsaquo;</button>
+      <button class="slider-next" type="button" aria-label="Next slide">&rsaquo;</button>
+    </div>
+  </div>
+</section>
+<section class="visit">
+  <div class="container">
+    <h2>Visit the studio</h2>
+    <!-- clean (MAP-01): a map shown in full colour -->
+    <iframe class="map map-clean" title="Studio map" src="/map.html?q=google.com/maps&amp;view=studio"></iframe>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <!-- clean (TEXT-01): a <br> in the footer address is not copy in the main region -->
+    <address>Brand Studio<br>1 Example Street, Springfield</address>
+    <p><a href="/contact/">Contact the studio</a></p>
+  </div>
+</footer>
+<script src="/assets/site.js"></script>
+</body>
+</html>

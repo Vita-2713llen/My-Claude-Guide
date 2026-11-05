@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand — interior studio for calm spaces</title>
+<meta name="description" content="Brand designs calm, practical rooms for homes and small offices. See our work, prices and upcoming open studio events.">
+<meta property="og:title" content="Brand — interior studio for calm spaces">
+<meta property="og:image" content="/img/og.png">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-row">
+    <a class="site-logo" href="/"><img src="/img/logo.svg" alt="Brand" width="120" height="32"></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="/about/">About</a></li>
+        <!-- TEXT-06: the menu says "Prices", the page is titled "Pricing" -->
+        <li><a href="/pricing/">Prices</a></li>
+        <li><a href="/events/">Events</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </nav>
+    <!-- A11Y-02: the panel below has no role=dialog / aria-modal and focus stays on this button -->
+    <button class="site-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<div id="menu-panel" class="menu-panel">
+  <ul>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/pricing/">Prices</a></li>
+    <li><a href="/events/">Events</a></li>
+    <li><a href="/faq/">FAQ</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+</div>
+<main>
+
+<section class="hero">
+  <div class="container">
+    <h1>Interior design for calm spaces</h1>
+    <!-- TEXT-01: a <br> inside a paragraph of copy -->
+    <p class="lead">We design rooms that work.<br>And rooms that rest.</p>
+    <p>Our favorite projects start with a single conversation about how you live and work.</p>
+    <div class="btn-row">
+      <a class="btn btn-work" href="/about/">View Our Work</a>
+      <a class="btn" href="/contact/">Get In Touch</a>
+      <a class="btn" href="/pricing/">See Price List</a>
+      <!-- TEXT-04: the one sentence-case label among Title Case labels -->
+      <a class="btn btn-story" href="/about/">Learn more about us</a>
+      <!-- LINK-01: an <a> styled as a button with no href -->
+      <a class="btn btn-brochure">Download Brochure</a>
+    </div>
+    <p class="chips">
+      <!-- LAY-08: .chip padding is .1em of 15px = 1.5px -->
+      <span class="chip">New season</span>
+      <!-- clean (LAY-08): whole pixels -->
+      <span class="tag-ok">Open studio</span>
+    </p>
+    <p class="links">
+      <!-- INT-05: no hover change --> <a class="link-plain" href="/about/">Read the story</a> ·
+      <!-- INT-06: 200 ms hover --> <a class="link-slow" href="/events/">See events</a> ·
+      <!-- clean (INT-05, INT-06): 350 ms hover --> <a class="link-ok" href="/faq/">Read the answers</a>
+    </p>
+  </div>
+</section>
+<section class="promo">
+  <div class="promo-inner">
+    <h2>Book an open studio visit</h2>
+    <p>See samples, meet the team and plan your room.</p>
+    <!-- LAY-02: at 360 this CTA is pushed past the right edge of an overflow:hidden band -->
+    <a class="btn promo-cta" href="/contact/">Book A Visit</a>
+  </div>
+</section>
+<section class="work">
+  <div class="container">
+    <h2>Recent rooms</h2>
+    <!-- clean (LAY-02): a real horizontal scroller; cards beyond the screen are intended -->
+    <div class="gallery">
+      <div class="card"><h3>Reading corner</h3><p>Soft light and one deep chair.</p></div>
+      <div class="card"><h3>Studio kitchen</h3><p>Open shelves and a long table.</p></div>
+      <div class="card"><h3>Garden office</h3><p>A desk facing the trees.</p></div>
+      <div class="card"><h3>Guest room</h3><p>Linen, oak and a window seat.</p></div>
+    </div>
+    <div class="media-row">
+      <!-- IMG-01: no alt attribute -->
+      <img class="photo-noalt" src="/img/photo-a.png" width="400" height="300">
+      <!-- IMG-03: a 1600px file shown at 400px (4x) -->
+      <img class="photo-big" src="/img/photo-big.png" alt="Sunlit reading corner with a deep chair" width="400" height="300">
+      <!-- clean (IMG-01, IMG-03): alt present, file the size it is shown -->
+      <img class="photo-ok" src="/img/photo-b.png" alt="Oak shelves in a studio kitchen" width="400" height="300">
+    </div>
+  </div>
+</section>
+<section class="testimonials">
+  <div class="container">
+    <h2>What clients say</h2>
+    <!-- INT-03: the next arrow stays enabled on the last slide and does nothing -->
+    <div class="slider" aria-label="Testimonials" data-fixture-slider data-stuck-next="1">
+      <div class="slider-track">
+        <div class="slide"><p>The room finally feels like ours.</p></div>
+        <div class="slide"><p>Calm, clear and on budget.</p></div>
+        <div class="slide"><p>We use every corner now.</p></div>
+      </div>
+    </div>
+    <div class="slider-nav">
+      <button class="slider-prev" type="button" aria-label="Previous slide">&lsaquo;</button>
+      <button class="slider-next" type="button" aria-label="Next slide">&rsaquo;</button>
+    </div>
+  </div>
+</section>
+<section class="awards">
+  <div class="container">
+    <h2>Recognition</h2>
+    <!-- INT-04: an autoplaying ticker with no pause on hover, focus or tap and no pause control -->
+    <div class="ticker" aria-label="Awards">
+      <div class="belt"><span>Design Week shortlist</span><span>Small Studio of the Year</span><span>Green Rooms award</span><span>Design Week shortlist</span><span>Small Studio of the Year</span><span>Green Rooms award</span></div>
+    </div>
+  </div>
+</section>
+<section class="partners">
+  <div class="container">
+    <h2>Partners</h2>
+    <!-- clean (INT-04): the same ticker with a working pause control -->
+    <div class="ticker" aria-label="Partners">
+      <div class="belt"><span>Oak Workshop</span><span>Linen House</span><span>Lamp Co</span><span>Oak Workshop</span><span>Linen House</span><span>Lamp Co</span></div>
+    </div>
+    <button class="pause-btn" type="button" aria-label="Pause partners ticker" aria-pressed="false">Pause</button>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <!-- clean (TEXT-01): a <br> in the footer address is not copy in the main region -->
+    <address>Brand Studio<br>1 Example Street, Springfield</address>
+    <p><a href="/contact/">Contact the studio</a></p>
+  </div>
+</footer>
+<script src="/assets/site.js"></script>
+</body>
+</html>

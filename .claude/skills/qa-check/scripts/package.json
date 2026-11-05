@@ -1,0 +1,26 @@
+{
+  "name": "qa-check-instruments",
+  "version": "2.2.0",
+  "private": true,
+  "description": "Deterministic instruments for the qa-check skill",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0",
+    "npm": ">=10"
+  },
+  "scripts": {
+    "test": "node selftest/run.cjs",
+    "perf": "node selftest/perf.cjs",
+    "release-check": "node release-check.cjs",
+    "browsers": "playwright-core install chromium webkit firefox",
+    "browsers-deps": "playwright-core install-deps chromium webkit firefox",
+    "registry": "node registry.cjs check"
+  },
+  "dependencies": {
+    "playwright-core": "1.63.0",
+    "cspell": "9.8.0",
+    "lighthouse": "12.8.2"
+  },
+  "optionalDependencies": {
+    "appium-remote-debugger": "17.5.8"
+  }
+}

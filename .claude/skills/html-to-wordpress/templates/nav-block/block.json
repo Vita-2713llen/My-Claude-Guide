@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "theme-textdomain/nav",
+	"title": "Navigation",
+	"category": "theme",
+	"icon": "menu",
+	"description": "The site menu, rendered by the theme. Markup is the theme's, so none of core's navigation CSS applies. Menu items are edited in Appearance → Menus.",
+	"textdomain": "theme-textdomain",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"align": false,
+		"spacing": { "padding": true, "margin": true },
+		"typography": { "fontSize": true, "__experimentalFontFamily": true }
+	},
+	"attributes": {
+		"menuId": { "type": "number", "default": 0 },
+		"megaColumns": { "type": "number", "default": 3 },
+		"megaWidth": { "type": "string", "default": "" },
+		"className": { "type": "string" }
+	},
+	"style": "file:./nav.css",
+	"editorScript": "theme-prefix-nav-editor",
+	"viewScript": "theme-prefix-nav-view",
+	"render": "file:./render.php"
+}

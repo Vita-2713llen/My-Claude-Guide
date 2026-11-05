@@ -1,0 +1,112 @@
+/* qa-check self-test fixture. Every planted defect is marked with a comment naming its registry ID.
+   Clean counterparts (things the instruments must NOT flag) are marked "clean". */
+:root { --ink: #1a1a1a; --muted: #4a4a4a; --bg: #ffffff; --accent: #0b4f99; --soft: #eef2f6; }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: Arial, Helvetica, sans-serif; font-size: 16px; line-height: 24px; color: var(--ink); background: var(--bg); }
+img { display: block; max-width: 100%; height: auto; }
+a { color: var(--accent); transition: color 350ms ease; }
+a:hover { color: #062f5c; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+section { padding: 48px 0; }
+h1 { font-size: 40px; line-height: 48px; margin: 0 0 16px; }
+h2 { font-size: 28px; line-height: 36px; margin: 0 0 16px; }
+p { margin: 0 0 16px; }
+
+/* header */
+.site-header { border-bottom: 1px solid #d0d6dd; background: #fff; }
+.header-row { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+.site-logo { display: inline-block; transition: opacity 350ms ease; }
+.site-logo:hover { opacity: 0.8; }
+.site-logo img { width: 120px; height: 32px; }
+.site-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 24px; }
+.site-nav a { text-decoration: none; color: var(--ink); }
+.site-nav a:hover { color: var(--accent); }
+.site-burger { display: none; width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; padding: 10px; transition: opacity 350ms ease; }
+.site-burger:hover { opacity: 0.7; }
+.site-burger span { display: block; height: 2px; margin: 5px 0; background: var(--ink); }
+.menu-panel { position: fixed; top: 72px; left: 0; right: 0; bottom: 0; background: #fff; padding: 24px 16px; display: none; z-index: 10; }
+.menu-panel.is-open { display: block; }
+.menu-panel ul { list-style: none; margin: 0; padding: 0; }
+.menu-panel li a { display: block; height: 48px; line-height: 48px; text-decoration: none; color: var(--ink); }
+/* NAV-08: the logo shifts when the burger panel opens */
+body.menu-open .site-logo { margin-left: 12px; }
+@media (max-width: 991px) {
+  .site-nav { display: none; }
+  .site-burger { display: block; }
+}
+
+/* buttons */
+.btn { display: inline-block; height: 48px; padding: 12px 24px; border-radius: 4px; background: var(--accent); color: #fff; text-decoration: none; font-size: 16px; line-height: 24px; transition: background-color 350ms ease, color 350ms ease; cursor: pointer; }
+.btn:hover { background: #062f5c; color: #fff; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 16px; }
+
+/* LINK-01 / INT-05 / INT-06 material */
+.link-plain { color: var(--accent); transition: none; }            /* INT-05: no hover style at all */
+.link-plain:hover { color: var(--accent); }
+.link-slow { color: var(--accent); transition: color 200ms ease; } /* INT-06: 200 ms is off the 350 ms scale */
+.link-slow:hover { color: #062f5c; }
+.link-ok { color: var(--accent); transition: color 350ms ease; }    /* clean: on the scale */
+.link-ok:hover { color: #062f5c; }
+
+/* LAY-08: fractional padding from em on a 15px font (1.5px) */
+.chip { display: inline-block; font-size: 15px; line-height: 24px; padding: .1em .6em; background: var(--soft); }
+.tag-ok { display: inline-block; font-size: 15px; line-height: 24px; padding: 2px 9px; background: var(--soft); } /* clean */
+
+/* LAY-02: a CTA pushed past the right edge inside an overflow:hidden band at phone width */
+.promo { overflow: hidden; background: var(--soft); }
+.promo-inner { padding: 0 16px; }
+@media (max-width: 600px) { .promo-cta { margin-left: 300px; } }
+
+/* clean: a real horizontal scroller (off-screen cards are intended) */
+.gallery { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
+.gallery .card { flex: 0 0 300px; scroll-snap-align: start; background: var(--soft); padding: 16px; }
+
+/* INT-03: slider whose next arrow stays enabled on the last slide */
+.slider { overflow: hidden; width: 100%; }
+.slider-track { display: flex; transition: transform 300ms ease; }
+.slide { flex: 0 0 100%; padding: 24px; background: var(--soft); }
+.slider-nav { display: flex; gap: 8px; margin-top: 16px; }
+.slider-nav button { width: 44px; height: 44px; border: 1px solid var(--ink); background: #fff; font-size: 20px; cursor: pointer; transition: background-color 350ms ease; }
+.slider-nav button:hover { background: var(--soft); }
+.slider-nav button:disabled { opacity: 0.3; cursor: default; }
+
+/* INT-04: tickers. The "Awards" one never pauses; the "Partners" one has a working pause control (clean). */
+.ticker { overflow: hidden; width: 100%; white-space: nowrap; }
+.belt { display: inline-flex; gap: 48px; animation: belt-move 12s linear infinite; }
+.belt span { display: inline-block; padding: 8px 0; }
+.ticker.is-paused .belt { animation-play-state: paused; }
+@keyframes belt-move { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.pause-btn { margin-top: 8px; height: 44px; padding: 0 16px; border: 1px solid var(--ink); background: #fff; cursor: pointer; transition: background-color 350ms ease; }
+.pause-btn:hover { background: var(--soft); }
+
+/* images */
+.media-row { display: flex; flex-wrap: wrap; gap: 16px; }
+.media-row img { width: 400px; height: 300px; }
+
+/* FAQ / tabs */
+.faq details, .faq-item { border-bottom: 1px solid #d0d6dd; padding: 12px 0; }
+.faq summary, .faq-q { cursor: pointer; font-weight: 700; }
+.faq-q { display: block; width: 100%; text-align: left; border: 0; background: none; font-size: 16px; line-height: 24px; padding: 0; color: var(--ink); transition: color 350ms ease; }
+.faq-q:hover { color: var(--accent); }
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.tab { height: 44px; padding: 0 16px; border: 1px solid var(--ink); background: #fff; cursor: pointer; transition: background-color 350ms ease; }
+.tab:hover { background: var(--soft); }
+.tab.is-active, .tab[aria-selected="true"] { background: var(--ink); color: #fff; }
+.tab-panel[hidden] { display: none; }
+
+/* forms */
+form { max-width: 560px; }
+.field { margin-bottom: 16px; }
+.field label { display: block; margin-bottom: 4px; }
+.field input, .field textarea { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid #6b7380; border-radius: 4px; }
+.field textarea { height: 120px; }
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+button.btn { border: 0; }
+
+/* MAP-01: the map is greyed out at rest; the clean map is not */
+.map { display: block; width: 100%; height: 300px; border: 0; }
+.map-grey { filter: grayscale(1); }
+
+.site-footer { border-top: 1px solid #d0d6dd; padding: 32px 0; color: var(--muted); }
+.site-footer a { color: var(--accent); }

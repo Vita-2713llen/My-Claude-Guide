@@ -1,0 +1,4 @@
+scripts/node_modules/
+*.bak-*
+.qa-state.json
+qa-target.json

@@ -1,0 +1,223 @@
+/**
+ * Structure for the theme's navigation block.
+ *
+ * This is the skeleton only — the part that is the same in every design and is
+ * tedious to get right. Every value marked DESIGN comes from the source CSS and
+ * must be replaced; nothing here is a house style.
+ *
+ * Two rules govern the file:
+ *
+ * 1. Nothing is hidden except under `.js-nav`, the class nav.js puts on <html>.
+ *    No script — no hiding. That is what keeps the editor canvas, and a page
+ *    whose JS failed, showing the resting design instead of a blank strip.
+ * 2. No selector fights core, because core's navigation CSS never loads for
+ *    this markup. If you find yourself counting classes here, something else
+ *    is wrong.
+ */
+
+/* ---------------------------------------------------------------- the bar */
+
+.theme-prefix-nav {
+	position: relative; /* The mega panel resolves against this, not its item. */
+}
+
+.theme-prefix-nav-list {
+	display: flex;
+	align-items: center;
+	gap: 32px; /* DESIGN */
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.theme-prefix-nav-item {
+	position: relative;
+}
+
+.theme-prefix-nav-link {
+	display: inline-flex;
+	align-items: center;
+	color: var(--wp--preset--color--text); /* DESIGN */
+	text-decoration: none;
+}
+
+.theme-prefix-nav-link:hover,
+.theme-prefix-nav-link:focus-visible {
+	color: var(--wp--preset--color--accent); /* DESIGN */
+}
+
+.theme-prefix-nav-item.is-current > .theme-prefix-nav-link {
+	color: var(--wp--preset--color--accent); /* DESIGN */
+}
+
+/* ------------------------------------------------------------- the chevron */
+
+.theme-prefix-nav-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;   /* DESIGN */
+	height: 24px;  /* DESIGN */
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+}
+
+.theme-prefix-nav-chevron {
+	width: 12px;   /* DESIGN */
+	height: 12px;  /* DESIGN */
+	background-color: currentColor;
+	/* Point it the way the design points it at rest. */
+	-webkit-mask: var(--theme-prefix-icon-chevron) center / contain no-repeat;
+	mask: var(--theme-prefix-icon-chevron) center / contain no-repeat;
+	transition: transform 250ms ease; /* DESIGN */
+}
+
+.theme-prefix-nav-item.is-open > .theme-prefix-nav-toggle .theme-prefix-nav-chevron {
+	transform: rotate(180deg);
+}
+
+/* --------------------------------------------------------------- the panel */
+
+.theme-prefix-nav-panel {
+	margin: 0;
+	padding: 24px;                     /* DESIGN */
+	background: #fff;                  /* DESIGN */
+	border-radius: 8px;                /* DESIGN */
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12); /* DESIGN */
+	list-style: none;
+}
+
+/* Hidden only when the script is present. */
+.js-nav .theme-prefix-nav-panel {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 20;
+	display: none;
+	min-width: 200px; /* DESIGN */
+}
+
+.js-nav .theme-prefix-nav-item.is-open > .theme-prefix-nav-panel {
+	display: block;
+}
+
+/* The mega panel spans the header, not its own item: the item is taken out of
+   the positioning chain so the absolute panel resolves against .theme-prefix-nav. */
+.theme-prefix-nav-item.is-mega {
+	position: static;
+}
+
+.js-nav .theme-prefix-nav-panel.is-mega {
+	left: 0;                                    /* DESIGN: or right, or centred */
+	width: var(--theme-prefix-nav-panel-width, 650px);
+	max-width: calc(100vw - 32px);              /* Never wider than the viewport. */
+}
+
+.theme-prefix-nav-item.is-open > .theme-prefix-nav-panel.is-mega {
+	display: grid;
+	grid-template-columns: repeat(var(--theme-prefix-nav-cols, 3), 1fr);
+	grid-auto-flow: column;                     /* DESIGN: column-first or row-first */
+	gap: 16px 32px;                             /* DESIGN */
+}
+
+/* --------------------------------------------------- the hover-revealed mark
+
+   The common pattern: a dot or arrow held outside a clipped box, slid in on
+   hover. Build it as a resting decoration and every row shows a mark at all
+   times. The offset must equal the mark's width plus its gap exactly — read the
+   computed padding back afterwards, because a stray padding on the link moves
+   the start point and the mark peeks out.                                     */
+
+.theme-prefix-nav-panel .theme-prefix-nav-item {
+	overflow: hidden;
+}
+
+.theme-prefix-nav-panel .theme-prefix-nav-link {
+	margin-left: -16px;  /* DESIGN: = mark width + gap */
+	padding-left: 0;
+	transition: margin-left 250ms ease; /* DESIGN */
+}
+
+.theme-prefix-nav-panel .theme-prefix-nav-link::before {
+	content: "";
+	flex: 0 0 auto;
+	width: 4px;         /* DESIGN */
+	height: 4px;        /* DESIGN */
+	margin-right: 12px; /* DESIGN */
+	border-radius: 50%;
+	background: currentColor;
+}
+
+.theme-prefix-nav-panel .theme-prefix-nav-link:hover,
+.theme-prefix-nav-panel .theme-prefix-nav-link:focus-visible {
+	margin-left: 0;
+}
+
+/* ------------------------------------------------------------- the burger */
+
+.theme-prefix-nav-burger {
+	display: none;
+}
+
+@media (max-width: 991px) { /* DESIGN */
+	.theme-prefix-nav-burger {
+		display: inline-flex;
+	}
+
+	.js-nav .theme-prefix-nav-drawer {
+		position: fixed;
+		inset: 0 auto 0 0;
+		z-index: 50;
+		width: 320px;              /* DESIGN */
+		max-width: 100%;
+		overflow-y: auto;          /* The drawer scrolls; the page behind does not. */
+		background: #fff;          /* DESIGN */
+		transform: translateX(-100%);
+		transition: transform 450ms ease; /* DESIGN */
+	}
+
+	.js-nav .theme-prefix-nav.is-open .theme-prefix-nav-drawer {
+		transform: none;
+	}
+
+	.theme-prefix-nav-list {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0;
+	}
+
+	/* A submenu scrolls inside itself instead of pushing the drawer down.
+	   All three declarations are needed: a fixed height would make the items
+	   shrink below their line height and the rows would overlap. */
+	.js-nav .theme-prefix-nav-panel {
+		position: static;
+		max-height: 250px;   /* DESIGN */
+		overflow-y: auto;
+		box-shadow: none;
+		border-radius: 0;
+
+		/* Every width the dropdown set must be undone here, or the submenu
+		   keeps the desktop panel's box and sits narrower than the drawer —
+		   with its divider and padding cut short to match. */
+		width: 100%;
+		min-width: 0;
+		max-width: none;
+	}
+
+	.js-nav .theme-prefix-nav-panel.is-mega {
+		width: 100%;
+		grid-template-columns: 1fr; /* The mega panel is one column in a drawer. */
+	}
+
+	.js-nav .theme-prefix-nav-panel > .theme-prefix-nav-item {
+		flex: 0 0 auto;
+	}
+
+	/* In the drawer the mark is usually always visible — check the source
+	   rather than carrying the desktop rule down. */
+	.theme-prefix-nav-panel .theme-prefix-nav-link {
+		margin-left: 0;
+	}
+}

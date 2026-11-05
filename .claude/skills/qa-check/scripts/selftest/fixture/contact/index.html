@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact Brand — book a first call or visit</title>
+<meta name="description" content="Send Brand a short note about your room and choose a date for a first visit. We answer every request within two working days.">
+<meta property="og:title" content="Contact Brand — book a first call or visit">
+<meta property="og:image" content="/img/og.png">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-row">
+    <a class="site-logo" href="/"><img src="/img/logo.svg" alt="Brand" width="120" height="32"></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="/about/">About</a></li>
+        <!-- TEXT-06: the menu says "Prices", the page is titled "Pricing" -->
+        <li><a href="/pricing/">Prices</a></li>
+        <li><a href="/events/">Events</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </nav>
+    <!-- A11Y-02: the panel below has no role=dialog / aria-modal and focus stays on this button -->
+    <button class="site-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<div id="menu-panel" class="menu-panel">
+  <ul>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/pricing/">Prices</a></li>
+    <li><a href="/events/">Events</a></li>
+    <li><a href="/faq/">FAQ</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+</div>
+<main>
+
+<section>
+  <div class="container">
+    <h1>Contact us</h1>
+    <p>Tell us about your room and we will get back to you.</p>
+    <!-- FORM-02: every field is required, no marker and no "required" note
+         FORM-03: no autocomplete on name / email / phone
+         FORM-04: no captcha and no honeypot
+         FORM-05: the visit date accepts past dates -->
+    <form class="contact-form" action="/thanks/" method="post">
+      <div class="field"><label for="c-name">Your name</label><input id="c-name" name="full_name" type="text" maxlength="120" required></div>
+      <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" maxlength="200" required></div>
+      <div class="field"><label for="c-phone">Phone</label><input id="c-phone" name="phone" type="tel" maxlength="30" required></div>
+      <div class="field"><label for="c-date">Preferred visit date</label><input id="c-date" name="visit_date" type="date" required></div>
+      <div class="field"><label for="c-msg">About your room</label><textarea id="c-msg" name="message" maxlength="2000" required></textarea></div>
+      <button class="btn" type="submit">Send Request</button>
+    </form>
+  </div>
+</section>
+<section class="newsletter">
+  <div class="container">
+    <h2>Studio notes</h2>
+    <!-- clean (FORM-02, FORM-03, FORM-04): marked required field, autocomplete and a honeypot -->
+    <form class="subscribe-form" action="/subscribe/" method="post">
+      <div class="field"><label for="n-email">Email address *</label><input id="n-email" name="subscriber_email" type="email" maxlength="200" autocomplete="email" required></div>
+      <div class="hp-field" aria-hidden="true"><label for="n-hp">Leave this empty</label><input id="n-hp" name="website_url" type="text" tabindex="-1" autocomplete="off"></div>
+      <button class="btn" type="submit">Get Studio Notes</button>
+    </form>
+  </div>
+</section>
+<section class="map-section">
+  <div class="container">
+    <h2>Find the studio</h2>
+    <!-- MAP-01: the map is greyed out (filter: grayscale) at rest -->
+    <iframe class="map map-grey" title="Studio location" src="/map.html?q=google.com/maps&amp;view=contact"></iframe>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <!-- clean (TEXT-01): a <br> in the footer address is not copy in the main region -->
+    <address>Brand Studio<br>1 Example Street, Springfield</address>
+    <p><a href="/contact/">Contact the studio</a></p>
+  </div>
+</footer>
+<script src="/assets/site.js"></script>
+</body>
+</html>

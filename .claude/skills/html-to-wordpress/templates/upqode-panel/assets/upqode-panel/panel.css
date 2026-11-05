@@ -1,0 +1,739 @@
+/**
+ * The UPQODE panel — what the panel's settings turn into, on the page and in
+ * the editor canvas. Generated; edit the generator, not the band rules.
+ *
+ * A block given a value carries it as a custom property in its own style
+ * attribute — `--xxp-pt-991: 24px` — and the rules below turn each one into its
+ * property inside the right query. The selector asks whether the property is
+ * written, which keeps the rules off every block that was given nothing. The
+ * trailing colon makes the match exact: `--xxp-w-base:` is not inside
+ * `--xxp-minw-base:`.
+ *
+ * **The order below is the behaviour.** The middle screen has no query and
+ * answers everywhere; the three above are min-width and the three below are
+ * max-width, written outward from the middle, so each answers the one before it.
+ * Nothing computes that — it is the cascade.
+ *
+ * Every property here is `!important`, and for the same reason in two forms:
+ * the middle screen's padding and gap are core's own inline style, which
+ * outranks every rule in every file, and another screen has to be able to
+ * answer it — and core's layout stylesheet caps every child of a constrained
+ * block at the global content size with a one-class selector that loads after
+ * this file, so a width or a max-width set in the panel lost to it in silence.
+ * That cost a heading on AN 101 its second line and a column six pixels, and
+ * the symptom is the worst kind: the sidebar shows the number, the page does
+ * not use it. The six size properties therefore carry `!important` as the rest
+ * always have.
+ *
+ * That is also why the theme's own CSS must never write one of these
+ * properties for a block — see "The UPQODE panel" in the skill.
+ *
+ * @package theme-textdomain
+ */
+
+/* ---- the design's motion — take every number from the source ----
+
+   THE FIVE BELOW ARE PLACEHOLDERS AND ARE WRONG EVERYWHERE. Replace all five
+   from the source on the first port, with the extractor, the same as any other
+   value. One port shipped them untouched for weeks and nobody saw it, because
+   at that point no block in the theme carried an arrival — so numbers that were
+   nobody's were never seen to be wrong. That source said 46px, 0.85s and a
+   different curve, in one line repeated in all 25 of its pages. */
+
+:root {
+	--xxp-motion-distance: 28px;
+	--xxp-motion-duration: 1.1s;
+	--xxp-reveal-duration: 0.7s;
+	--xxp-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+	--xxp-motion-lead: 0.5s;
+}
+
+/* 992–1279px, and every screen that says nothing of its own */
+[style*="--xxp-w-base:"] { width: var(--xxp-w-base) !important; }
+[style*="--xxp-minw-base:"] { min-width: var(--xxp-minw-base) !important; }
+[style*="--xxp-maxw-base:"] { max-width: var(--xxp-maxw-base) !important; }
+[style*="--xxp-h-base:"] { height: var(--xxp-h-base) !important; }
+[style*="--xxp-minh-base:"] { min-height: var(--xxp-minh-base) !important; }
+[style*="--xxp-maxh-base:"] { max-height: var(--xxp-maxh-base) !important; }
+[style*="--xxp-ar-base:"] { aspect-ratio: var(--xxp-ar-base) !important; }
+[style*="--xxp-pt-base:"] { padding-top: var(--xxp-pt-base) !important; }
+[style*="--xxp-pr-base:"] { padding-right: var(--xxp-pr-base) !important; }
+[style*="--xxp-pb-base:"] { padding-bottom: var(--xxp-pb-base) !important; }
+[style*="--xxp-pl-base:"] { padding-left: var(--xxp-pl-base) !important; }
+[style*="--xxp-mt-base:"] { margin-top: var(--xxp-mt-base) !important; }
+[style*="--xxp-mr-base:"][style*="--xxp-mr-base:"] { margin-right: var(--xxp-mr-base) !important; }
+[style*="--xxp-mb-base:"] { margin-bottom: var(--xxp-mb-base) !important; }
+[style*="--xxp-ml-base:"][style*="--xxp-ml-base:"] { margin-left: var(--xxp-ml-base) !important; }
+[style*="--xxp-gap-base:"] { --wp--style--block-gap: var(--xxp-gap-base) !important; gap: var(--xxp-gap-base) !important; }
+[style*="--xxp-rgap-base:"] { row-gap: var(--xxp-rgap-base) !important; }
+[style*="--xxp-cgap-base:"] { column-gap: var(--xxp-cgap-base) !important; }
+[style*="--xxp-colw-base:"] { column-width: var(--xxp-colw-base) !important; }
+[style*="--xxp-grow-base:"] { flex-grow: var(--xxp-grow-base) !important; }
+[style*="--xxp-shrink-base:"] { flex-shrink: var(--xxp-shrink-base) !important; }
+[style*="--xxp-basis-base:"] { flex-basis: var(--xxp-basis-base) !important; }
+[style*="--xxp-order-base:"] { order: var(--xxp-order-base) !important; }
+[style*="--xxp-aself-base:"] { align-self: var(--xxp-aself-base) !important; }
+[style*="--xxp-over-base:"] { overflow: var(--xxp-over-base) !important; }
+[style*="--xxp-disp-base:"] { display: var(--xxp-disp-base) !important; }
+[style*="--xxp-twrap-base:"] { text-wrap: var(--xxp-twrap-base) !important; }
+[style*="--xxp-cols-base:"] { grid-template-columns: repeat(var(--xxp-cols-base), var(--xxp-ctrack-base, minmax(0, 1fr))) !important; }
+[style*="--xxp-gcol-base:"] { grid-column: var(--xxp-gcol-base) !important; }
+[style*="--xxp-top-base:"] { top: var(--xxp-top-base) !important; }
+[style*="--xxp-pos-base:"] { position: var(--xxp-pos-base) !important; }
+[style*="--xxp-right-base:"] { right: var(--xxp-right-base) !important; }
+[style*="--xxp-bottom-base:"] { bottom: var(--xxp-bottom-base) !important; }
+[style*="--xxp-left-base:"] { left: var(--xxp-left-base) !important; }
+[style*="--xxp-z-base:"] { z-index: var(--xxp-z-base) !important; }
+[style*="--xxp-op-base:"] { opacity: var(--xxp-op-base) !important; }
+[style*="--xxp-btw-base:"]:not(.wp-block-button):not(.wp-block-image) { border-top-width: var(--xxp-btw-base) !important; }
+[style*="--xxp-btw-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btw-base:"].wp-block-image > img, [style*="--xxp-btw-base:"].wp-block-image > a > img { border-top-width: var(--xxp-btw-base) !important; }
+[style*="--xxp-brw-base:"]:not(.wp-block-button):not(.wp-block-image) { border-right-width: var(--xxp-brw-base) !important; }
+[style*="--xxp-brw-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brw-base:"].wp-block-image > img, [style*="--xxp-brw-base:"].wp-block-image > a > img { border-right-width: var(--xxp-brw-base) !important; }
+[style*="--xxp-bbw-base:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-width: var(--xxp-bbw-base) !important; }
+[style*="--xxp-bbw-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbw-base:"].wp-block-image > img, [style*="--xxp-bbw-base:"].wp-block-image > a > img { border-bottom-width: var(--xxp-bbw-base) !important; }
+[style*="--xxp-blw-base:"]:not(.wp-block-button):not(.wp-block-image) { border-left-width: var(--xxp-blw-base) !important; }
+[style*="--xxp-blw-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blw-base:"].wp-block-image > img, [style*="--xxp-blw-base:"].wp-block-image > a > img { border-left-width: var(--xxp-blw-base) !important; }
+[style*="--xxp-btc-base:"]:not(.wp-block-button):not(.wp-block-image) { border-top-color: var(--xxp-btc-base) !important; }
+[style*="--xxp-btc-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btc-base:"].wp-block-image > img, [style*="--xxp-btc-base:"].wp-block-image > a > img { border-top-color: var(--xxp-btc-base) !important; }
+[style*="--xxp-brc-base:"]:not(.wp-block-button):not(.wp-block-image) { border-right-color: var(--xxp-brc-base) !important; }
+[style*="--xxp-brc-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brc-base:"].wp-block-image > img, [style*="--xxp-brc-base:"].wp-block-image > a > img { border-right-color: var(--xxp-brc-base) !important; }
+[style*="--xxp-bbc-base:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-color: var(--xxp-bbc-base) !important; }
+[style*="--xxp-bbc-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbc-base:"].wp-block-image > img, [style*="--xxp-bbc-base:"].wp-block-image > a > img { border-bottom-color: var(--xxp-bbc-base) !important; }
+[style*="--xxp-blc-base:"]:not(.wp-block-button):not(.wp-block-image) { border-left-color: var(--xxp-blc-base) !important; }
+[style*="--xxp-blc-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blc-base:"].wp-block-image > img, [style*="--xxp-blc-base:"].wp-block-image > a > img { border-left-color: var(--xxp-blc-base) !important; }
+[style*="--xxp-bts-base:"]:not(.wp-block-button):not(.wp-block-image) { border-top-style: var(--xxp-bts-base) !important; }
+[style*="--xxp-bts-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bts-base:"].wp-block-image > img, [style*="--xxp-bts-base:"].wp-block-image > a > img { border-top-style: var(--xxp-bts-base) !important; }
+[style*="--xxp-brs-base:"]:not(.wp-block-button):not(.wp-block-image) { border-right-style: var(--xxp-brs-base) !important; }
+[style*="--xxp-brs-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brs-base:"].wp-block-image > img, [style*="--xxp-brs-base:"].wp-block-image > a > img { border-right-style: var(--xxp-brs-base) !important; }
+[style*="--xxp-bbs-base:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-style: var(--xxp-bbs-base) !important; }
+[style*="--xxp-bbs-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbs-base:"].wp-block-image > img, [style*="--xxp-bbs-base:"].wp-block-image > a > img { border-bottom-style: var(--xxp-bbs-base) !important; }
+[style*="--xxp-bls-base:"]:not(.wp-block-button):not(.wp-block-image) { border-left-style: var(--xxp-bls-base) !important; }
+[style*="--xxp-bls-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bls-base:"].wp-block-image > img, [style*="--xxp-bls-base:"].wp-block-image > a > img { border-left-style: var(--xxp-bls-base) !important; }
+[style*="--xxp-rtl-base:"]:not(.wp-block-button):not(.wp-block-image) { border-top-left-radius: var(--xxp-rtl-base) !important; }
+[style*="--xxp-rtl-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtl-base:"].wp-block-image > img, [style*="--xxp-rtl-base:"].wp-block-image > a > img { border-top-left-radius: var(--xxp-rtl-base) !important; }
+[style*="--xxp-rtr-base:"]:not(.wp-block-button):not(.wp-block-image) { border-top-right-radius: var(--xxp-rtr-base) !important; }
+[style*="--xxp-rtr-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtr-base:"].wp-block-image > img, [style*="--xxp-rtr-base:"].wp-block-image > a > img { border-top-right-radius: var(--xxp-rtr-base) !important; }
+[style*="--xxp-rbr-base:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-right-radius: var(--xxp-rbr-base) !important; }
+[style*="--xxp-rbr-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbr-base:"].wp-block-image > img, [style*="--xxp-rbr-base:"].wp-block-image > a > img { border-bottom-right-radius: var(--xxp-rbr-base) !important; }
+[style*="--xxp-rbl-base:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-left-radius: var(--xxp-rbl-base) !important; }
+[style*="--xxp-rbl-base:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbl-base:"].wp-block-image > img, [style*="--xxp-rbl-base:"].wp-block-image > a > img { border-bottom-left-radius: var(--xxp-rbl-base) !important; }
+[style*="--xxp-dir-base:"] { flex-direction: var(--xxp-dir-base) !important; }
+[style*="--xxp-just-base:"] { justify-content: var(--xxp-just-base) !important; }
+[style*="--xxp-align-base:"] { align-items: var(--xxp-align-base) !important; }
+[style*="--xxp-wrap-base:"] { flex-wrap: var(--xxp-wrap-base) !important; }
+[style*="--xxp-talign-base:"] { text-align: var(--xxp-talign-base) !important; }
+[style*="--xxp-fs-base:"] { font-size: var(--xxp-fs-base) !important; }
+[style*="--xxp-crop-base:"], [style*="--xxp-crop-base:"] img, [style*="--xxp-crop-base:"] video { object-position: var(--xxp-crop-base) !important; }
+[style*="--xxp-fit-base:"] { object-fit: var(--xxp-fit-base) !important; }
+[style*="--xxp-fit-base:"] :is(img, video) { object-fit: var(--xxp-fit-base) !important; width: 100% !important; height: 100% !important; }
+
+@media (min-width: 1280px) {
+	/* 1280–1439px, and wider unless a wider screen says otherwise */
+	[style*="--xxp-w-1280:"] { width: var(--xxp-w-1280) !important; }
+	[style*="--xxp-minw-1280:"] { min-width: var(--xxp-minw-1280) !important; }
+	[style*="--xxp-maxw-1280:"] { max-width: var(--xxp-maxw-1280) !important; }
+	[style*="--xxp-h-1280:"] { height: var(--xxp-h-1280) !important; }
+	[style*="--xxp-minh-1280:"] { min-height: var(--xxp-minh-1280) !important; }
+	[style*="--xxp-maxh-1280:"] { max-height: var(--xxp-maxh-1280) !important; }
+	[style*="--xxp-ar-1280:"] { aspect-ratio: var(--xxp-ar-1280) !important; }
+	[style*="--xxp-pt-1280:"] { padding-top: var(--xxp-pt-1280) !important; }
+	[style*="--xxp-pr-1280:"] { padding-right: var(--xxp-pr-1280) !important; }
+	[style*="--xxp-pb-1280:"] { padding-bottom: var(--xxp-pb-1280) !important; }
+	[style*="--xxp-pl-1280:"] { padding-left: var(--xxp-pl-1280) !important; }
+	[style*="--xxp-mt-1280:"] { margin-top: var(--xxp-mt-1280) !important; }
+	[style*="--xxp-mr-1280:"][style*="--xxp-mr-1280:"] { margin-right: var(--xxp-mr-1280) !important; }
+	[style*="--xxp-mb-1280:"] { margin-bottom: var(--xxp-mb-1280) !important; }
+	[style*="--xxp-ml-1280:"][style*="--xxp-ml-1280:"] { margin-left: var(--xxp-ml-1280) !important; }
+	[style*="--xxp-gap-1280:"] { --wp--style--block-gap: var(--xxp-gap-1280) !important; gap: var(--xxp-gap-1280) !important; }
+	[style*="--xxp-rgap-1280:"] { row-gap: var(--xxp-rgap-1280) !important; }
+	[style*="--xxp-cgap-1280:"] { column-gap: var(--xxp-cgap-1280) !important; }
+	[style*="--xxp-colw-1280:"] { column-width: var(--xxp-colw-1280) !important; }
+	[style*="--xxp-grow-1280:"] { flex-grow: var(--xxp-grow-1280) !important; }
+	[style*="--xxp-shrink-1280:"] { flex-shrink: var(--xxp-shrink-1280) !important; }
+	[style*="--xxp-basis-1280:"] { flex-basis: var(--xxp-basis-1280) !important; }
+	[style*="--xxp-order-1280:"] { order: var(--xxp-order-1280) !important; }
+	[style*="--xxp-aself-1280:"] { align-self: var(--xxp-aself-1280) !important; }
+	[style*="--xxp-over-1280:"] { overflow: var(--xxp-over-1280) !important; }
+	[style*="--xxp-disp-1280:"] { display: var(--xxp-disp-1280) !important; }
+	[style*="--xxp-twrap-1280:"] { text-wrap: var(--xxp-twrap-1280) !important; }
+	[style*="--xxp-cols-1280:"] { grid-template-columns: repeat(var(--xxp-cols-1280), var(--xxp-ctrack-1280, minmax(0, 1fr))) !important; }
+	[style*="--xxp-gcol-1280:"] { grid-column: var(--xxp-gcol-1280) !important; }
+	[style*="--xxp-top-1280:"] { top: var(--xxp-top-1280) !important; }
+	[style*="--xxp-pos-1280:"] { position: var(--xxp-pos-1280) !important; }
+	[style*="--xxp-right-1280:"] { right: var(--xxp-right-1280) !important; }
+	[style*="--xxp-bottom-1280:"] { bottom: var(--xxp-bottom-1280) !important; }
+	[style*="--xxp-left-1280:"] { left: var(--xxp-left-1280) !important; }
+	[style*="--xxp-z-1280:"] { z-index: var(--xxp-z-1280) !important; }
+	[style*="--xxp-op-1280:"] { opacity: var(--xxp-op-1280) !important; }
+	[style*="--xxp-btw-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-top-width: var(--xxp-btw-1280) !important; }
+	[style*="--xxp-btw-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btw-1280:"].wp-block-image > img, [style*="--xxp-btw-1280:"].wp-block-image > a > img { border-top-width: var(--xxp-btw-1280) !important; }
+	[style*="--xxp-brw-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-right-width: var(--xxp-brw-1280) !important; }
+	[style*="--xxp-brw-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brw-1280:"].wp-block-image > img, [style*="--xxp-brw-1280:"].wp-block-image > a > img { border-right-width: var(--xxp-brw-1280) !important; }
+	[style*="--xxp-bbw-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-width: var(--xxp-bbw-1280) !important; }
+	[style*="--xxp-bbw-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbw-1280:"].wp-block-image > img, [style*="--xxp-bbw-1280:"].wp-block-image > a > img { border-bottom-width: var(--xxp-bbw-1280) !important; }
+	[style*="--xxp-blw-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-left-width: var(--xxp-blw-1280) !important; }
+	[style*="--xxp-blw-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blw-1280:"].wp-block-image > img, [style*="--xxp-blw-1280:"].wp-block-image > a > img { border-left-width: var(--xxp-blw-1280) !important; }
+	[style*="--xxp-btc-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-top-color: var(--xxp-btc-1280) !important; }
+	[style*="--xxp-btc-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btc-1280:"].wp-block-image > img, [style*="--xxp-btc-1280:"].wp-block-image > a > img { border-top-color: var(--xxp-btc-1280) !important; }
+	[style*="--xxp-brc-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-right-color: var(--xxp-brc-1280) !important; }
+	[style*="--xxp-brc-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brc-1280:"].wp-block-image > img, [style*="--xxp-brc-1280:"].wp-block-image > a > img { border-right-color: var(--xxp-brc-1280) !important; }
+	[style*="--xxp-bbc-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-color: var(--xxp-bbc-1280) !important; }
+	[style*="--xxp-bbc-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbc-1280:"].wp-block-image > img, [style*="--xxp-bbc-1280:"].wp-block-image > a > img { border-bottom-color: var(--xxp-bbc-1280) !important; }
+	[style*="--xxp-blc-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-left-color: var(--xxp-blc-1280) !important; }
+	[style*="--xxp-blc-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blc-1280:"].wp-block-image > img, [style*="--xxp-blc-1280:"].wp-block-image > a > img { border-left-color: var(--xxp-blc-1280) !important; }
+	[style*="--xxp-bts-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-top-style: var(--xxp-bts-1280) !important; }
+	[style*="--xxp-bts-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bts-1280:"].wp-block-image > img, [style*="--xxp-bts-1280:"].wp-block-image > a > img { border-top-style: var(--xxp-bts-1280) !important; }
+	[style*="--xxp-brs-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-right-style: var(--xxp-brs-1280) !important; }
+	[style*="--xxp-brs-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brs-1280:"].wp-block-image > img, [style*="--xxp-brs-1280:"].wp-block-image > a > img { border-right-style: var(--xxp-brs-1280) !important; }
+	[style*="--xxp-bbs-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-style: var(--xxp-bbs-1280) !important; }
+	[style*="--xxp-bbs-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbs-1280:"].wp-block-image > img, [style*="--xxp-bbs-1280:"].wp-block-image > a > img { border-bottom-style: var(--xxp-bbs-1280) !important; }
+	[style*="--xxp-bls-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-left-style: var(--xxp-bls-1280) !important; }
+	[style*="--xxp-bls-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bls-1280:"].wp-block-image > img, [style*="--xxp-bls-1280:"].wp-block-image > a > img { border-left-style: var(--xxp-bls-1280) !important; }
+	[style*="--xxp-rtl-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-top-left-radius: var(--xxp-rtl-1280) !important; }
+	[style*="--xxp-rtl-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtl-1280:"].wp-block-image > img, [style*="--xxp-rtl-1280:"].wp-block-image > a > img { border-top-left-radius: var(--xxp-rtl-1280) !important; }
+	[style*="--xxp-rtr-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-top-right-radius: var(--xxp-rtr-1280) !important; }
+	[style*="--xxp-rtr-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtr-1280:"].wp-block-image > img, [style*="--xxp-rtr-1280:"].wp-block-image > a > img { border-top-right-radius: var(--xxp-rtr-1280) !important; }
+	[style*="--xxp-rbr-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-right-radius: var(--xxp-rbr-1280) !important; }
+	[style*="--xxp-rbr-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbr-1280:"].wp-block-image > img, [style*="--xxp-rbr-1280:"].wp-block-image > a > img { border-bottom-right-radius: var(--xxp-rbr-1280) !important; }
+	[style*="--xxp-rbl-1280:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-left-radius: var(--xxp-rbl-1280) !important; }
+	[style*="--xxp-rbl-1280:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbl-1280:"].wp-block-image > img, [style*="--xxp-rbl-1280:"].wp-block-image > a > img { border-bottom-left-radius: var(--xxp-rbl-1280) !important; }
+	[style*="--xxp-dir-1280:"] { flex-direction: var(--xxp-dir-1280) !important; }
+	[style*="--xxp-just-1280:"] { justify-content: var(--xxp-just-1280) !important; }
+	[style*="--xxp-align-1280:"] { align-items: var(--xxp-align-1280) !important; }
+	[style*="--xxp-wrap-1280:"] { flex-wrap: var(--xxp-wrap-1280) !important; }
+	[style*="--xxp-talign-1280:"] { text-align: var(--xxp-talign-1280) !important; }
+	[style*="--xxp-fs-1280:"] { font-size: var(--xxp-fs-1280) !important; }
+	[style*="--xxp-crop-1280:"], [style*="--xxp-crop-1280:"] img, [style*="--xxp-crop-1280:"] video { object-position: var(--xxp-crop-1280) !important; }
+	[style*="--xxp-fit-1280:"] { object-fit: var(--xxp-fit-1280) !important; }
+	[style*="--xxp-fit-1280:"] :is(img, video) { object-fit: var(--xxp-fit-1280) !important; width: 100% !important; height: 100% !important; }
+}
+
+@media (min-width: 1440px) {
+	/* 1440–1919px, and wider unless 1920 says otherwise */
+	[style*="--xxp-w-1440:"] { width: var(--xxp-w-1440) !important; }
+	[style*="--xxp-minw-1440:"] { min-width: var(--xxp-minw-1440) !important; }
+	[style*="--xxp-maxw-1440:"] { max-width: var(--xxp-maxw-1440) !important; }
+	[style*="--xxp-h-1440:"] { height: var(--xxp-h-1440) !important; }
+	[style*="--xxp-minh-1440:"] { min-height: var(--xxp-minh-1440) !important; }
+	[style*="--xxp-maxh-1440:"] { max-height: var(--xxp-maxh-1440) !important; }
+	[style*="--xxp-ar-1440:"] { aspect-ratio: var(--xxp-ar-1440) !important; }
+	[style*="--xxp-pt-1440:"] { padding-top: var(--xxp-pt-1440) !important; }
+	[style*="--xxp-pr-1440:"] { padding-right: var(--xxp-pr-1440) !important; }
+	[style*="--xxp-pb-1440:"] { padding-bottom: var(--xxp-pb-1440) !important; }
+	[style*="--xxp-pl-1440:"] { padding-left: var(--xxp-pl-1440) !important; }
+	[style*="--xxp-mt-1440:"] { margin-top: var(--xxp-mt-1440) !important; }
+	[style*="--xxp-mr-1440:"][style*="--xxp-mr-1440:"] { margin-right: var(--xxp-mr-1440) !important; }
+	[style*="--xxp-mb-1440:"] { margin-bottom: var(--xxp-mb-1440) !important; }
+	[style*="--xxp-ml-1440:"][style*="--xxp-ml-1440:"] { margin-left: var(--xxp-ml-1440) !important; }
+	[style*="--xxp-gap-1440:"] { --wp--style--block-gap: var(--xxp-gap-1440) !important; gap: var(--xxp-gap-1440) !important; }
+	[style*="--xxp-rgap-1440:"] { row-gap: var(--xxp-rgap-1440) !important; }
+	[style*="--xxp-cgap-1440:"] { column-gap: var(--xxp-cgap-1440) !important; }
+	[style*="--xxp-colw-1440:"] { column-width: var(--xxp-colw-1440) !important; }
+	[style*="--xxp-grow-1440:"] { flex-grow: var(--xxp-grow-1440) !important; }
+	[style*="--xxp-shrink-1440:"] { flex-shrink: var(--xxp-shrink-1440) !important; }
+	[style*="--xxp-basis-1440:"] { flex-basis: var(--xxp-basis-1440) !important; }
+	[style*="--xxp-order-1440:"] { order: var(--xxp-order-1440) !important; }
+	[style*="--xxp-aself-1440:"] { align-self: var(--xxp-aself-1440) !important; }
+	[style*="--xxp-over-1440:"] { overflow: var(--xxp-over-1440) !important; }
+	[style*="--xxp-disp-1440:"] { display: var(--xxp-disp-1440) !important; }
+	[style*="--xxp-twrap-1440:"] { text-wrap: var(--xxp-twrap-1440) !important; }
+	[style*="--xxp-cols-1440:"] { grid-template-columns: repeat(var(--xxp-cols-1440), var(--xxp-ctrack-1440, minmax(0, 1fr))) !important; }
+	[style*="--xxp-gcol-1440:"] { grid-column: var(--xxp-gcol-1440) !important; }
+	[style*="--xxp-top-1440:"] { top: var(--xxp-top-1440) !important; }
+	[style*="--xxp-pos-1440:"] { position: var(--xxp-pos-1440) !important; }
+	[style*="--xxp-right-1440:"] { right: var(--xxp-right-1440) !important; }
+	[style*="--xxp-bottom-1440:"] { bottom: var(--xxp-bottom-1440) !important; }
+	[style*="--xxp-left-1440:"] { left: var(--xxp-left-1440) !important; }
+	[style*="--xxp-z-1440:"] { z-index: var(--xxp-z-1440) !important; }
+	[style*="--xxp-op-1440:"] { opacity: var(--xxp-op-1440) !important; }
+	[style*="--xxp-btw-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-top-width: var(--xxp-btw-1440) !important; }
+	[style*="--xxp-btw-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btw-1440:"].wp-block-image > img, [style*="--xxp-btw-1440:"].wp-block-image > a > img { border-top-width: var(--xxp-btw-1440) !important; }
+	[style*="--xxp-brw-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-right-width: var(--xxp-brw-1440) !important; }
+	[style*="--xxp-brw-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brw-1440:"].wp-block-image > img, [style*="--xxp-brw-1440:"].wp-block-image > a > img { border-right-width: var(--xxp-brw-1440) !important; }
+	[style*="--xxp-bbw-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-width: var(--xxp-bbw-1440) !important; }
+	[style*="--xxp-bbw-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbw-1440:"].wp-block-image > img, [style*="--xxp-bbw-1440:"].wp-block-image > a > img { border-bottom-width: var(--xxp-bbw-1440) !important; }
+	[style*="--xxp-blw-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-left-width: var(--xxp-blw-1440) !important; }
+	[style*="--xxp-blw-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blw-1440:"].wp-block-image > img, [style*="--xxp-blw-1440:"].wp-block-image > a > img { border-left-width: var(--xxp-blw-1440) !important; }
+	[style*="--xxp-btc-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-top-color: var(--xxp-btc-1440) !important; }
+	[style*="--xxp-btc-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btc-1440:"].wp-block-image > img, [style*="--xxp-btc-1440:"].wp-block-image > a > img { border-top-color: var(--xxp-btc-1440) !important; }
+	[style*="--xxp-brc-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-right-color: var(--xxp-brc-1440) !important; }
+	[style*="--xxp-brc-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brc-1440:"].wp-block-image > img, [style*="--xxp-brc-1440:"].wp-block-image > a > img { border-right-color: var(--xxp-brc-1440) !important; }
+	[style*="--xxp-bbc-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-color: var(--xxp-bbc-1440) !important; }
+	[style*="--xxp-bbc-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbc-1440:"].wp-block-image > img, [style*="--xxp-bbc-1440:"].wp-block-image > a > img { border-bottom-color: var(--xxp-bbc-1440) !important; }
+	[style*="--xxp-blc-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-left-color: var(--xxp-blc-1440) !important; }
+	[style*="--xxp-blc-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blc-1440:"].wp-block-image > img, [style*="--xxp-blc-1440:"].wp-block-image > a > img { border-left-color: var(--xxp-blc-1440) !important; }
+	[style*="--xxp-bts-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-top-style: var(--xxp-bts-1440) !important; }
+	[style*="--xxp-bts-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bts-1440:"].wp-block-image > img, [style*="--xxp-bts-1440:"].wp-block-image > a > img { border-top-style: var(--xxp-bts-1440) !important; }
+	[style*="--xxp-brs-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-right-style: var(--xxp-brs-1440) !important; }
+	[style*="--xxp-brs-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brs-1440:"].wp-block-image > img, [style*="--xxp-brs-1440:"].wp-block-image > a > img { border-right-style: var(--xxp-brs-1440) !important; }
+	[style*="--xxp-bbs-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-style: var(--xxp-bbs-1440) !important; }
+	[style*="--xxp-bbs-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbs-1440:"].wp-block-image > img, [style*="--xxp-bbs-1440:"].wp-block-image > a > img { border-bottom-style: var(--xxp-bbs-1440) !important; }
+	[style*="--xxp-bls-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-left-style: var(--xxp-bls-1440) !important; }
+	[style*="--xxp-bls-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bls-1440:"].wp-block-image > img, [style*="--xxp-bls-1440:"].wp-block-image > a > img { border-left-style: var(--xxp-bls-1440) !important; }
+	[style*="--xxp-rtl-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-top-left-radius: var(--xxp-rtl-1440) !important; }
+	[style*="--xxp-rtl-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtl-1440:"].wp-block-image > img, [style*="--xxp-rtl-1440:"].wp-block-image > a > img { border-top-left-radius: var(--xxp-rtl-1440) !important; }
+	[style*="--xxp-rtr-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-top-right-radius: var(--xxp-rtr-1440) !important; }
+	[style*="--xxp-rtr-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtr-1440:"].wp-block-image > img, [style*="--xxp-rtr-1440:"].wp-block-image > a > img { border-top-right-radius: var(--xxp-rtr-1440) !important; }
+	[style*="--xxp-rbr-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-right-radius: var(--xxp-rbr-1440) !important; }
+	[style*="--xxp-rbr-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbr-1440:"].wp-block-image > img, [style*="--xxp-rbr-1440:"].wp-block-image > a > img { border-bottom-right-radius: var(--xxp-rbr-1440) !important; }
+	[style*="--xxp-rbl-1440:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-left-radius: var(--xxp-rbl-1440) !important; }
+	[style*="--xxp-rbl-1440:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbl-1440:"].wp-block-image > img, [style*="--xxp-rbl-1440:"].wp-block-image > a > img { border-bottom-left-radius: var(--xxp-rbl-1440) !important; }
+	[style*="--xxp-dir-1440:"] { flex-direction: var(--xxp-dir-1440) !important; }
+	[style*="--xxp-just-1440:"] { justify-content: var(--xxp-just-1440) !important; }
+	[style*="--xxp-align-1440:"] { align-items: var(--xxp-align-1440) !important; }
+	[style*="--xxp-wrap-1440:"] { flex-wrap: var(--xxp-wrap-1440) !important; }
+	[style*="--xxp-talign-1440:"] { text-align: var(--xxp-talign-1440) !important; }
+	[style*="--xxp-fs-1440:"] { font-size: var(--xxp-fs-1440) !important; }
+	[style*="--xxp-crop-1440:"], [style*="--xxp-crop-1440:"] img, [style*="--xxp-crop-1440:"] video { object-position: var(--xxp-crop-1440) !important; }
+	[style*="--xxp-fit-1440:"] { object-fit: var(--xxp-fit-1440) !important; }
+	[style*="--xxp-fit-1440:"] :is(img, video) { object-fit: var(--xxp-fit-1440) !important; width: 100% !important; height: 100% !important; }
+}
+
+@media (min-width: 1920px) {
+	/* 1920px and wider */
+	[style*="--xxp-w-1920:"] { width: var(--xxp-w-1920) !important; }
+	[style*="--xxp-minw-1920:"] { min-width: var(--xxp-minw-1920) !important; }
+	[style*="--xxp-maxw-1920:"] { max-width: var(--xxp-maxw-1920) !important; }
+	[style*="--xxp-h-1920:"] { height: var(--xxp-h-1920) !important; }
+	[style*="--xxp-minh-1920:"] { min-height: var(--xxp-minh-1920) !important; }
+	[style*="--xxp-maxh-1920:"] { max-height: var(--xxp-maxh-1920) !important; }
+	[style*="--xxp-ar-1920:"] { aspect-ratio: var(--xxp-ar-1920) !important; }
+	[style*="--xxp-pt-1920:"] { padding-top: var(--xxp-pt-1920) !important; }
+	[style*="--xxp-pr-1920:"] { padding-right: var(--xxp-pr-1920) !important; }
+	[style*="--xxp-pb-1920:"] { padding-bottom: var(--xxp-pb-1920) !important; }
+	[style*="--xxp-pl-1920:"] { padding-left: var(--xxp-pl-1920) !important; }
+	[style*="--xxp-mt-1920:"] { margin-top: var(--xxp-mt-1920) !important; }
+	[style*="--xxp-mr-1920:"][style*="--xxp-mr-1920:"] { margin-right: var(--xxp-mr-1920) !important; }
+	[style*="--xxp-mb-1920:"] { margin-bottom: var(--xxp-mb-1920) !important; }
+	[style*="--xxp-ml-1920:"][style*="--xxp-ml-1920:"] { margin-left: var(--xxp-ml-1920) !important; }
+	[style*="--xxp-gap-1920:"] { --wp--style--block-gap: var(--xxp-gap-1920) !important; gap: var(--xxp-gap-1920) !important; }
+	[style*="--xxp-rgap-1920:"] { row-gap: var(--xxp-rgap-1920) !important; }
+	[style*="--xxp-cgap-1920:"] { column-gap: var(--xxp-cgap-1920) !important; }
+	[style*="--xxp-colw-1920:"] { column-width: var(--xxp-colw-1920) !important; }
+	[style*="--xxp-grow-1920:"] { flex-grow: var(--xxp-grow-1920) !important; }
+	[style*="--xxp-shrink-1920:"] { flex-shrink: var(--xxp-shrink-1920) !important; }
+	[style*="--xxp-basis-1920:"] { flex-basis: var(--xxp-basis-1920) !important; }
+	[style*="--xxp-order-1920:"] { order: var(--xxp-order-1920) !important; }
+	[style*="--xxp-aself-1920:"] { align-self: var(--xxp-aself-1920) !important; }
+	[style*="--xxp-over-1920:"] { overflow: var(--xxp-over-1920) !important; }
+	[style*="--xxp-disp-1920:"] { display: var(--xxp-disp-1920) !important; }
+	[style*="--xxp-twrap-1920:"] { text-wrap: var(--xxp-twrap-1920) !important; }
+	[style*="--xxp-cols-1920:"] { grid-template-columns: repeat(var(--xxp-cols-1920), var(--xxp-ctrack-1920, minmax(0, 1fr))) !important; }
+	[style*="--xxp-gcol-1920:"] { grid-column: var(--xxp-gcol-1920) !important; }
+	[style*="--xxp-top-1920:"] { top: var(--xxp-top-1920) !important; }
+	[style*="--xxp-pos-1920:"] { position: var(--xxp-pos-1920) !important; }
+	[style*="--xxp-right-1920:"] { right: var(--xxp-right-1920) !important; }
+	[style*="--xxp-bottom-1920:"] { bottom: var(--xxp-bottom-1920) !important; }
+	[style*="--xxp-left-1920:"] { left: var(--xxp-left-1920) !important; }
+	[style*="--xxp-z-1920:"] { z-index: var(--xxp-z-1920) !important; }
+	[style*="--xxp-op-1920:"] { opacity: var(--xxp-op-1920) !important; }
+	[style*="--xxp-btw-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-top-width: var(--xxp-btw-1920) !important; }
+	[style*="--xxp-btw-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btw-1920:"].wp-block-image > img, [style*="--xxp-btw-1920:"].wp-block-image > a > img { border-top-width: var(--xxp-btw-1920) !important; }
+	[style*="--xxp-brw-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-right-width: var(--xxp-brw-1920) !important; }
+	[style*="--xxp-brw-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brw-1920:"].wp-block-image > img, [style*="--xxp-brw-1920:"].wp-block-image > a > img { border-right-width: var(--xxp-brw-1920) !important; }
+	[style*="--xxp-bbw-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-width: var(--xxp-bbw-1920) !important; }
+	[style*="--xxp-bbw-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbw-1920:"].wp-block-image > img, [style*="--xxp-bbw-1920:"].wp-block-image > a > img { border-bottom-width: var(--xxp-bbw-1920) !important; }
+	[style*="--xxp-blw-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-left-width: var(--xxp-blw-1920) !important; }
+	[style*="--xxp-blw-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blw-1920:"].wp-block-image > img, [style*="--xxp-blw-1920:"].wp-block-image > a > img { border-left-width: var(--xxp-blw-1920) !important; }
+	[style*="--xxp-btc-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-top-color: var(--xxp-btc-1920) !important; }
+	[style*="--xxp-btc-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btc-1920:"].wp-block-image > img, [style*="--xxp-btc-1920:"].wp-block-image > a > img { border-top-color: var(--xxp-btc-1920) !important; }
+	[style*="--xxp-brc-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-right-color: var(--xxp-brc-1920) !important; }
+	[style*="--xxp-brc-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brc-1920:"].wp-block-image > img, [style*="--xxp-brc-1920:"].wp-block-image > a > img { border-right-color: var(--xxp-brc-1920) !important; }
+	[style*="--xxp-bbc-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-color: var(--xxp-bbc-1920) !important; }
+	[style*="--xxp-bbc-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbc-1920:"].wp-block-image > img, [style*="--xxp-bbc-1920:"].wp-block-image > a > img { border-bottom-color: var(--xxp-bbc-1920) !important; }
+	[style*="--xxp-blc-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-left-color: var(--xxp-blc-1920) !important; }
+	[style*="--xxp-blc-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blc-1920:"].wp-block-image > img, [style*="--xxp-blc-1920:"].wp-block-image > a > img { border-left-color: var(--xxp-blc-1920) !important; }
+	[style*="--xxp-bts-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-top-style: var(--xxp-bts-1920) !important; }
+	[style*="--xxp-bts-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bts-1920:"].wp-block-image > img, [style*="--xxp-bts-1920:"].wp-block-image > a > img { border-top-style: var(--xxp-bts-1920) !important; }
+	[style*="--xxp-brs-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-right-style: var(--xxp-brs-1920) !important; }
+	[style*="--xxp-brs-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brs-1920:"].wp-block-image > img, [style*="--xxp-brs-1920:"].wp-block-image > a > img { border-right-style: var(--xxp-brs-1920) !important; }
+	[style*="--xxp-bbs-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-style: var(--xxp-bbs-1920) !important; }
+	[style*="--xxp-bbs-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbs-1920:"].wp-block-image > img, [style*="--xxp-bbs-1920:"].wp-block-image > a > img { border-bottom-style: var(--xxp-bbs-1920) !important; }
+	[style*="--xxp-bls-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-left-style: var(--xxp-bls-1920) !important; }
+	[style*="--xxp-bls-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bls-1920:"].wp-block-image > img, [style*="--xxp-bls-1920:"].wp-block-image > a > img { border-left-style: var(--xxp-bls-1920) !important; }
+	[style*="--xxp-rtl-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-top-left-radius: var(--xxp-rtl-1920) !important; }
+	[style*="--xxp-rtl-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtl-1920:"].wp-block-image > img, [style*="--xxp-rtl-1920:"].wp-block-image > a > img { border-top-left-radius: var(--xxp-rtl-1920) !important; }
+	[style*="--xxp-rtr-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-top-right-radius: var(--xxp-rtr-1920) !important; }
+	[style*="--xxp-rtr-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtr-1920:"].wp-block-image > img, [style*="--xxp-rtr-1920:"].wp-block-image > a > img { border-top-right-radius: var(--xxp-rtr-1920) !important; }
+	[style*="--xxp-rbr-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-right-radius: var(--xxp-rbr-1920) !important; }
+	[style*="--xxp-rbr-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbr-1920:"].wp-block-image > img, [style*="--xxp-rbr-1920:"].wp-block-image > a > img { border-bottom-right-radius: var(--xxp-rbr-1920) !important; }
+	[style*="--xxp-rbl-1920:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-left-radius: var(--xxp-rbl-1920) !important; }
+	[style*="--xxp-rbl-1920:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbl-1920:"].wp-block-image > img, [style*="--xxp-rbl-1920:"].wp-block-image > a > img { border-bottom-left-radius: var(--xxp-rbl-1920) !important; }
+	[style*="--xxp-dir-1920:"] { flex-direction: var(--xxp-dir-1920) !important; }
+	[style*="--xxp-just-1920:"] { justify-content: var(--xxp-just-1920) !important; }
+	[style*="--xxp-align-1920:"] { align-items: var(--xxp-align-1920) !important; }
+	[style*="--xxp-wrap-1920:"] { flex-wrap: var(--xxp-wrap-1920) !important; }
+	[style*="--xxp-talign-1920:"] { text-align: var(--xxp-talign-1920) !important; }
+	[style*="--xxp-fs-1920:"] { font-size: var(--xxp-fs-1920) !important; }
+	[style*="--xxp-crop-1920:"], [style*="--xxp-crop-1920:"] img, [style*="--xxp-crop-1920:"] video { object-position: var(--xxp-crop-1920) !important; }
+	[style*="--xxp-fit-1920:"] { object-fit: var(--xxp-fit-1920) !important; }
+	[style*="--xxp-fit-1920:"] :is(img, video) { object-fit: var(--xxp-fit-1920) !important; width: 100% !important; height: 100% !important; }
+}
+
+@media (max-width: 991px) {
+	/* 768–991px, and narrower unless a narrower screen says otherwise */
+	[style*="--xxp-w-991:"] { width: var(--xxp-w-991) !important; }
+	[style*="--xxp-minw-991:"] { min-width: var(--xxp-minw-991) !important; }
+	[style*="--xxp-maxw-991:"] { max-width: var(--xxp-maxw-991) !important; }
+	[style*="--xxp-h-991:"] { height: var(--xxp-h-991) !important; }
+	[style*="--xxp-minh-991:"] { min-height: var(--xxp-minh-991) !important; }
+	[style*="--xxp-maxh-991:"] { max-height: var(--xxp-maxh-991) !important; }
+	[style*="--xxp-ar-991:"] { aspect-ratio: var(--xxp-ar-991) !important; }
+	[style*="--xxp-pt-991:"] { padding-top: var(--xxp-pt-991) !important; }
+	[style*="--xxp-pr-991:"] { padding-right: var(--xxp-pr-991) !important; }
+	[style*="--xxp-pb-991:"] { padding-bottom: var(--xxp-pb-991) !important; }
+	[style*="--xxp-pl-991:"] { padding-left: var(--xxp-pl-991) !important; }
+	[style*="--xxp-mt-991:"] { margin-top: var(--xxp-mt-991) !important; }
+	[style*="--xxp-mr-991:"][style*="--xxp-mr-991:"] { margin-right: var(--xxp-mr-991) !important; }
+	[style*="--xxp-mb-991:"] { margin-bottom: var(--xxp-mb-991) !important; }
+	[style*="--xxp-ml-991:"][style*="--xxp-ml-991:"] { margin-left: var(--xxp-ml-991) !important; }
+	[style*="--xxp-gap-991:"] { --wp--style--block-gap: var(--xxp-gap-991) !important; gap: var(--xxp-gap-991) !important; }
+	[style*="--xxp-rgap-991:"] { row-gap: var(--xxp-rgap-991) !important; }
+	[style*="--xxp-cgap-991:"] { column-gap: var(--xxp-cgap-991) !important; }
+	[style*="--xxp-colw-991:"] { column-width: var(--xxp-colw-991) !important; }
+	[style*="--xxp-grow-991:"] { flex-grow: var(--xxp-grow-991) !important; }
+	[style*="--xxp-shrink-991:"] { flex-shrink: var(--xxp-shrink-991) !important; }
+	[style*="--xxp-basis-991:"] { flex-basis: var(--xxp-basis-991) !important; }
+	[style*="--xxp-order-991:"] { order: var(--xxp-order-991) !important; }
+	[style*="--xxp-aself-991:"] { align-self: var(--xxp-aself-991) !important; }
+	[style*="--xxp-over-991:"] { overflow: var(--xxp-over-991) !important; }
+	[style*="--xxp-disp-991:"] { display: var(--xxp-disp-991) !important; }
+	[style*="--xxp-twrap-991:"] { text-wrap: var(--xxp-twrap-991) !important; }
+	[style*="--xxp-cols-991:"] { grid-template-columns: repeat(var(--xxp-cols-991), var(--xxp-ctrack-991, minmax(0, 1fr))) !important; }
+	[style*="--xxp-gcol-991:"] { grid-column: var(--xxp-gcol-991) !important; }
+	[style*="--xxp-top-991:"] { top: var(--xxp-top-991) !important; }
+	[style*="--xxp-pos-991:"] { position: var(--xxp-pos-991) !important; }
+	[style*="--xxp-right-991:"] { right: var(--xxp-right-991) !important; }
+	[style*="--xxp-bottom-991:"] { bottom: var(--xxp-bottom-991) !important; }
+	[style*="--xxp-left-991:"] { left: var(--xxp-left-991) !important; }
+	[style*="--xxp-z-991:"] { z-index: var(--xxp-z-991) !important; }
+	[style*="--xxp-op-991:"] { opacity: var(--xxp-op-991) !important; }
+	[style*="--xxp-btw-991:"]:not(.wp-block-button):not(.wp-block-image) { border-top-width: var(--xxp-btw-991) !important; }
+	[style*="--xxp-btw-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btw-991:"].wp-block-image > img, [style*="--xxp-btw-991:"].wp-block-image > a > img { border-top-width: var(--xxp-btw-991) !important; }
+	[style*="--xxp-brw-991:"]:not(.wp-block-button):not(.wp-block-image) { border-right-width: var(--xxp-brw-991) !important; }
+	[style*="--xxp-brw-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brw-991:"].wp-block-image > img, [style*="--xxp-brw-991:"].wp-block-image > a > img { border-right-width: var(--xxp-brw-991) !important; }
+	[style*="--xxp-bbw-991:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-width: var(--xxp-bbw-991) !important; }
+	[style*="--xxp-bbw-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbw-991:"].wp-block-image > img, [style*="--xxp-bbw-991:"].wp-block-image > a > img { border-bottom-width: var(--xxp-bbw-991) !important; }
+	[style*="--xxp-blw-991:"]:not(.wp-block-button):not(.wp-block-image) { border-left-width: var(--xxp-blw-991) !important; }
+	[style*="--xxp-blw-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blw-991:"].wp-block-image > img, [style*="--xxp-blw-991:"].wp-block-image > a > img { border-left-width: var(--xxp-blw-991) !important; }
+	[style*="--xxp-btc-991:"]:not(.wp-block-button):not(.wp-block-image) { border-top-color: var(--xxp-btc-991) !important; }
+	[style*="--xxp-btc-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btc-991:"].wp-block-image > img, [style*="--xxp-btc-991:"].wp-block-image > a > img { border-top-color: var(--xxp-btc-991) !important; }
+	[style*="--xxp-brc-991:"]:not(.wp-block-button):not(.wp-block-image) { border-right-color: var(--xxp-brc-991) !important; }
+	[style*="--xxp-brc-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brc-991:"].wp-block-image > img, [style*="--xxp-brc-991:"].wp-block-image > a > img { border-right-color: var(--xxp-brc-991) !important; }
+	[style*="--xxp-bbc-991:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-color: var(--xxp-bbc-991) !important; }
+	[style*="--xxp-bbc-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbc-991:"].wp-block-image > img, [style*="--xxp-bbc-991:"].wp-block-image > a > img { border-bottom-color: var(--xxp-bbc-991) !important; }
+	[style*="--xxp-blc-991:"]:not(.wp-block-button):not(.wp-block-image) { border-left-color: var(--xxp-blc-991) !important; }
+	[style*="--xxp-blc-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blc-991:"].wp-block-image > img, [style*="--xxp-blc-991:"].wp-block-image > a > img { border-left-color: var(--xxp-blc-991) !important; }
+	[style*="--xxp-bts-991:"]:not(.wp-block-button):not(.wp-block-image) { border-top-style: var(--xxp-bts-991) !important; }
+	[style*="--xxp-bts-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bts-991:"].wp-block-image > img, [style*="--xxp-bts-991:"].wp-block-image > a > img { border-top-style: var(--xxp-bts-991) !important; }
+	[style*="--xxp-brs-991:"]:not(.wp-block-button):not(.wp-block-image) { border-right-style: var(--xxp-brs-991) !important; }
+	[style*="--xxp-brs-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brs-991:"].wp-block-image > img, [style*="--xxp-brs-991:"].wp-block-image > a > img { border-right-style: var(--xxp-brs-991) !important; }
+	[style*="--xxp-bbs-991:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-style: var(--xxp-bbs-991) !important; }
+	[style*="--xxp-bbs-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbs-991:"].wp-block-image > img, [style*="--xxp-bbs-991:"].wp-block-image > a > img { border-bottom-style: var(--xxp-bbs-991) !important; }
+	[style*="--xxp-bls-991:"]:not(.wp-block-button):not(.wp-block-image) { border-left-style: var(--xxp-bls-991) !important; }
+	[style*="--xxp-bls-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bls-991:"].wp-block-image > img, [style*="--xxp-bls-991:"].wp-block-image > a > img { border-left-style: var(--xxp-bls-991) !important; }
+	[style*="--xxp-rtl-991:"]:not(.wp-block-button):not(.wp-block-image) { border-top-left-radius: var(--xxp-rtl-991) !important; }
+	[style*="--xxp-rtl-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtl-991:"].wp-block-image > img, [style*="--xxp-rtl-991:"].wp-block-image > a > img { border-top-left-radius: var(--xxp-rtl-991) !important; }
+	[style*="--xxp-rtr-991:"]:not(.wp-block-button):not(.wp-block-image) { border-top-right-radius: var(--xxp-rtr-991) !important; }
+	[style*="--xxp-rtr-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtr-991:"].wp-block-image > img, [style*="--xxp-rtr-991:"].wp-block-image > a > img { border-top-right-radius: var(--xxp-rtr-991) !important; }
+	[style*="--xxp-rbr-991:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-right-radius: var(--xxp-rbr-991) !important; }
+	[style*="--xxp-rbr-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbr-991:"].wp-block-image > img, [style*="--xxp-rbr-991:"].wp-block-image > a > img { border-bottom-right-radius: var(--xxp-rbr-991) !important; }
+	[style*="--xxp-rbl-991:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-left-radius: var(--xxp-rbl-991) !important; }
+	[style*="--xxp-rbl-991:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbl-991:"].wp-block-image > img, [style*="--xxp-rbl-991:"].wp-block-image > a > img { border-bottom-left-radius: var(--xxp-rbl-991) !important; }
+	[style*="--xxp-dir-991:"] { flex-direction: var(--xxp-dir-991) !important; }
+	[style*="--xxp-just-991:"] { justify-content: var(--xxp-just-991) !important; }
+	[style*="--xxp-align-991:"] { align-items: var(--xxp-align-991) !important; }
+	[style*="--xxp-wrap-991:"] { flex-wrap: var(--xxp-wrap-991) !important; }
+	[style*="--xxp-talign-991:"] { text-align: var(--xxp-talign-991) !important; }
+	[style*="--xxp-fs-991:"] { font-size: var(--xxp-fs-991) !important; }
+	[style*="--xxp-crop-991:"], [style*="--xxp-crop-991:"] img, [style*="--xxp-crop-991:"] video { object-position: var(--xxp-crop-991) !important; }
+	[style*="--xxp-fit-991:"] { object-fit: var(--xxp-fit-991) !important; }
+	[style*="--xxp-fit-991:"] :is(img, video) { object-fit: var(--xxp-fit-991) !important; width: 100% !important; height: 100% !important; }
+}
+
+@media (max-width: 767px) {
+	/* 568–767px, and narrower unless 567 says otherwise */
+	[style*="--xxp-w-767:"] { width: var(--xxp-w-767) !important; }
+	[style*="--xxp-minw-767:"] { min-width: var(--xxp-minw-767) !important; }
+	[style*="--xxp-maxw-767:"] { max-width: var(--xxp-maxw-767) !important; }
+	[style*="--xxp-h-767:"] { height: var(--xxp-h-767) !important; }
+	[style*="--xxp-minh-767:"] { min-height: var(--xxp-minh-767) !important; }
+	[style*="--xxp-maxh-767:"] { max-height: var(--xxp-maxh-767) !important; }
+	[style*="--xxp-ar-767:"] { aspect-ratio: var(--xxp-ar-767) !important; }
+	[style*="--xxp-pt-767:"] { padding-top: var(--xxp-pt-767) !important; }
+	[style*="--xxp-pr-767:"] { padding-right: var(--xxp-pr-767) !important; }
+	[style*="--xxp-pb-767:"] { padding-bottom: var(--xxp-pb-767) !important; }
+	[style*="--xxp-pl-767:"] { padding-left: var(--xxp-pl-767) !important; }
+	[style*="--xxp-mt-767:"] { margin-top: var(--xxp-mt-767) !important; }
+	[style*="--xxp-mr-767:"][style*="--xxp-mr-767:"] { margin-right: var(--xxp-mr-767) !important; }
+	[style*="--xxp-mb-767:"] { margin-bottom: var(--xxp-mb-767) !important; }
+	[style*="--xxp-ml-767:"][style*="--xxp-ml-767:"] { margin-left: var(--xxp-ml-767) !important; }
+	[style*="--xxp-gap-767:"] { --wp--style--block-gap: var(--xxp-gap-767) !important; gap: var(--xxp-gap-767) !important; }
+	[style*="--xxp-rgap-767:"] { row-gap: var(--xxp-rgap-767) !important; }
+	[style*="--xxp-cgap-767:"] { column-gap: var(--xxp-cgap-767) !important; }
+	[style*="--xxp-colw-767:"] { column-width: var(--xxp-colw-767) !important; }
+	[style*="--xxp-grow-767:"] { flex-grow: var(--xxp-grow-767) !important; }
+	[style*="--xxp-shrink-767:"] { flex-shrink: var(--xxp-shrink-767) !important; }
+	[style*="--xxp-basis-767:"] { flex-basis: var(--xxp-basis-767) !important; }
+	[style*="--xxp-order-767:"] { order: var(--xxp-order-767) !important; }
+	[style*="--xxp-aself-767:"] { align-self: var(--xxp-aself-767) !important; }
+	[style*="--xxp-over-767:"] { overflow: var(--xxp-over-767) !important; }
+	[style*="--xxp-disp-767:"] { display: var(--xxp-disp-767) !important; }
+	[style*="--xxp-twrap-767:"] { text-wrap: var(--xxp-twrap-767) !important; }
+	[style*="--xxp-cols-767:"] { grid-template-columns: repeat(var(--xxp-cols-767), var(--xxp-ctrack-767, minmax(0, 1fr))) !important; }
+	[style*="--xxp-gcol-767:"] { grid-column: var(--xxp-gcol-767) !important; }
+	[style*="--xxp-top-767:"] { top: var(--xxp-top-767) !important; }
+	[style*="--xxp-pos-767:"] { position: var(--xxp-pos-767) !important; }
+	[style*="--xxp-right-767:"] { right: var(--xxp-right-767) !important; }
+	[style*="--xxp-bottom-767:"] { bottom: var(--xxp-bottom-767) !important; }
+	[style*="--xxp-left-767:"] { left: var(--xxp-left-767) !important; }
+	[style*="--xxp-z-767:"] { z-index: var(--xxp-z-767) !important; }
+	[style*="--xxp-op-767:"] { opacity: var(--xxp-op-767) !important; }
+	[style*="--xxp-btw-767:"]:not(.wp-block-button):not(.wp-block-image) { border-top-width: var(--xxp-btw-767) !important; }
+	[style*="--xxp-btw-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btw-767:"].wp-block-image > img, [style*="--xxp-btw-767:"].wp-block-image > a > img { border-top-width: var(--xxp-btw-767) !important; }
+	[style*="--xxp-brw-767:"]:not(.wp-block-button):not(.wp-block-image) { border-right-width: var(--xxp-brw-767) !important; }
+	[style*="--xxp-brw-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brw-767:"].wp-block-image > img, [style*="--xxp-brw-767:"].wp-block-image > a > img { border-right-width: var(--xxp-brw-767) !important; }
+	[style*="--xxp-bbw-767:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-width: var(--xxp-bbw-767) !important; }
+	[style*="--xxp-bbw-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbw-767:"].wp-block-image > img, [style*="--xxp-bbw-767:"].wp-block-image > a > img { border-bottom-width: var(--xxp-bbw-767) !important; }
+	[style*="--xxp-blw-767:"]:not(.wp-block-button):not(.wp-block-image) { border-left-width: var(--xxp-blw-767) !important; }
+	[style*="--xxp-blw-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blw-767:"].wp-block-image > img, [style*="--xxp-blw-767:"].wp-block-image > a > img { border-left-width: var(--xxp-blw-767) !important; }
+	[style*="--xxp-btc-767:"]:not(.wp-block-button):not(.wp-block-image) { border-top-color: var(--xxp-btc-767) !important; }
+	[style*="--xxp-btc-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btc-767:"].wp-block-image > img, [style*="--xxp-btc-767:"].wp-block-image > a > img { border-top-color: var(--xxp-btc-767) !important; }
+	[style*="--xxp-brc-767:"]:not(.wp-block-button):not(.wp-block-image) { border-right-color: var(--xxp-brc-767) !important; }
+	[style*="--xxp-brc-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brc-767:"].wp-block-image > img, [style*="--xxp-brc-767:"].wp-block-image > a > img { border-right-color: var(--xxp-brc-767) !important; }
+	[style*="--xxp-bbc-767:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-color: var(--xxp-bbc-767) !important; }
+	[style*="--xxp-bbc-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbc-767:"].wp-block-image > img, [style*="--xxp-bbc-767:"].wp-block-image > a > img { border-bottom-color: var(--xxp-bbc-767) !important; }
+	[style*="--xxp-blc-767:"]:not(.wp-block-button):not(.wp-block-image) { border-left-color: var(--xxp-blc-767) !important; }
+	[style*="--xxp-blc-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blc-767:"].wp-block-image > img, [style*="--xxp-blc-767:"].wp-block-image > a > img { border-left-color: var(--xxp-blc-767) !important; }
+	[style*="--xxp-bts-767:"]:not(.wp-block-button):not(.wp-block-image) { border-top-style: var(--xxp-bts-767) !important; }
+	[style*="--xxp-bts-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bts-767:"].wp-block-image > img, [style*="--xxp-bts-767:"].wp-block-image > a > img { border-top-style: var(--xxp-bts-767) !important; }
+	[style*="--xxp-brs-767:"]:not(.wp-block-button):not(.wp-block-image) { border-right-style: var(--xxp-brs-767) !important; }
+	[style*="--xxp-brs-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brs-767:"].wp-block-image > img, [style*="--xxp-brs-767:"].wp-block-image > a > img { border-right-style: var(--xxp-brs-767) !important; }
+	[style*="--xxp-bbs-767:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-style: var(--xxp-bbs-767) !important; }
+	[style*="--xxp-bbs-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbs-767:"].wp-block-image > img, [style*="--xxp-bbs-767:"].wp-block-image > a > img { border-bottom-style: var(--xxp-bbs-767) !important; }
+	[style*="--xxp-bls-767:"]:not(.wp-block-button):not(.wp-block-image) { border-left-style: var(--xxp-bls-767) !important; }
+	[style*="--xxp-bls-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bls-767:"].wp-block-image > img, [style*="--xxp-bls-767:"].wp-block-image > a > img { border-left-style: var(--xxp-bls-767) !important; }
+	[style*="--xxp-rtl-767:"]:not(.wp-block-button):not(.wp-block-image) { border-top-left-radius: var(--xxp-rtl-767) !important; }
+	[style*="--xxp-rtl-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtl-767:"].wp-block-image > img, [style*="--xxp-rtl-767:"].wp-block-image > a > img { border-top-left-radius: var(--xxp-rtl-767) !important; }
+	[style*="--xxp-rtr-767:"]:not(.wp-block-button):not(.wp-block-image) { border-top-right-radius: var(--xxp-rtr-767) !important; }
+	[style*="--xxp-rtr-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtr-767:"].wp-block-image > img, [style*="--xxp-rtr-767:"].wp-block-image > a > img { border-top-right-radius: var(--xxp-rtr-767) !important; }
+	[style*="--xxp-rbr-767:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-right-radius: var(--xxp-rbr-767) !important; }
+	[style*="--xxp-rbr-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbr-767:"].wp-block-image > img, [style*="--xxp-rbr-767:"].wp-block-image > a > img { border-bottom-right-radius: var(--xxp-rbr-767) !important; }
+	[style*="--xxp-rbl-767:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-left-radius: var(--xxp-rbl-767) !important; }
+	[style*="--xxp-rbl-767:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbl-767:"].wp-block-image > img, [style*="--xxp-rbl-767:"].wp-block-image > a > img { border-bottom-left-radius: var(--xxp-rbl-767) !important; }
+	[style*="--xxp-dir-767:"] { flex-direction: var(--xxp-dir-767) !important; }
+	[style*="--xxp-just-767:"] { justify-content: var(--xxp-just-767) !important; }
+	[style*="--xxp-align-767:"] { align-items: var(--xxp-align-767) !important; }
+	[style*="--xxp-wrap-767:"] { flex-wrap: var(--xxp-wrap-767) !important; }
+	[style*="--xxp-talign-767:"] { text-align: var(--xxp-talign-767) !important; }
+	[style*="--xxp-fs-767:"] { font-size: var(--xxp-fs-767) !important; }
+	[style*="--xxp-crop-767:"], [style*="--xxp-crop-767:"] img, [style*="--xxp-crop-767:"] video { object-position: var(--xxp-crop-767) !important; }
+	[style*="--xxp-fit-767:"] { object-fit: var(--xxp-fit-767) !important; }
+	[style*="--xxp-fit-767:"] :is(img, video) { object-fit: var(--xxp-fit-767) !important; width: 100% !important; height: 100% !important; }
+}
+
+@media (max-width: 567px) {
+	/* 360–567px */
+	[style*="--xxp-w-567:"] { width: var(--xxp-w-567) !important; }
+	[style*="--xxp-minw-567:"] { min-width: var(--xxp-minw-567) !important; }
+	[style*="--xxp-maxw-567:"] { max-width: var(--xxp-maxw-567) !important; }
+	[style*="--xxp-h-567:"] { height: var(--xxp-h-567) !important; }
+	[style*="--xxp-minh-567:"] { min-height: var(--xxp-minh-567) !important; }
+	[style*="--xxp-maxh-567:"] { max-height: var(--xxp-maxh-567) !important; }
+	[style*="--xxp-ar-567:"] { aspect-ratio: var(--xxp-ar-567) !important; }
+	[style*="--xxp-pt-567:"] { padding-top: var(--xxp-pt-567) !important; }
+	[style*="--xxp-pr-567:"] { padding-right: var(--xxp-pr-567) !important; }
+	[style*="--xxp-pb-567:"] { padding-bottom: var(--xxp-pb-567) !important; }
+	[style*="--xxp-pl-567:"] { padding-left: var(--xxp-pl-567) !important; }
+	[style*="--xxp-mt-567:"] { margin-top: var(--xxp-mt-567) !important; }
+	[style*="--xxp-mr-567:"][style*="--xxp-mr-567:"] { margin-right: var(--xxp-mr-567) !important; }
+	[style*="--xxp-mb-567:"] { margin-bottom: var(--xxp-mb-567) !important; }
+	[style*="--xxp-ml-567:"][style*="--xxp-ml-567:"] { margin-left: var(--xxp-ml-567) !important; }
+	[style*="--xxp-gap-567:"] { --wp--style--block-gap: var(--xxp-gap-567) !important; gap: var(--xxp-gap-567) !important; }
+	[style*="--xxp-rgap-567:"] { row-gap: var(--xxp-rgap-567) !important; }
+	[style*="--xxp-cgap-567:"] { column-gap: var(--xxp-cgap-567) !important; }
+	[style*="--xxp-colw-567:"] { column-width: var(--xxp-colw-567) !important; }
+	[style*="--xxp-grow-567:"] { flex-grow: var(--xxp-grow-567) !important; }
+	[style*="--xxp-shrink-567:"] { flex-shrink: var(--xxp-shrink-567) !important; }
+	[style*="--xxp-basis-567:"] { flex-basis: var(--xxp-basis-567) !important; }
+	[style*="--xxp-order-567:"] { order: var(--xxp-order-567) !important; }
+	[style*="--xxp-aself-567:"] { align-self: var(--xxp-aself-567) !important; }
+	[style*="--xxp-over-567:"] { overflow: var(--xxp-over-567) !important; }
+	[style*="--xxp-disp-567:"] { display: var(--xxp-disp-567) !important; }
+	[style*="--xxp-twrap-567:"] { text-wrap: var(--xxp-twrap-567) !important; }
+	[style*="--xxp-cols-567:"] { grid-template-columns: repeat(var(--xxp-cols-567), var(--xxp-ctrack-567, minmax(0, 1fr))) !important; }
+	[style*="--xxp-gcol-567:"] { grid-column: var(--xxp-gcol-567) !important; }
+	[style*="--xxp-top-567:"] { top: var(--xxp-top-567) !important; }
+	[style*="--xxp-pos-567:"] { position: var(--xxp-pos-567) !important; }
+	[style*="--xxp-right-567:"] { right: var(--xxp-right-567) !important; }
+	[style*="--xxp-bottom-567:"] { bottom: var(--xxp-bottom-567) !important; }
+	[style*="--xxp-left-567:"] { left: var(--xxp-left-567) !important; }
+	[style*="--xxp-z-567:"] { z-index: var(--xxp-z-567) !important; }
+	[style*="--xxp-op-567:"] { opacity: var(--xxp-op-567) !important; }
+	[style*="--xxp-btw-567:"]:not(.wp-block-button):not(.wp-block-image) { border-top-width: var(--xxp-btw-567) !important; }
+	[style*="--xxp-btw-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btw-567:"].wp-block-image > img, [style*="--xxp-btw-567:"].wp-block-image > a > img { border-top-width: var(--xxp-btw-567) !important; }
+	[style*="--xxp-brw-567:"]:not(.wp-block-button):not(.wp-block-image) { border-right-width: var(--xxp-brw-567) !important; }
+	[style*="--xxp-brw-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brw-567:"].wp-block-image > img, [style*="--xxp-brw-567:"].wp-block-image > a > img { border-right-width: var(--xxp-brw-567) !important; }
+	[style*="--xxp-bbw-567:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-width: var(--xxp-bbw-567) !important; }
+	[style*="--xxp-bbw-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbw-567:"].wp-block-image > img, [style*="--xxp-bbw-567:"].wp-block-image > a > img { border-bottom-width: var(--xxp-bbw-567) !important; }
+	[style*="--xxp-blw-567:"]:not(.wp-block-button):not(.wp-block-image) { border-left-width: var(--xxp-blw-567) !important; }
+	[style*="--xxp-blw-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blw-567:"].wp-block-image > img, [style*="--xxp-blw-567:"].wp-block-image > a > img { border-left-width: var(--xxp-blw-567) !important; }
+	[style*="--xxp-btc-567:"]:not(.wp-block-button):not(.wp-block-image) { border-top-color: var(--xxp-btc-567) !important; }
+	[style*="--xxp-btc-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-btc-567:"].wp-block-image > img, [style*="--xxp-btc-567:"].wp-block-image > a > img { border-top-color: var(--xxp-btc-567) !important; }
+	[style*="--xxp-brc-567:"]:not(.wp-block-button):not(.wp-block-image) { border-right-color: var(--xxp-brc-567) !important; }
+	[style*="--xxp-brc-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brc-567:"].wp-block-image > img, [style*="--xxp-brc-567:"].wp-block-image > a > img { border-right-color: var(--xxp-brc-567) !important; }
+	[style*="--xxp-bbc-567:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-color: var(--xxp-bbc-567) !important; }
+	[style*="--xxp-bbc-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbc-567:"].wp-block-image > img, [style*="--xxp-bbc-567:"].wp-block-image > a > img { border-bottom-color: var(--xxp-bbc-567) !important; }
+	[style*="--xxp-blc-567:"]:not(.wp-block-button):not(.wp-block-image) { border-left-color: var(--xxp-blc-567) !important; }
+	[style*="--xxp-blc-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-blc-567:"].wp-block-image > img, [style*="--xxp-blc-567:"].wp-block-image > a > img { border-left-color: var(--xxp-blc-567) !important; }
+	[style*="--xxp-bts-567:"]:not(.wp-block-button):not(.wp-block-image) { border-top-style: var(--xxp-bts-567) !important; }
+	[style*="--xxp-bts-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bts-567:"].wp-block-image > img, [style*="--xxp-bts-567:"].wp-block-image > a > img { border-top-style: var(--xxp-bts-567) !important; }
+	[style*="--xxp-brs-567:"]:not(.wp-block-button):not(.wp-block-image) { border-right-style: var(--xxp-brs-567) !important; }
+	[style*="--xxp-brs-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-brs-567:"].wp-block-image > img, [style*="--xxp-brs-567:"].wp-block-image > a > img { border-right-style: var(--xxp-brs-567) !important; }
+	[style*="--xxp-bbs-567:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-style: var(--xxp-bbs-567) !important; }
+	[style*="--xxp-bbs-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bbs-567:"].wp-block-image > img, [style*="--xxp-bbs-567:"].wp-block-image > a > img { border-bottom-style: var(--xxp-bbs-567) !important; }
+	[style*="--xxp-bls-567:"]:not(.wp-block-button):not(.wp-block-image) { border-left-style: var(--xxp-bls-567) !important; }
+	[style*="--xxp-bls-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-bls-567:"].wp-block-image > img, [style*="--xxp-bls-567:"].wp-block-image > a > img { border-left-style: var(--xxp-bls-567) !important; }
+	[style*="--xxp-rtl-567:"]:not(.wp-block-button):not(.wp-block-image) { border-top-left-radius: var(--xxp-rtl-567) !important; }
+	[style*="--xxp-rtl-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtl-567:"].wp-block-image > img, [style*="--xxp-rtl-567:"].wp-block-image > a > img { border-top-left-radius: var(--xxp-rtl-567) !important; }
+	[style*="--xxp-rtr-567:"]:not(.wp-block-button):not(.wp-block-image) { border-top-right-radius: var(--xxp-rtr-567) !important; }
+	[style*="--xxp-rtr-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rtr-567:"].wp-block-image > img, [style*="--xxp-rtr-567:"].wp-block-image > a > img { border-top-right-radius: var(--xxp-rtr-567) !important; }
+	[style*="--xxp-rbr-567:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-right-radius: var(--xxp-rbr-567) !important; }
+	[style*="--xxp-rbr-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbr-567:"].wp-block-image > img, [style*="--xxp-rbr-567:"].wp-block-image > a > img { border-bottom-right-radius: var(--xxp-rbr-567) !important; }
+	[style*="--xxp-rbl-567:"]:not(.wp-block-button):not(.wp-block-image) { border-bottom-left-radius: var(--xxp-rbl-567) !important; }
+	[style*="--xxp-rbl-567:"].wp-block-button > .wp-block-button__link, [style*="--xxp-rbl-567:"].wp-block-image > img, [style*="--xxp-rbl-567:"].wp-block-image > a > img { border-bottom-left-radius: var(--xxp-rbl-567) !important; }
+	[style*="--xxp-dir-567:"] { flex-direction: var(--xxp-dir-567) !important; }
+	[style*="--xxp-just-567:"] { justify-content: var(--xxp-just-567) !important; }
+	[style*="--xxp-align-567:"] { align-items: var(--xxp-align-567) !important; }
+	[style*="--xxp-wrap-567:"] { flex-wrap: var(--xxp-wrap-567) !important; }
+	[style*="--xxp-talign-567:"] { text-align: var(--xxp-talign-567) !important; }
+	[style*="--xxp-fs-567:"] { font-size: var(--xxp-fs-567) !important; }
+	[style*="--xxp-crop-567:"], [style*="--xxp-crop-567:"] img, [style*="--xxp-crop-567:"] video { object-position: var(--xxp-crop-567) !important; }
+	[style*="--xxp-fit-567:"] { object-fit: var(--xxp-fit-567) !important; }
+	[style*="--xxp-fit-567:"] :is(img, video) { object-fit: var(--xxp-fit-567) !important; width: 100% !important; height: 100% !important; }
+}
+
+/* ---- Hide on this screen ----
+
+   Every size above cascades on purpose. A switch must not: ticking 1920 and
+   1280 must not hide 1440 between them. So each screen has a window of its own,
+   closed at both ends, and a tick means that screen and no other. */
+@media (min-width: 1920px) {
+	[style*="--xxp-hide-1920:"] { display: none !important; }
+}
+@media (min-width: 1440px) and (max-width: 1919px) {
+	[style*="--xxp-hide-1440:"] { display: none !important; }
+}
+@media (min-width: 1280px) and (max-width: 1439px) {
+	[style*="--xxp-hide-1280:"] { display: none !important; }
+}
+@media (min-width: 992px) and (max-width: 1279px) {
+	[style*="--xxp-hide-base:"] { display: none !important; }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+	[style*="--xxp-hide-991:"] { display: none !important; }
+}
+@media (min-width: 568px) and (max-width: 767px) {
+	[style*="--xxp-hide-767:"] { display: none !important; }
+}
+@media (max-width: 567px) {
+	[style*="--xxp-hide-567:"] { display: none !important; }
+}
+
+/* ---- the same, in the editor canvas ----
+
+   A block hidden on the screen the canvas is at would vanish from the editor
+   and could not be selected again. The canvas marks it instead
+   (`--xxp-hidden-<screen>`), and it is faded and outlined in that window. */
+@media (min-width: 1920px) {
+	.editor-styles-wrapper [style*="--xxp-hidden-1920:"] { opacity: 0.35; outline: 1px dashed currentColor; outline-offset: -1px; }
+}
+@media (min-width: 1440px) and (max-width: 1919px) {
+	.editor-styles-wrapper [style*="--xxp-hidden-1440:"] { opacity: 0.35; outline: 1px dashed currentColor; outline-offset: -1px; }
+}
+@media (min-width: 1280px) and (max-width: 1439px) {
+	.editor-styles-wrapper [style*="--xxp-hidden-1280:"] { opacity: 0.35; outline: 1px dashed currentColor; outline-offset: -1px; }
+}
+@media (min-width: 992px) and (max-width: 1279px) {
+	.editor-styles-wrapper [style*="--xxp-hidden-base:"] { opacity: 0.35; outline: 1px dashed currentColor; outline-offset: -1px; }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+	.editor-styles-wrapper [style*="--xxp-hidden-991:"] { opacity: 0.35; outline: 1px dashed currentColor; outline-offset: -1px; }
+}
+@media (min-width: 568px) and (max-width: 767px) {
+	.editor-styles-wrapper [style*="--xxp-hidden-767:"] { opacity: 0.35; outline: 1px dashed currentColor; outline-offset: -1px; }
+}
+@media (max-width: 567px) {
+	.editor-styles-wrapper [style*="--xxp-hidden-567:"] { opacity: 0.35; outline: 1px dashed currentColor; outline-offset: -1px; }
+}
+
+/* ---- UPQODE Animations ---- */
+
+/* Fade in on load: declarative, ends visible, needs no script — so the canvas
+   shows the finished state. The delay is the block's own (--xxp-delay). */
+.xxp-rise {
+	animation: xxpRiseIn var(--xxp-motion-duration) var(--xxp-motion-ease) both;
+	animation-delay: calc(var(--xxp-motion-lead) + var(--xxp-delay, 0ms));
+}
+
+/* Zoom in on load: a picture settling into its frame. */
+.xxp-zoom {
+	transform-origin: center center;
+	animation: xxpZoomIn calc(var(--xxp-motion-duration) * 1.3) var(--xxp-motion-ease) both;
+	animation-delay: var(--xxp-delay, 0ms);
+}
+
+/* Fade in on scroll: hidden before the first paint, but only once the head
+   gate has put .xxp-reveal-ready on <html> — which it does only where
+   motion.js can run, and takes off again if motion.js never arrives. */
+.xxp-reveal-ready .xxp-reveal {
+	opacity: 0;
+}
+
+/* Line draws itself: grows from its centre. */
+.xxp-line {
+	transform-origin: center center;
+}
+
+@keyframes xxpRiseIn {
+	from { opacity: 0; transform: translateY(var(--xxp-motion-distance)); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes xxpZoomIn {
+	from { opacity: 0; transform: scale(0.88); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes xxpLineGrow {
+	from { opacity: 0; transform: scaleX(0); }
+	to { opacity: 1; transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.xxp-rise,
+	.xxp-zoom,
+	.xxp-reveal {
+		animation: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+	}
+}
+
+/* ---- Small · Body · Large on a paragraph ----
+
+   The same tokens Styles → Typography → Text edits per screen, so a paragraph
+   given a style follows that screen. Body is the paragraph as it is. */
+.is-style-text-sm {
+	font-size: var(--type-text-sm-size) !important;
+	line-height: var(--type-text-sm-lh);
+	letter-spacing: var(--type-text-sm-ls);
+	font-weight: var(--type-text-sm-fw);
+}
+
+.is-style-text-lg {
+	font-size: var(--type-text-lg-size) !important;
+	line-height: var(--type-text-lg-lh);
+	letter-spacing: var(--type-text-lg-ls);
+	font-weight: var(--type-text-lg-fw);
+}

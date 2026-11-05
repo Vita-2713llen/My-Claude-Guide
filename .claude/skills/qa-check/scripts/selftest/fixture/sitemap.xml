@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- __BASE__ is replaced by the self-test server with its own origin -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>__BASE__/</loc></url>
+  <url><loc>__BASE__/about/</loc></url>
+  <url><loc>__BASE__/pricing/</loc></url>
+  <url><loc>__BASE__/events/</loc></url>
+  <url><loc>__BASE__/faq/</loc></url>
+  <url><loc>__BASE__/contact/</loc></url>
+</urlset>

@@ -1,0 +1,746 @@
+/**
+ * What this theme adds to a block's sidebar.
+ *
+ * Sidebar, not canvas: the editor's own interface is outside the iframe the
+ * page is drawn in, so none of the theme's other stylesheets reach it. Only the
+ * layout of the fields is here — everything else is the editor's own.
+ *
+ * The two panels are UPQODE Animations and UPQODE Dimensions, side by side in the
+ * Settings tab. The second borrows the editor's own spacing control, so most of
+ * what is below is the room around it rather than the control itself.
+ */
+
+/* The editor's own Dimensions panel, out of the way.
+
+   Everything it holds is in UPQODE Dimensions, where the middle band reads and
+   writes the very same values — so the two panels showed one number twice, in
+   two places, with nothing to say which to use. The one that steps per screen
+   is the one to keep.
+
+   Nothing about the block changes: the attribute is still core's, still saved
+   as an inline style, still what Global Styles cascades into. Only the second
+   way in is closed.
+
+   Scoped to the block inspector on purpose. The same panel carries the site's
+   own spacing in Styles, where it is the only way to set the gutter, and that
+   one has to stay. */
+.block-editor-block-inspector .dimensions-block-support-panel {
+	display: none;
+}
+
+/* And the same for Layout, for the same reason: the panel beside Animations
+   says direction, distribution and alignment per band, and the editor's own
+   says them once — two places for one thing is how a value gets set twice and
+   argued over. The site-wide one in Styles stays; this is the block inspector. */
+.block-editor-block-inspector .layout-block-support-panel {
+	display: none;
+}
+
+/* the row of screens: which one the fields below are setting. Seven of them in
+   a sidebar 280px wide, so they share the row rather than being given a width
+   each — the drawings carry the ladder, not the boxes. */
+.xxp-dim-screens {
+	display: grid;
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+	gap: 2px;
+	margin-bottom: 8px;
+}
+
+.xxp-dim-screen {
+	position: relative;
+	min-width: 0;
+	padding: 4px 0;
+	justify-content: center;
+}
+
+.xxp-dim-screen svg {
+	display: block;
+}
+
+/* a screen that already carries something, so it can be seen without clicking
+   through all seven */
+.xxp-dim-screen.is-set::after {
+	content: '';
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: currentColor;
+}
+
+.xxp-dim-hint {
+	margin: 0 0 12px;
+	font-size: 12px;
+	font-style: normal;
+	color: #757575;
+}
+
+.xxp-dim-spacing + .xxp-dim-spacing,
+.xxp-dim-group {
+	margin-top: 14px;
+}
+
+/* the name of a group of plain measurements, in the editor's own voice */
+.xxp-dim-label {
+	margin: 0 0 6px;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
+	color: #1e1e1e;
+}
+
+.xxp-dim-fields {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 8px;
+}
+
+/* THE FIELDS LINE UP WHATEVER THE LABELS DO.
+   A label is one line or two depending on the word — "Columns" beside "This block spans",
+   "Fixed" and "Min" beside "Max" — and the input underneath it moved with it, so a row of
+   three came out as a staircase.
+
+   `align-items: end` was the first try and it made the staircase worse: cells stopped
+   stretching, so the SHORT one dropped by its own difference instead of the tall one
+   rising. The cells have to stay the same height — which is the grid's default — and the
+   input has to sit at the foot of its own cell. Then every input is on one line and the
+   labels stay where they belong, at the top. */
+.xxp-dim-fields > * {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	height: 100%;
+}
+
+/* HOW MANY COLUMNS — what the group holds, not three for everything.
+   Three columns in a sidebar leaves each field about seventy pixels, which is enough
+   for a number and not for anything else: "In front of" broke over two lines, "This
+   block spans" over three, and a field carrying the px/auto control showed "aut(" with
+   its unit crushed against it. A group of two gets two columns and the same labels sit
+   on one line. */
+.xxp-dim-fields:has( > :nth-child( 2 ):last-child ) {
+	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+}
+
+.xxp-dim-fields:has( > :only-child ) {
+	grid-template-columns: minmax( 0, 1fr );
+}
+
+/* AND A VALUE THAT IS NOT A PLAIN NUMBER TAKES THE ROW.
+   "Share of the row" is three counts and one length — Grow, Shrink, Order, and From —
+   and in a row of four the only field that needed width was the one that got a third of
+   it. The counts keep their row; the length, and anything written as words, drops to a
+   row of its own underneath, where its unit and its example both fit. */
+.xxp-dim-fields:has( .xxp-dim-count ) .xxp-dim-length,
+.xxp-dim-fields:has( .xxp-dim-count ) .xxp-dim-text {
+	grid-column: 1 / -1;
+	order: 1;
+}
+
+/* A value that is words rather than a measurement takes the whole width.
+   Three columns is right for top/right/bottom/left and for fixed/min/max; it is
+   wrong for one field whose value is a phrase — "center 25%" in a third of a
+   sidebar is squeezed to nothing and its help reads one word to a line. */
+.xxp-dim-group.is-words .xxp-dim-fields,
+.xxp-dim-group.is-toggle .xxp-dim-fields {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+/* a switch reads left to right, with its words beside it rather than under */
+.xxp-dim-group.is-toggle .components-toggle-control .components-flex {
+	align-items: center;
+}
+
+/* and it stands apart from what follows: the switch answers whether the block is
+   on this screen at all, and the measurements under it answer something else */
+.xxp-dim-group.is-toggle {
+	margin-bottom: 20px;
+}
+
+/* A field's name is now the CSS property it writes — `flex-basis`, `grid-column`,
+   `column-width` — and CSS is lowercase. Upper-casing it was fine while the names
+   were words of ours ("MIN", "MAX"); on a property it reads as a constant.
+   The heading above a group keeps the editor's own upper case, because core sets
+   its spacing controls that way and a panel in two voices is worse than either.
+   `input-control__label` is the second one: a unit field labels itself through its
+   own component and never sees `base-control__label`. */
+/* `!important`, and it is the editor that asks for it: core sets the upper case
+   from an inline <style> whose selector repeats its own class three times
+   (`.x.x.x`), so three classes of ours only draw level — and a tie goes to the
+   stylesheet printed later, which is always core's. */
+.xxp-dim-row .xxp-dim-fields .components-base-control__label,
+.xxp-dim-row .xxp-dim-fields .components-input-control__label,
+.xxp-dim-row .xxp-dim-choices .components-base-control__label,
+.xxp-dim-row .xxp-dim-choices .components-input-control__label,
+.xxp-type-row .components-input-control__label {
+	/* 10px in the editor's own grey was a caption, not a name — "дуже маленький".
+	   The editor labels its own controls at 11px in near-black, and a property is
+	   the one word in this panel somebody actually reads. */
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1.4;
+	text-transform: lowercase !important;
+	color: #1e1e1e;
+}
+
+/* and a little air between a name and the control under it */
+.xxp-dim-row .xxp-dim-choices .components-base-control__label,
+.xxp-dim-row .xxp-dim-fields .components-base-control__label {
+	margin-bottom: 4px;
+}
+
+/* …except where the label is a question and not a property: "Starts in column",
+   "Takes". Lower-casing those reads as a typo. */
+.xxp-dim-row .xxp-dim-fields.is-asked .components-base-control__label,
+.xxp-dim-row .xxp-dim-fields.is-asked .components-input-control__label {
+	text-transform: none !important;
+}
+
+.xxp-dim-fields .components-text-control__input {
+	padding: 4px 6px;
+}
+
+/* the type size sits in the editor's own Styles tab, under FONT SIZE */
+/* The editor's own font size, hidden: the field above it says the same thing
+   for whichever screen is chosen, and the middle band is one of those. Two
+   fields for one value is the thing being got rid of. */
+.block-editor-block-inspector .typography-block-support-panel .components-tools-panel-item:has( .components-font-size-picker ) {
+	display: none;
+}
+
+/* The editor lays Typography out as a grid of half-width cells, so a row
+   dropped into it lands in one cell and the seven screens squeeze into half
+   the sidebar. It takes the full width, and it goes **above** the size: you
+   pick the screen first and then say what the type does on it. */
+.xxp-type-row {
+	grid-column: 1 / -1;
+	order: -1;
+	margin-top: 0;
+	margin-bottom: 4px;
+}
+
+.xxp-type-row .xxp-dim-screens {
+	margin-bottom: 6px;
+}
+
+/* the name of the part, said once and quietly: it is a label, not a control */
+.xxp-dim-parts {
+	margin: 0 0 12px;
+	font-size: 11px;
+	line-height: 1.4;
+	color: #757575;
+}
+
+.xxp-dim-parts-label {
+	display: block;
+	font-weight: 500;
+	text-transform: uppercase;
+	color: #949494;
+}
+
+/* the choices read as one group, two to a row, in the same voice as the rest */
+.xxp-dim-choices {
+	margin-top: 14px;
+}
+
+.xxp-dim-kind {
+	margin: 0 0 6px;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
+	color: #1e1e1e;
+}
+
+.xxp-dim-choices .components-base-control {
+	margin-bottom: 6px;
+}
+
+/* ---- the editor's own Border panel, hidden ------------------------------
+   Not because it is wrong — it is the control this panel now draws, core's
+   own `BorderBoxControl` and `BorderRadiusControl` — but because it says ONE
+   value for all seven screens and the copy in UPQODE Dimensions says it at
+   the screen you are looking at. The middle screen writes `style.border`,
+   which is this panel's own store, so nothing is lost by closing the door:
+   every border set through here before is still there and still edited. */
+.block-editor-block-inspector .border-block-support-panel {
+	display: none;
+}
+
+/* the radius sits under the four sides, with the room between them core gives */
+.xxp-dim-row .xxp-dim-radius {
+	margin-top: 16px;
+}
+
+/* a sentence under a control, in the editor's own voice for help text */
+.xxp-dim-row .xxp-dim-note {
+	margin: 4px 0 0;
+	font-size: 12px;
+	line-height: 1.4;
+	color: #757575;
+}
+
+/* ---- the sections, and the folds inside them ----------------------------
+   A panel inside a panel is what the editor already draws for a nested
+   PanelBody, and the only thing wrong with it here is the room it takes:
+   core pads a top-level panel for a sidebar's full width, and these sit
+   inside one. So the padding comes in and the rule above the heading goes,
+   leaving the heading itself — which is the whole point of the section. */
+.xxp-dim-row .xxp-dim-section,
+.xxp-dim-row .xxp-dim-fold {
+	margin: 10px -16px 0;
+	border-top: 1px solid #e0e0e0;
+	border-bottom: 0;
+}
+
+.xxp-dim-row .xxp-dim-section > .components-panel__body-title button,
+.xxp-dim-row .xxp-dim-fold > .components-panel__body-title button {
+	padding: 10px 16px;
+	font-size: 12px;
+}
+
+/* A fold is a second heading INSIDE a section, so it is quieter than the
+   section's own and keeps the section's left edge rather than the panel's. */
+.xxp-dim-row .xxp-dim-fold {
+	margin-top: 8px;
+}
+
+.xxp-dim-row .xxp-dim-fold > .components-panel__body-title button {
+	font-weight: 400;
+	color: #757575;
+}
+
+/* ---- sizing: the three presets, what they add up to, and the numbers ---- */
+.xxp-dim-sizing {
+	margin-top: 4px;
+}
+
+/* What is in force here, preset or not. It is not a control and must not read
+   as one — but it is the only place the exact numbers show while the presets
+   are closed, so it is never hidden and never abbreviated. */
+.xxp-dim-sizing-line {
+	margin: 6px 0 0;
+	font-size: 11px;
+	line-height: 1.5;
+	color: #757575;
+}
+
+.xxp-dim-sizing-more {
+	margin-top: 2px;
+	padding: 0;
+	height: auto;
+	font-size: 11px;
+	color: #757575;
+}
+
+.xxp-dim-sizing .xxp-dim-group {
+	margin-top: 8px;
+}
+
+/* the whole panel, the way the editor offers it: centred, quiet, and last */
+.xxp-dim-reset {
+	display: flex;
+	width: 100%;
+	margin-top: 16px;
+	justify-content: center;
+}
+
+
+/* ---- the type scale, mounted under the typography panel in Styles ----
+
+   It sits in a panel that was not built to hold anything else, so it borrows
+   that panel's own spacing and rule rather than inventing its own. */
+/* The tools panel lays its children out on a two-column grid and gives a
+   plain div one of those columns, which is why this came out squeezed into
+   the left half. It is one section, so it takes the whole row. */
+.xxp-ts-mount {
+	grid-column: 1 / -1;
+	padding: 0 0 16px;
+	border-bottom: 1px solid #e0e0e0;
+	margin-bottom: 16px;
+}
+
+.xxp-ts-mount .components-base-control,
+.xxp-ts-mount .components-base-control__field,
+.xxp-ts-mount input {
+	width: 100%;
+}
+
+/* The three controls this stands in for. They set one value for every
+   width, which is the thing the design does not do — leaving them beside a
+   set of per-width fields would be two answers to the same question, and
+   the one that wins would be whichever was touched last. The font family,
+   the colour and the letter case stay: none of them changes with width. */
+/* Each control named by what is inside it, and the size named carefully: the
+   font size and the letter spacing both carry a unit control, so matching on
+   that alone hid the size whenever the tracking was replaced — which is how
+   Headings lost its size field for the right reason by accident, and Text
+   kept a second one. The picker is the part only the size has. */
+.xxp-ts-has-size .components-tools-panel-item:has( .components-font-size-picker ),
+.xxp-ts-has-fw .components-tools-panel-item:has( .components-font-appearance-control ),
+.xxp-ts-has-lh .components-tools-panel-item:has( .block-editor-line-height-control ),
+.xxp-ts-has-ls .components-tools-panel-item:has( .components-unit-control ):not( :has( .components-font-size-picker ) ) {
+	display: none;
+}
+
+.xxp-ts-intro {
+	margin: 0 0 12px;
+	font-size: 12px;
+	color: #757575;
+}
+
+/* ---- which of the three a paragraph is ----
+
+   Above the screens, because it is the larger question: you pick the style
+   first and then say what it is at each width. Headings get this row from
+   WordPress; Text has none, so it is drawn beside it in the same shape. */
+
+.xxp-ts-sizes {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 2px;
+	margin-bottom: 10px;
+}
+
+.xxp-ts-size {
+	position: relative;
+	min-width: 0;
+	justify-content: center;
+}
+
+/* one that has been given something of its own at some width */
+.xxp-ts-size.is-set::after {
+	content: '';
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: currentColor;
+}
+
+.xxp-ts-band {
+	margin: 0 0 12px;
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #757575;
+}
+
+/* ---- one group of the scale: a heading, then its fields ----
+
+   The fields are flush against each other on their own: WordPress's controls
+   take `__nextHasNoMarginBottom`, which is right — a control should not decide
+   the rhythm of the panel it is dropped into — and then nothing was deciding
+   it. Three sizes under SIZE read as one block of text with the labels lost
+   between them. */
+
+.xxp-ts-group {
+	margin-bottom: 20px;
+}
+
+.xxp-ts-group .components-base-control + .components-base-control {
+	margin-top: 14px;
+}
+
+/* ---- the "New colour" row under a swatch grid ----
+
+   The popover is WordPress's and is sized for the grid alone, so the row keeps
+   to the same width and does not stretch it: the picker inside is told to fill
+   what it is given rather than ask for its own 258px. */
+
+.xxp-pal-mount {
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.xxp-pal-add.is-open {
+	display: grid;
+	gap: 12px;
+}
+
+.xxp-pal-mount .components-color-picker {
+	width: 100%;
+	min-width: 0;
+}
+
+.xxp-pal-add-foot {
+	display: flex;
+	gap: 8px;
+	justify-content: flex-end;
+}
+
+/* ---- form fields, the row in Styles and the screen behind it ----
+
+   The row is a copy of one of core's own, so it needs nothing said about it
+   beyond the drawing inside. The screen is ours, and it borrows the panel's
+   rhythm rather than inventing one: the same 20px between groups and the same
+   small uppercase heading over each as the type scale uses, so the two screens
+   read as one editor. */
+
+.xxp-fs-mount {
+	padding: 16px;
+}
+
+.xxp-fs-head {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	margin-bottom: 12px;
+}
+
+.xxp-fs-back svg {
+	fill: currentColor;
+}
+
+.xxp-fs-title {
+	margin: 0;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.4;
+}
+
+.xxp-fs-intro {
+	margin: 0 0 20px;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #757575;
+}
+
+.xxp-fs-group {
+	margin-bottom: 20px;
+}
+
+.xxp-fs-grouphead {
+	margin: 0 0 10px;
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	opacity: 0.7;
+}
+
+.xxp-fs-field + .xxp-fs-field,
+.xxp-fs-group .components-base-control + .components-base-control {
+	margin-top: 16px;
+}
+
+.xxp-fs-label {
+	margin: 0 0 6px;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
+	line-height: 1.4;
+}
+
+.xxp-fs-reset {
+	margin-top: 4px;
+}
+
+/* A tools panel lays its children on two columns and a colour row took one of
+   them, so "Placeholder" and "Background" arrived as "Placehol…". Each row is
+   one setting with a name — it takes the width. */
+.xxp-fs-colors .components-tools-panel-item {
+	grid-column: 1 / -1;
+}
+
+/* and the row is a grid of the same two columns, which WordPress declares in a
+   generated class, so the thing inside it is told to span them rather than the
+   template being fought over */
+.xxp-fs-colors .components-tools-panel-item > * {
+	grid-column: 1 / -1;
+}
+
+/* the fields a group has besides its colours — a size, a weight — sit under
+   the panel of swatches rather than against it */
+.xxp-fs-rest:not(:empty) {
+	margin-top: 16px;
+}
+
+.xxp-fs-rest .components-base-control + .components-base-control {
+	margin-top: 16px;
+}
+
+/* ---- the three states, as tabs ----
+
+   The same row the type scale draws for Small / Body / Large, and for the same
+   reason: a thing to pick first, before saying what it looks like. */
+
+.xxp-fs-states {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 2px;
+	margin-bottom: 10px;
+}
+
+.xxp-fs-state {
+	position: relative;
+	min-width: 0;
+	justify-content: center;
+}
+
+/* one that has been given something of its own */
+.xxp-fs-state.is-set::after {
+	content: '';
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: currentColor;
+}
+
+.xxp-fs-note {
+	margin: 0 0 20px;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #757575;
+}
+
+/* ---- the scale as a file ----
+
+   Under the fields, with a rule over it: it is not one of them. The two
+   buttons share a line because they are one question asked both ways. */
+
+/* ---- Export / Import ----
+
+   A screen of its own, opened from the last row in the Styles list. It borrows
+   the field-styles screen's rhythm rather than inventing one: the same back
+   arrow and title line, the same 12px grey lead, so the two read as one editor.
+
+   The list in the middle is the point of the screen. Somebody about to carry a
+   site's look somewhere else wants to know what is in the file before it is
+   written, and a number beside each section is the shortest honest answer. */
+
+.xxp-gx-mount {
+	padding: 16px;
+}
+
+.xxp-gx-head {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	margin-bottom: 12px;
+}
+
+.xxp-gx-back svg {
+	fill: currentColor;
+}
+
+.xxp-gx-title {
+	margin: 0;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.4;
+}
+
+.xxp-gx-sub {
+	margin: 0 0 4px;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1.4;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #1e1e1e;
+}
+
+.xxp-gx-lead {
+	margin: 0 0 16px;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #757575;
+}
+
+.xxp-gx-list {
+	margin: 0 0 16px;
+	padding: 0;
+	list-style: none;
+}
+
+.xxp-gx-list li {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 6px 0;
+	border-bottom: 1px solid #f0f0f0;
+	font-size: 12px;
+	color: #757575;
+}
+
+.xxp-gx-list li:last-child {
+	border-bottom: 0;
+}
+
+/* a section that holds something is the thing being carried, so it is the one
+   written in the editor's own ink; the rest stay the colour of their note */
+.xxp-gx-list li.is-set span,
+.xxp-gx-list li.is-set em {
+	color: #1e1e1e;
+}
+
+.xxp-gx-list li.is-set span {
+	font-weight: 500;
+}
+
+.xxp-gx-list em {
+	flex-shrink: 0;
+	font-style: normal;
+	font-variant-numeric: tabular-nums;
+}
+
+/* the button sits on its own line and fills it: there is one thing to do in
+   each half of this screen, and a half-width button would suggest otherwise */
+.xxp-gx-act {
+	display: flex;
+	margin-bottom: 16px;
+}
+
+.xxp-gx-act .components-button {
+	flex: 1;
+	justify-content: center;
+}
+
+.xxp-gx-rule {
+	margin: 0 0 16px;
+	border: 0;
+	border-top: 1px solid #e0e0e0;
+}
+
+/* the browser's own file field, made to sit at the width of the panel rather
+   than at whatever width the file name happens to need */
+.xxp-gx-file {
+	display: block;
+	width: 100%;
+	margin-bottom: 12px;
+	font-size: 12px;
+	color: #1e1e1e;
+}
+
+.xxp-gx-file::file-selector-button {
+	margin-right: 8px;
+	padding: 4px 10px;
+	border: 1px solid #949494;
+	border-radius: 2px;
+	background: #fff;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.xxp-gx-said {
+	margin: 0;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #757575;
+}
+
+/* The arrow that says "this opens a screen", borrowed from the Blocks row.
+   That row has no icon on the left, so core spaces it with `space-between`;
+   this one does, and the icon and the label have to stay together — so the
+   arrow is pushed to the far edge instead. */
+.xxp-gx-row .xxp-gx-chev {
+	margin-left: auto;
+}

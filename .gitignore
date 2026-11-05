@@ -39,3 +39,9 @@ __pycache__/
 # Local/secret config — never commit (MCP keys, tokens)
 .claude/settings.local.json
 .mcp.json
+
+# QA gate and the WordPress port — ship with the project.
+!.claude/skills/qa-check/
+!.claude/skills/qa-check/**
+!.claude/skills/html-to-wordpress/
+!.claude/skills/html-to-wordpress/**
