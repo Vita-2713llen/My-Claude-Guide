@@ -9,6 +9,8 @@
 !.claude/skills/style-guide/**
 !.claude/skills/page-check/
 !.claude/skills/page-check/**
+!.claude/skills/framer-convert/
+!.claude/skills/framer-convert/**
 !.claude/skills/seo-check/
 !.claude/skills/seo-check/**
 
