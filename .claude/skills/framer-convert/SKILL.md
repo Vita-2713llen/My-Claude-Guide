@@ -86,6 +86,19 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 - Carousels/galleries driven by CMS: list with `limit` = item count, horizontal stack, `overflow: clip`, items 100% wide;
   the motion code stacks and switches them.
 - Photo stacks that follow scrolling (services stage) = a second CMS list of image items absolutely filling the frame.
+- **CMS detail templates: bind EVERYTHING that changes per item** (title, lead, role, figures, dates, hero image, email,
+  body). A static template shows one item's copy on every slug. Text: `text: tree.ref(field, pageId)`; image frames:
+  `fill: tree.ref(imageField, pageId)` (`backgroundImage`/`fillImage` are rejected); dates:
+  `{from: tree.ref(dateField, pageId), transforms:[{name:'toDateString',display:'date',format:'all',dateStyle:'long'}]}`;
+  `mailto:` links: add a `link` field (`mailto:` + email) and bind `link.href`. Verify every slug with `slugmap.js`
+  (h1 per slug live vs Framer) and `itemdiff.js` (texts that differ between two live items must appear on ours).
+- **Rich bodies** = ONE `RichTextNode` bound to the richtext field (delete the measured paragraphs/spacers) with per-tag
+  presets whose tag matches (`stylePresetHeading2` must be an h2 preset, etc.). Bound rich text renders `blockquote`, `li`,
+  `img` as `.framer-text` elements themselves — style them with injected CSS keyed by the node name
+  (`.team-body blockquote.framer-text{…}`, `li.framer-text`, `img.framer-text{border-radius:20px;margin:40px 0}`).
+- `TextMediaBlock` images publish as raw `data:framer/asset-reference,<hash>.<ext>` → the override rewrites them to
+  `https://framerusercontent.com/images/<hash>.<ext>` at runtime (`fixRtImgs`).
+- A collection list can show a different count per breakpoint: patch the replica `collectionList.limit`.
 
 ## 5. Forms
 
@@ -277,3 +290,11 @@ Converter rules learned in QA:
 | Tab panel collapsed / glued to the stage edge when shown | the active panel gets explicit `width:100%` + max-width AND inline `top:0; left:0; right:auto` — Framer's pins stay in the class CSS and shift a `relative` element |
 | Journal card hover missing the corner | hover gesture variant on the card component: bone 52px "bite" with ↗ |
 | CMS copy taken from the design tool | when it differs, the LIVE site copy wins (titles, dates) |
+| Home kept from the design-tool build while inner pages came from live | Home goes through the SAME live pipeline (snapshot → measure 1440/810/390 → native → resolve → replay), then lists → CMS → components (`tools/cmscomp.js`) |
+| Detail pages static (every slug = same person/post) | bind all per-item fields to the page's collection; check with `slugmap.js` |
+| Live `display:contents` wrappers (head rows on phone) | the converter emits gap/padding of thousands of px on replicas — scan replicas for gap/padding ≥ 300px; rebuild live `order` (button under the list) with a phone-only duplicate |
+| Leading empty paragraph in rich text (`\n` at start) | virtual blocks can't be removed: patch the RichTextNode `text` to the plain first run, restyle run 0, insert the other runs / `TextLineBreak` |
+| Text colour tween on hover leaves the label dark | tween every `.framer-text` inside AND `--framer-text-color` (runs carry their own var) |
+| SVG icon in a 16×26 frame looks cropped/bigger | Framer fills frames with `cover`; inject `img{object-fit:contain}` for that layer |
+| Grid row centring via `gridAlignment` | `gridAlignment` is horizontal; vertical = `gridItemVerticalAlignment` on the child |
+| Component variant roots after `createComponentFromFrame` | keep px heights per variant, rename roots to the live class without `[data-…]` suffixes |
