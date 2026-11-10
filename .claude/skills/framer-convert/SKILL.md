@@ -60,6 +60,24 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
   and restore its width/height.
 - Pins are lost by `createComponentFromFrame` on fixed nodes — re-set `top/left` afterwards.
 - `tapEffect`/`scale` are not allowed on a variant root — use a `pressed` gesture variant.
+- **Every live `.w-dyn-list` is a CMS list and every item is a component — without being asked.** Recipe for an existing
+  list (proven on 10 lists):
+  1. target = the repeated item's single child frame (if the item has several children, wrap them first in a frame that
+     copies the item's stack props and per-breakpoint layout; the item itself must stay the `repeatedDescendantId`);
+  2. record per-breakpoint replica diffs of the target and all descendants **by child-index path** (width, height, gap,
+     padding, direction, visible, fontSize, …) — they are lost when the frame becomes a component;
+  3. `createComponentFromFrame` (auto-creates variables for some bindings only) → walk the primary variant, for every
+     prop still bound to the list (`providerId === list`) create a var (`string`/`image`/`link`/`date`), re-bind the node
+     to `tree.ref(var, comp)`, and set the instance control to `tree.ref(field, list)`;
+  4. **new controls can't be set in the same program that creates the var** — call `await api.controls.components([id])`
+     in a following program, then patch `$control__<varId>`;
+  5. create `Tablet` / `Phone` variants with `tree.createVariant(primary, id, {gesture:null,name})`, apply the recorded
+     diffs by path, offset their `top` (ground nodes must not overlap), and set `$control__variant` on the tablet/phone
+     replicas of the instance;
+  6. **rename every variant root to the live class string** (`service-list-row w-inline-block`, `crew-card tablet`) —
+     `createComponentFromFrame` names it "Variant 1" and every hover/motion selector stops matching.
+- Check each Phone variant against the live ≤767 CSS — a 4-column desktop row copied to phone squeezes text to one letter
+  per line (use absolute number + padded name, full-width copy/media, `aspectRatio` needs a px height).
 
 ## 4. CMS
 
@@ -74,12 +92,27 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 - Style every input: fill token, 1px border token, radius, padding, text colour token, **placeholder colour token**,
   **focused border token** (live focus colour, never Framer's default blue), focused fill.
 - Submit must be a component instance set as `formSubmitButtonId`.
+- **Never leave a live form as plain frames** (the converter outputs `w-input` divs): replace each with
+  `FormPlainTextInputNode` (`formTextInputType` text/email/tel/textarea, `formInputName`, `formInputPlaceholder` = live
+  placeholder, `formInputRequired`) or `FormSelectNode` (`formSelectOptions` from the live `<option>`s, drop the fake
+  chevron, `formInputIconColor`). Read names/placeholders/options/button label/success text from the live DOM with
+  Playwright (`formprobe.js`). Set the cell wrappers to `htmlTag:"label"`. `transition` is not accepted on inputs.
+- Submit component: variant root needs a **px width** (instance is `100%`), hover = `tree.createVariant(root, id,
+  {gesture:"hover", fill})`, label = string var → instance `$control__…` = live button value.
+- Footer subscribe form too (placeholder "Email", live widths).
 
 ## 6. Header
 
 - Fixed instance in the layout template, `top 0, left 0, width 100%, zIndex 50`, override switching Top → Scrolled.
 - Nav links: live padding (0 20 → gap 40), 12px uppercase 0.08em; CTA inside the nav pill, sentence case, live size.
 - Dropdowns as `RelativeOverlayNode` on the trigger.
+- **One pill, symmetric padding**: the glass pill (fill, 1px border, radius 10, blur 14, padding 6) wraps the links
+  (gap 2) AND the CTA (gap 8 before it). A pill inside a padded wrapper gives 13px left / 6px right — the designer sees it.
+- Name header/footer nodes with the live classes (`head-nav-link`, `head-nav-link head-drop-trigger`, `head-chevron`,
+  `head-drop-item`, `button button-solid`, `foot-link`, `foot-button`) so the generated hover CSS reaches them.
+- Footer = the live footer: services column is a CMS list (live order, e.g. Number desc, limit 4) of a
+  `Footer Service Link` component; Company / Legal columns at the live x positions; never leave
+  `/services/:<collectionId>` links without a collection item (they publish as broken `/:<slugVarId>` hrefs).
 
 ## 7. Motion — code overrides, 1:1 with the source
 
@@ -98,11 +131,33 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
   `svc-item / svc-title / svc-ix / svc-get / svc-shot / svc-tick / svc-step / svc-what / svc-stage`,
   `voice / voice-body`, `case-list / case-slide / case-body / case-prev / case-next`, `post-card`, `art`, `split`.
 - Button hovers come from component gesture variants matching the live colours; never leave a hover unstyled.
+- **All hovers, measured, not guessed** (`hovaudit.js` → `hovgen.js`): Playwright hovers every live element that has a
+  `:hover` rule, a `data-w-id` (Webflow IX2) or is a link, records computed colour / background / border / opacity /
+  transform / shadow of the element and its descendants before → after, and does the same on the published Framer page
+  by layer name. `hovgen.js` turns the live end-states into CSS keyed by `[data-framer-name~="class"]` (colour also sets
+  `--framer-text-color` and reaches `.framer-text`; `!important` to beat inline styles; base states for hidden-until-hover
+  parts such as `service-list-fill scaleX(0)`, arrows/tags opacity 0) inside `@media (hover:hover)`, and the motion file
+  injects it once as `<style id="…-hover">`. Skip parts already driven by GSAP (button-hero fill). Re-run the audit after
+  publishing: every line must be gone.
+- **Sticky = `position:"sticky"` + `positionStickyTop`** — `top` is ignored for sticky (published as `top:auto`). Grep the
+  live CSS for `position: sticky` (runs cards 118/144/170, article contents 100, prose aside 118, testimonial pin 100)
+  and its breakpoints (often desktop only → replicas `relative`). Parent stack must be `stackAlignment:start`.
+  `overflow: clip` ancestors are fine.
+- Scroll-spy contents ("On this page"): labels scroll to the heading with the same text (offset 120) and the active one
+  gets ink colour + 2px ink left border.
+- Run `scrollaudit.js` (samples every 150px of scroll on live and Framer) to catch parallax / scrub / marquee / counters
+  that do not move on Framer.
 
 ## 8. QA after every section
 
 - Screenshot each section in Framer and compare with the live crop at the same width; fix before moving on.
 - Re-check wide screens (1440/1800) for container width, hero composition and type size.
+- **Over-scan art layers** (`width:111%; top/left:-5.5%` in Webflow) must not be frozen to the 1440 px width: set
+  `width/height:"111%"` + all four pins (`left/right/top/bottom` = the negative offset). Sweep every page for frames
+  wider than ~1150px inside absolute 100% wraps — a frozen 1598px image leaves an empty strip at 1800.
+- Audit scripts (scratch, keep in `tools/`): `hovaudit.js` (hovers + links), `scrollaudit.js` (scroll-linked motion),
+  `dynlists.js` (every live `.w-dyn-list` must be a CMS list), `formprobe.js`, `navprobe.js` (header geometry).
+  Do the user's job before they see it: run them on every page after each publish.
 - Zero linter errors; warnings only where intentional (bleeding art, collapsed accordion bodies).
 - Never publish — the designer publishes. Ask her to publish, then verify motion on the published URL with Playwright.
 
