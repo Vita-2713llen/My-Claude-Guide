@@ -125,6 +125,6 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 | Primary hover = flat colour swap | live = dark disc grows from the arrow (absolute circle in the variant, scale 0 → 20, 0.5s power3.out), ink → bone, arrow x+5; the hover border takes the disc colour so no 1px ring stays |
 | Hero photo too saturated | copy the live overlay (radial bone veil) with alpha tokens |
 | Case carousel faded | live slides horizontally (xPercent track, 0.9s), content in the 1370 container |
-| Tab panel collapsed when shown | the active panel gets explicit `width:100%` + its max-width in code |
+| Tab panel collapsed / glued to the stage edge when shown | the active panel gets explicit `width:100%` + max-width AND inline `top:0; left:0; right:auto` — Framer's pins stay in the class CSS and shift a `relative` element |
 | Journal card hover missing the corner | hover gesture variant on the card component: bone 52px "bite" with ↗ |
 | CMS copy taken from the design tool | when it differs, the LIVE site copy wins (titles, dates) |
