@@ -106,6 +106,18 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 - Zero linter errors; warnings only where intentional (bleeding art, collapsed accordion bodies).
 - Never publish — the designer publishes. Ask her to publish, then verify motion on the published URL with Playwright.
 
+## 10. Responsive (Tablet 810 / Phone 390)
+
+- Measure the live site at 810 and 390 first (section paddings, heading sizes, grid columns, which blocks stack, centring) and screenshot every section + the open burger menu.
+- Create page AND layout-template breakpoints (`createVariant(primaryBp, id, {gesture:null, width})`; template/page-with-template breakpoints need a fixed px height).
+- Type: give presets breakpoint slots from the live values (Noverde: H1 52, H2 40, Statement 36/26, lead 18, quote 22, case claim 26); slot labels shift when adding — read back after every patch.
+- Header: component variants `Mobile` (logo + burger, fixed 77px, clip) and `Mobile Open` (drawer: Playfair links with bottom rules, chevron row, full-width CTA instance) toggled with `SET_VARIANT`; set the instance variant per template breakpoint.
+- Components that must change layout per breakpoint get variants (Case Slide Tablet/Phone, Service Row Stacked with its own CMS photo) and the instance picks the variant on each breakpoint.
+- Desktop-only motion (accordion) is gated with `matchMedia('(min-width:1200px)')`; below it the same cards become a scroll-snap slider with prev/next buttons.
+- Dense tables on phone: hide secondary columns per breakpoint, tiles go to a 2-column grid.
+- `overflowX:auto` is rejected on some frames — do horizontal scrolling in the override instead.
+- Instance link controls to CMS detail pages sometimes need a string `href` attempt before the `{href, collectionItem}` object is accepted.
+
 ## 9. Corrections log (do these right the first time)
 
 | Mistake | Correct |
