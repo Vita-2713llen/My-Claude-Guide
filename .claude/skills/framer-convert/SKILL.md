@@ -128,6 +128,22 @@ Tools live in `stand/tools`: `prep.cjs` → `measure.cjs` → `native.cjs` → `
 7. Page paths follow the live site (`/team` → `/our-team`); Framer rewrites every link to the page automatically.
 8. Then per page: CMS lists + CMS-bound detail pages, buttons → Button instances, publish → QA vs live at 1440/810/390.
 
+**Source = the LIVE site, not the design tool.** The design-tool markup differed from live (container 1250 vs 1370,
+other blocks, other copy). Snapshot each live page with `snap.cjs` (Chromium, JavaScript disabled — Webflow pages are
+server-rendered, nothing from the page runs), `prep.cjs` takes `body > section` when there is no `<main>`.
+**Measure desktop at 1440** (`measure.cjs … 1440,810,390`), the width you QA at — a 1200 measurement gives a narrower
+media-query layout (2-col grids, 1280 containers, smaller images).
+Converter rules learned in QA:
+- Container centring only when the capped child fills the column; a narrower left-aligned title stays left.
+- Column children with `margin: auto` (every narrower child centred) → `stackAlignment: center`.
+- A fit-content box whose children all fill (image wraps) collapses to 0 → give it the measured width (100% when it
+  fills its parent).
+- Tiled CSS patterns (dot grid, hatching, small `background-size`) have no Framer equivalent → keep the base
+  `background-color`; with real gradient layers keep the colour as the fill and draw the gradients above it.
+- Strip `[data-wf-…]` / `[data-w-id]` from layer names.
+- Set page `metadata` {title, description} from the live `<title>` / meta description (brand renamed).
+- Header nav pill on photos: `fill` = bone 62% token + `backgroundBlur: 14px` + radius 10 + padding 7 (live glass).
+
 ## 10. Responsive (Tablet 810 / Phone 390)
 
 - Measure the live site at 810 and 390 first (section paddings, heading sizes, grid columns, which blocks stack, centring) and screenshot every section + the open burger menu.
