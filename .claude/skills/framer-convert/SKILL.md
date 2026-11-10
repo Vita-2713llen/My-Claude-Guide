@@ -108,7 +108,7 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 
 ## 11. Inner pages pipeline (after Home is approved)
 
-Tools live in `stand/tools`: `prep.cjs` → `measure.cjs` → `native.cjs` → `resolve.cjs` → gzip+base64 → upload → replay.
+Tools live in `stand/tools` (snapshot copy in this skill's `tools/` folder): `prep.cjs` → `measure.cjs` → `native.cjs` → `resolve.cjs` → gzip+base64 → upload → replay.
 
 1. Render each design page in Chromium (scripts blocked), then `node prep.cjs <rendered> <out> <assetBase>`: main's sections
    become named body children, header/footer dropped (the layout template owns them), brand renamed, asset URLs absolute.
@@ -143,6 +143,32 @@ Converter rules learned in QA:
 - Strip `[data-wf-…]` / `[data-w-id]` from layer names.
 - Set page `metadata` {title, description} from the live `<title>` / meta description (brand renamed).
 - Header nav pill on photos: `fill` = bone 62% token + `backgroundBlur: 14px` + radius 10 + padding 7 (live glass).
+- **QA the 1200 canvas too, not only the 1440 publish.** The Desktop breakpoint starts at 1200, so a layout measured at
+  1440 must still hold at 1200: capped containers → `100%` + `maxWidth`, fixed-px text/boxes in a column → `maxWidth`
+  + fill, single-line text in a column → `1fr` (it must wrap when the column narrows; only a left-aligned label in a
+  centred column keeps `auto`). `auto`-width text never wraps in Framer — card blurbs ran out of the card.
+- `margin-left/top: auto` computes to px (a 500px gap at 1440). Read the live CSS for classes with `margin-*: auto`
+  (`AUTO_MARGIN` json): two children → `space-between`; otherwise a spacer `1fr` (min = CSS gap) before the pushed child
+  (buttons at the bottom of pricing cards, figures on the right of sector rows).
+- Equal-height cards (grid/row, align stretch, own surface, same height in the row) → `height: 1fr` — works in an
+  auto-height grid and follows the tallest card. A stretched card must never keep a fixed px height.
+- Grid tracks: a column that keeps its width when the viewport changes (`dw` ≈ 0: avatar 46px, photo 206px) stays px;
+  only fluid columns become `fr` — otherwise a 46px avatar grows into a pill.
+- Uneven multi-row grids (quote card = text over [avatar | byline]; lead card = [photo | text over byline]) have no
+  Framer form: `regrid` splits them into rows (or columns when one child spans all rows) and wraps each group in a stack.
+- Webflow icon-font glyphs (`w-icon-slider-left/right`) render empty in Framer → prep replaces them with SVG chevrons.
+- States a script switches (alt prices, collapsed accordion text) are `display:none` and would be dropped: list them in
+  `KEEP_STATES` (CSS selectors) — prep keeps them absolute + opacity 0 so the layer exists for the motion code.
+- Scroll stages (`testimonial-stage` 256vh + `testimonial-pin` sticky) → set the pin `position: sticky, top: 100px`
+  natively (relative on 810/390), and the motion code turns the cards per third of the scroll (out −28px, in +28px).
+- Live inner-page interactions to port into the motion file (probe live with Playwright hover/click first): Webflow
+  sliders (arrows step one card, wrap), cases rows (click opens text + switches panel), price switch (swap figures),
+  FAQ (height 0→auto, plus → minus, bg white 95%), team card (photo scale .62/−7% → 1 + veil), buttons (`button-fill`
+  circle scale 0→20 from the arrow, arrow x+5, label bone), journal card (photo 1.04).
+- Transformed elements measure at their transformed rect (team photo at scale .62) — the motion code resets them to
+  inset 0 + transform; on canvas give a px left that centres at 1200–1440.
+- No preview deploy here: with staging off `publishing.publish()` targets production. Never call it — QA via
+  `tree.screenshot(breakpointId)` against live shots, and ask the designer to publish for the live check.
 
 ## 10. Responsive (Tablet 810 / Phone 390)
 

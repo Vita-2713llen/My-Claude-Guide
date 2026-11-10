@@ -1,0 +1,17 @@
+{
+ "document-mock": "top",
+ "document-mock-aside": "left",
+ "document-mock-ok": "left",
+ "runs-panel": "top",
+ "runs-panel-state": "left",
+ "runs-row-value": "left",
+ "runs-chip": "left",
+ "runs-attached-file": "left",
+ "reach-data": "left",
+ "cases-go": "top",
+ "faq-panel": "top",
+ "price-act": "top",
+ "team-service-link": "top",
+ "metrics-key-number": "left",
+ "office-lead-wrap": "left"
+}
