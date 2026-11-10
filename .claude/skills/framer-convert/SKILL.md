@@ -120,3 +120,11 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 | CMS items as plain frames | `createComponentFromFrame` → component with bound variables |
 | Animations postponed to the end | plan motion with the layout; name layers as you build |
 | Override with `import "gsap"` not detected | URL imports from esm.sh |
+| Nav links 11px / no hover / CTA glued to "All pages" | read the live preset exactly (12px, 500, 0.08em), pill hover rgba(255,255,255,.78) r10, 8px gap before the CTA |
+| Header CTA without hover | every clickable frame gets `hoverEffect` (CTA bg → darker token, 0.25s) |
+| Primary hover = flat colour swap | live = dark disc grows from the arrow (absolute circle in the variant, scale 0 → 20, 0.5s power3.out), ink → bone, arrow x+5; the hover border takes the disc colour so no 1px ring stays |
+| Hero photo too saturated | copy the live overlay (radial bone veil) with alpha tokens |
+| Case carousel faded | live slides horizontally (xPercent track, 0.9s), content in the 1370 container |
+| Tab panel collapsed when shown | the active panel gets explicit `width:100%` + its max-width in code |
+| Journal card hover missing the corner | hover gesture variant on the card component: bone 52px "bite" with ↗ |
+| CMS copy taken from the design tool | when it differs, the LIVE site copy wins (titles, dates) |
