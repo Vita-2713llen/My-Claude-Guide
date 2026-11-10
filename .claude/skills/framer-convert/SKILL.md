@@ -167,8 +167,26 @@ Converter rules learned in QA:
   circle scale 0→20 from the arrow, arrow x+5, label bone), journal card (photo 1.04).
 - Transformed elements measure at their transformed rect (team photo at scale .62) — the motion code resets them to
   inset 0 + transform; on canvas give a px left that centres at 1200–1440.
-- No preview deploy here: with staging off `publishing.publish()` targets production. Never call it — QA via
-  `tree.screenshot(breakpointId)` against live shots, and ask the designer to publish for the live check.
+- Publishing: with staging off `publishing.publish()` goes straight to production. The designer said "роби це сам" —
+  publish yourself after each fix round, then QA the published site with Playwright (hover, click, scroll states and
+  `pageerror`). On a new project without that explicit permission: ask first.
+- **Every `w-dyn-list` is a CMS collection list — never leave static copies** (the designer: "це ж колекція!").
+  Per list: find each item's CMS row by the slug in its detail link (`collectionItem`), write the live texts/images into
+  the CMS (live = source of truth; delete rows the live site does not have), keep the first item as the template,
+  delete the rest, `collectionList: {collection, repeatedDescendantId, limit?}` + `collectionList.sorting:
+  [{variable: tree.ref(varId, list), direction: "asc"|"desc"}]` (add an `Order` number field when two pages show the
+  same collection in different orders), bind `text` / `fill` / `link.collectionItem` with `tree.ref(var, list)`,
+  socials with `link: {href: tree.ref(linkVar, list)}`, dates with `{from: ref, transforms: [{name: "toDateString",
+  dateStyle: "long"}]}`. Webflow sliders built from one-item lists per slide → move the first list into the mask
+  (horizontal stack), item width = slide width per breakpoint (%), item height/padding from the slide/card (the slide
+  gave the card its height), remove the slides; the motion code falls back from `w-slide` to `w-dyn-item`.
+- A frame with `width: auto` whose children all fill (`1fr` / `%`) collapses to 0 → text one letter per line. Sweep
+  EVERY breakpoint (replicas too) after each replay and set such frames to `100%`.
+- Media beside a panel in a row (consult photo | card): the live photo stretches to the card → `height: 1fr` +
+  `minHeight` = measured; keep the measured px on the stacked tablet/phone replicas.
+- Images inside a transformed/scaled frame (team photo) must be `100% × 100%`, not the measured px height.
+- Code edits: never splice code with `String.replace(anchor, text)` — `$$` in the text collapses to `$` (`$$(...)`
+  became `$(...)` and the whole motion file threw on boot). Use `split(anchor).join(...)` or a function replacer.
 
 ## 10. Responsive (Tablet 810 / Phone 390)
 
