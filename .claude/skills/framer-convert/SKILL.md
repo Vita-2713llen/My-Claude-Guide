@@ -106,6 +106,28 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 - Zero linter errors; warnings only where intentional (bleeding art, collapsed accordion bodies).
 - Never publish — the designer publishes. Ask her to publish, then verify motion on the published URL with Playwright.
 
+## 11. Inner pages pipeline (after Home is approved)
+
+Tools live in `stand/tools`: `prep.cjs` → `measure.cjs` → `native.cjs` → `resolve.cjs` → gzip+base64 → upload → replay.
+
+1. Render each design page in Chromium (scripts blocked), then `node prep.cjs <rendered> <out> <assetBase>`: main's sections
+   become named body children, header/footer dropped (the layout template owns them), brand renamed, asset URLs absolute.
+2. `measure.cjs` at 1200/810/390 → `native.cjs` (FONT_MAP must map Playfair → "Playfair") → copy the spec bundle per page
+   (`b-<page>.json`, the tool overwrites one file).
+3. `node resolve.cjs b-<page>.json pages/ds.json r-<page>.json` — colours → existing tokens (or new "<Base> <alpha>"),
+   presets → existing text styles when font/weight/case/sizes at 1200/810/390/line-height match, otherwise one new
+   `Verdova/…` preset; links → Framer paths (+ `collectionItem` for detail pages), dropped pages unlinked.
+4. Upload as `{"z": base64(gzip(json))}` — `fetch` inside `exec` fails on big or text/plain files.
+5. Replay program per page: create Tablet/Phone page breakpoints if missing, set breakpoint heights in px (9000 / 10000 /
+   12000 — a 1080 default makes the linter report every section as overlapping), clear the breakpoint, insert ops in
+   order, patch replicas `${bpId}${nodeId}`; refresh token/preset lists per page; drop `overflowX/Y: "visible"`.
+   Several pages per `exec` call is fine (~4).
+6. Attach `with<Brand>Motion` to every page's first section. The motion file must match names with `~=` (word match) —
+   converted layers are named after all their classes plus `[data-…]` attributes — and reveal
+   `[data-framer-name*="[data-reveal"]` as well as `· reveal`.
+7. Page paths follow the live site (`/team` → `/our-team`); Framer rewrites every link to the page automatically.
+8. Then per page: CMS lists + CMS-bound detail pages, buttons → Button instances, publish → QA vs live at 1440/810/390.
+
 ## 10. Responsive (Tablet 810 / Phone 390)
 
 - Measure the live site at 810 and 390 first (section paddings, heading sizes, grid columns, which blocks stack, centring) and screenshot every section + the open burger menu.
