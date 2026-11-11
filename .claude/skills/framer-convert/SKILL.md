@@ -337,3 +337,15 @@ Converter rules learned in QA:
 | Same-page anchor (`href="#runs"`) | Framer rewrites a bare `#id` to `./#id` (= home). Set `elementId` on the target section and link to `"/<page-path>#id"` |
 | Link audit | `tools/linkcmp.js` lists content links only-live / only-Framer per page (header/footer excluded); a live anchor to a missing id is a live bug — point it at the real page and say so |
 | Card photo height differs only on phone | the phone variant of a CMS card component kept an aspect-derived px height — check every variant node of the component, not just the base |
+| Footer copyright (ALWAYS, automatically) | left `© {Project}. All Rights Reserved`, right `Designed by Fourtwelve` with only "Fourtwelve" linked to `https://fourtwelve.co/` (new tab). Only the project name changes. This replaces any "by UPQODE"/template credit — say so once if a project rule asks for another credit |
+| Social links | never invent personal profiles: link the generic platform pages (`https://www.linkedin.com/`, `https://x.com/`, `https://www.facebook.com/`, `https://www.instagram.com/`), new tab |
+| Pre-hide CSS rendered by the code override does nothing | React escapes quotes inside `<style>{css}</style>` on SSR (`&quot;`) and the sheet dies after the first rule — render it with `dangerouslySetInnerHTML={{__html: CSS}}` |
+| Code block inserted with `String.replace` lost `$$(` | in a replacement string `$$` means `$` — use `split(a).join(b)` or a replacer function |
+| "Every element must have load + scroll motion" | universal pass at the end of boot: collect every tweened element (skip hover timelines tagged `tl.data="hover"`), then animate everything else — first-screen items as a load cascade, the rest with `ScrollTrigger.batch`; headings split into words; pre-hide only the first section in SSR CSS |
+| Jerky hovers / reveals | a CSS `transition` on an element GSAP animates fights it — `transition:none!important` on GSAP-driven parts (button fill/arrow/label) and during reveals; copy live timings frame by frame (`tools/hovframes.js`) |
+| Forms do nothing on submit | Framer forms need "Send To" chosen in the editor (no API) — tell the user. Wire submit button variants (Sending/Done/Error) and message frames after the form (absolute, height 0 until revealed) |
+| Mobile menu cut off / list not scrollable | open variant height `100dvh` via CSS (variants refuse vh), list `min-height:0; overflow-y:auto`, Lenis `prevent` for the list |
+| Testing only 390 | users test at 360: run `tools/adaptaudit.js 360` and `810` (text overlaps, x/width/height vs live, overflow) on every page |
+| Element pinned with px `top` from the 390 measurement leaves a gap at 360 | live used `top:48%; bottom:0` — in Framer use `bottom:0` + `height:%` (absolute `top` must be px) |
+| CMS list shows fewer items on tablet | each breakpoint replica has its own `collectionList.limit` — check all three |
+| Footer columns on tablet/phone | live centres them (tablet grid 1.3fr 1fr 1fr, gap 24; phone single centred column) — check `foot-nav` per breakpoint |
