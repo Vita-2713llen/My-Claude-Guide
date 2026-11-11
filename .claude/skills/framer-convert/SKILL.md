@@ -208,8 +208,21 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
     At 1199/1280/360 the panel then slides out of its photo or gets cut. `{width:null}` is refused, so pin it in
     the code CSS: `top:auto; bottom:18px; height:auto; right:18px; width:auto; max-width:320px`. For a
     four-inset overlay, also set `aspect-ratio:auto` and all four insets explicitly.
+  - Setting `width:"100%"` on a child whose parent stack is `width:auto` makes the child collapse to 0, and a title
+    then breaks one letter per line. Before you set a child to 100%, give every auto-width parent up the chain
+    `100%` as well. Afterwards, sweep for `100%` children inside `auto` parents.
+  - A wrapper with a capped max-width sits on the left inside a `stackAlignment:"start"` parent at 768. Live centres
+    it. Set the phone replica parent to `stackAlignment:"center"` (for example `testimonial-head`,
+    `specification-intro`, `person-hero-title-group`). `tools/centertext.js` lists texts that are centred on live
+    and off-centre on Framer, and `tools/offwrap.js` names the wrapper that is stuck on the left.
   - Absolute arrows accept only px `left`. Centre or right-anchor them with CSS in the code file instead:
     `left:calc(50% - 57px)` and `left:calc(100% - 76px)`.
+- **Icons in round buttons must sit exactly in the centre.** Glyph wrappers imported from Webflow keep a
+  line-height bottom padding (3–6px) that pushes the arrow up. Set those wrappers to `padding:0`. Check with
+  `tools/iconcenter.js`: dx and dy must both be within 1px.
+- **Text on photos must pass contrast at every width.** When dark text sits on a photo that can be dark, use
+  light text (`#f6f2e8`) with a darker top gradient, even if live alternates light and dark slides. The designer
+  wants readability first.
 - **Text on photos**: Webflow often stacks 3 gradients in one `background-image` on a scrim. A light top gradient
   is what makes dark text readable, and there is an alternating `top-dark` variant with light text. Framer's single
   fill keeps only one layer, and the dark text ends up on a dark photo. Replicate the stack in CSS with the live
