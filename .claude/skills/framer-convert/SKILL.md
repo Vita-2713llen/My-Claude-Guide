@@ -180,6 +180,7 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
   preset a text belongs to. Shared presets often hide per-element differences (one user has `-0.05em`, the rest
   `-0.01em`): clone the preset for those users instead of editing the shared one.
 - Rich text: `tools/rtcmp.js` compares a body block by block (tag, height, margins, font).
+- Hovers visually: `tools/hovshot.js <page> <liveSel> <framerSel> <tag>` saves rest/hover crops of both sites.
 - Zero linter errors; warnings only where intentional (bleeding art, collapsed accordion bodies).
 - Never publish — the designer publishes. Ask her to publish, then verify motion on the published URL with Playwright.
 
@@ -321,3 +322,8 @@ Converter rules learned in QA:
 | Absolute element collapses to 0 / wrong side | absolute positioning needs an explicit px `width` |
 | `api.tree.patch(textBlock, {textStylePreset})` fails on `v:` blocks | patch the RichTextNode itself (`{textStylePreset}`) — virtual blocks are read-only |
 | Every exec prints a huge linter dump | batch all patches for a page into one program and publish in the same call |
+| Converter drops `gap` whenever the live box is `justify-content: space-between` (Framer refuses gap + space-between) | `native.cjs` now emits `start` + gap when the children already fill the main axis; for existing pages run `tools/gapscan.js` and fix vertical/auto-sized boxes (horizontal fill rows can keep space-between) |
+| Utility pages (Style Guide, Licensing, Changelog) skipped by the pipeline | they are `div.section` / `div.inner-banner` / `aside.section`, not `<section>` — `prep.cjs` now picks those up; create the page by duplicating a static page (keeps the layout template + breakpoints), then run `tools/replay.js` with the uploaded bundle |
+| Lazy images make live pages look shorter in a load-only measurement | scroll the whole page before measuring (`tools/anchors2.js`); a rich-text image measured 0×0 on tablet/phone gets explicit height in the replica |
+| Header variant per page (live `w-variant-…` on utility pages: solid bone bar, no glass pill) | reproduce with a page flag set by the motion code (`html[data-vd-paper]`) + CSS for both header variants; Framer draws borders on `::after` — hide that too |
+| Dropdown labels / targets differ from live ("Team Member" vs "Team Details") | copy every label and every CMS item slug from the live menu (`tools/hovaudit.js` link report) |

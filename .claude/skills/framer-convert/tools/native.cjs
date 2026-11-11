@@ -195,6 +195,16 @@ function layoutAt(n, w) {
       const kEnd = L.dir === 'h' ? k1.r.x + k1.r.w : k1.r.y + k1.r.h;
       if (m > gapCss + 8 && near(kEnd, cEnd, 2)) L.distribution = 'space-between';
     }
+    // space-between whose children already fill the main axis (content-sized box) is just start + gap;
+    // keep the gap: Framer refuses a gap together with space-between and the converter would lose it
+    if (L.distribution === 'space-between' && !L.wrap && kids.length > 1) {
+      const g = px(L.dir === 'h' ? st.columnGap : st.rowGap) || 0;
+      if (g > 0) {
+        const inner = L.dir === 'h' ? b.r.w - px(st.paddingLeft) - px(st.paddingRight) - px(st.borderLeftWidth) - px(st.borderRightWidth) : b.r.h - px(st.paddingTop) - px(st.paddingBottom) - px(st.borderTopWidth) - px(st.borderBottomWidth);
+        const used = kids.reduce((t, k) => t + (L.dir === 'h' ? k.bp[w].r.w : k.bp[w].r.h), 0) + (kids.length - 1) * g;
+        if (Math.abs(inner - used) <= 2) L.distribution = 'start';
+      }
+    }
   } else if (/grid/.test(disp)) {
     const cols = (st.gridTemplateColumns || '').split(/\s+/).map(px).filter((v) => v > 0);
     if (cols.length > 1) {

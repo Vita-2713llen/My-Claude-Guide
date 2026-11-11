@@ -33,7 +33,7 @@ const main = doc.querySelector('main');
 const body = doc.body;
 const names = {};
 // design-tool pages wrap sections in <main>; a live Webflow page has them straight under <body>
-const secs = main ? Array.from(main.children) : Array.from(body.children).filter((e) => e.tagName === 'SECTION');
+const secs = main ? Array.from(main.children) : Array.from(body.children).filter((e) => e.tagName === 'SECTION' || ((e.tagName === 'DIV' || e.tagName === 'ASIDE') && /(^|\s)(section|inner-banner)(\s|$)/.test(e.className || '')));
 // drop chrome
 body.querySelectorAll(':scope > header, :scope > footer, :scope > .progress, :scope > #progress, :scope > script, :scope > .w-webflow-badge').forEach((e) => e.remove());
 secs.forEach((s) => {
