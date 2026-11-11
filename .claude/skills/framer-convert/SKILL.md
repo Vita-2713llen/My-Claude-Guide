@@ -171,6 +171,15 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 - Audit scripts (scratch, keep in `tools/`): `hovaudit.js` (hovers + links), `scrollaudit.js` (scroll-linked motion),
   `dynlists.js` (every live `.w-dyn-list` must be a CMS list), `formprobe.js`, `navprobe.js` (header geometry).
   Do the user's job before they see it: run them on every page after each publish.
+- **Measure every page, every width, every publish** — `tools/heights.js` (page heights 1440/810/390), then for any
+  page with |Δ| > ~10px `tools/sections.js` → `tools/anchors.js` (which heading first moves) → `tools/tree.js` /
+  `tools/tree2.js` (live class vs Framer layer outline with sizes, gaps, paddings) → `tools/cssq.js` (live computed
+  CSS of one selector at 3 widths). Fix until every page is within a few px at all three widths.
+- **Typography audit** — `tools/textaudit.js <width>` matches every text live vs Framer by content and diffs
+  font-size / line-height / letter-spacing / weight / transform / family; `tools/textwho.js` shows which element and
+  preset a text belongs to. Shared presets often hide per-element differences (one user has `-0.05em`, the rest
+  `-0.01em`): clone the preset for those users instead of editing the shared one.
+- Rich text: `tools/rtcmp.js` compares a body block by block (tag, height, margins, font).
 - Zero linter errors; warnings only where intentional (bleeding art, collapsed accordion bodies).
 - Never publish — the designer publishes. Ask her to publish, then verify motion on the published URL with Playwright.
 
@@ -298,3 +307,17 @@ Converter rules learned in QA:
 | SVG icon in a 16×26 frame looks cropped/bigger | Framer fills frames with `cover`; inject `img{object-fit:contain}` for that layer |
 | Grid row centring via `gridAlignment` | `gridAlignment` is horizontal; vertical = `gridItemVerticalAlignment` on the child |
 | Component variant roots after `createComponentFromFrame` | keep px heights per variant, rename roots to the live class without `[data-…]` suffixes |
+| Inter in Framer renders wider than live (lines wrap one word earlier) | Framer presets carry `openTypeFontFeatures` cv03/cv04/cv09/cv11/blwf; live uses none — set `{}` on presets or `.framer-text{font-feature-settings:normal}` |
+| Rich-text bodies taller than live (+40–50px per article) | Framer renders the body as flex column, so margins do not collapse; make the body `display:block` (`.post-body{display:block!important}`) |
+| Rich-text images 16:9 / blockquote padding off | copy live: `img{aspect-ratio:16/10;object-fit:cover}`, blockquote `padding:30px 20px 22px 24px` |
+| Grid card that spans two rows (`grid-row: span 2`) | Framer does not export row span — keep a 1-row grid and pin the bottom-aligned sibling `absolute; left; bottom; width:px` |
+| Live `order:-1` on tablet/phone (photo stage before the list) | duplicate the block, put the copy first, `visible:false` on desktop and the original hidden on tablet/phone (only one is rendered per breakpoint, scripts still see one) |
+| Converter "spacer" frames (`1fr`) in rows | they eat half the row and squeeze text — on narrow breakpoints hide the spacer and give the text `1fr` |
+| Replica keeps an old `textStylePreset` | after assigning a new preset on the base node, also patch every breakpoint replica / component variant node |
+| Text preset weight differs per breakpoint (500 desktop, 400 tablet/phone) | presets only vary size/lh/ls per breakpoint — make a second preset and assign it on the variant/replica |
+| Tag pills with fixed px widths from the measurement | pills and their text `width:auto`, row `stackWrapEnabled` — otherwise a 1px font difference wraps the label |
+| Slider arrows stacked under the slides on tablet/phone | read live positions (`tools/tree2.js`): arrows sit above the mask, centred — absolute `top`/`left` per breakpoint + slider `paddingTop` |
+| Uploaded SVG loses its labels' font | Framer's sanitizer drops multi-class `<style>` rules — inline the CSS into attributes first (`tools/inlinesvg.py`) |
+| Absolute element collapses to 0 / wrong side | absolute positioning needs an explicit px `width` |
+| `api.tree.patch(textBlock, {textStylePreset})` fails on `v:` blocks | patch the RichTextNode itself (`{textStylePreset}`) — virtual blocks are read-only |
+| Every exec prints a huge linter dump | batch all patches for a page into one program and publish in the same call |
