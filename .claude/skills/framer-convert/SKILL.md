@@ -220,6 +220,22 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 - **Icons in round buttons must sit exactly in the centre.** Glyph wrappers imported from Webflow keep a
   line-height bottom padding (3–6px) that pushes the arrow up. Set those wrappers to `padding:0`. Check with
   `tools/iconcenter.js`: dx and dy must both be within 1px.
+- **Everything in the burger must be clickable, every time.**
+  - A `SET_VARIANT` onTap inside the open mobile menu (for example "All Pages" → a "Mobile Pages" variant) is
+    flaky in published Framer. On the first open the stale tap callback is sometimes dropped, and roughly 3 of 20
+    first taps did nothing.
+  - Expand the page list in place instead:
+    - Make the Pages list `visible` in the Mobile Open variant and remove the onTap.
+    - Hide the list with CSS unless `html.vd-ap` is set.
+    - Toggle that class with a click listener on `window` in the capture phase. Install the listener at **module
+      load**, not inside the override effect, so it already works on the very first tap after load.
+    - Make the drawer scroll: `flex:1 1 0; min-height:0; overflow-y:auto; data-lenis-prevent`.
+  - Verify with `tools/burgertest.js 390 20`. It checks the expand rate (must be 20/20), that every sub-link
+    navigates (scrolling inside the drawer), every top-level item, and the close button.
+- **Framer's Inter renders slightly wider than Webflow's.** A label that fits exactly on live ("2026" in a 35.5px
+  bar column, "Abated, costed" in 100px) breaks mid-word in Framer ("202 / 6"), because Framer text uses
+  `pre-wrap` plus break-word. Give such short labels `white-space:nowrap`. `tools/wordbreak.js` lists every word
+  broken across two lines. Hidden alternative prices and words mid-reveal show up as false positives.
 - **Text on photos must pass contrast at every width.** When dark text sits on a photo that can be dark, use
   light text (`#f6f2e8`) with a darker top gradient, even if live alternates light and dark slides. The designer
   wants readability first.
