@@ -333,3 +333,7 @@ Converter rules learned in QA:
 | Scroll audit says "Framer: none" | first check the selector caught the same layer (prefix matches like `price-question` vs `price-questions-in`, header named differently) — re-probe the exact element with `tools/scrollprobe2.js` before changing anything |
 | Header "paper" variant on detail templates too | audit `site-head` classes on EVERY page and scroll position (`tools/hdrmode.js`); live adds a 1px hairline (`rgba(34,53,42,.14)`) once stuck |
 | Nav pill items shifted 5px vs live | live pill border (1px) takes layout space, Framer's border is an overlay → add 1px to the pill's horizontal padding; compare chevron gap in the dropdown trigger (`tools/hdrbox.js` prints every header label x) |
+| Social icons render no `<a>` though the component props are bound | the CMS link fields are empty — fill `$control__<fieldId>` on every CollectionItemNode (copy live URLs); also bind detail-page icons with `tree.ref(field, pageId)` instead of a static href |
+| Same-page anchor (`href="#runs"`) | Framer rewrites a bare `#id` to `./#id` (= home). Set `elementId` on the target section and link to `"/<page-path>#id"` |
+| Link audit | `tools/linkcmp.js` lists content links only-live / only-Framer per page (header/footer excluded); a live anchor to a missing id is a live bug — point it at the real page and say so |
+| Card photo height differs only on phone | the phone variant of a CMS card component kept an aspect-derived px height — check every variant node of the component, not just the base |
