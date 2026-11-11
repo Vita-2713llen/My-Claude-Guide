@@ -182,7 +182,46 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 - Rich text: `tools/rtcmp.js` compares a body block by block (tag, height, margins, font).
 - Hovers visually: `tools/hovshot.js <page> <liveSel> <framerSel> <tag>` saves rest/hover crops of both sites.
 - Zero linter errors; warnings only where intentional (bleeding art, collapsed accordion bodies).
-- Never publish — the designer publishes. Ask her to publish, then verify motion on the published URL with Playwright.
+- Publish yourself when the designer has asked for it (`api.publishing.publish()`), then verify on the published URL
+  with Playwright. Otherwise ask the designer to publish.
+- **Test the in-between widths, not only 1440/810/390.** The designer opens 360, 768, 992, 1100 and 1765.
+  Framer has 3 breakpoints (≥1200 / 810–1199 / <810), and every px value set on the 810 or 390 replica is frozen
+  across the whole range. Run these after every publish:
+  - `tools/visaudit.js 360,390,480,600,700,768,810,900,992,1100,1199,1280` → overlapping texts, text cut by a
+    clipping ancestor or by the viewport, controls cut by the viewport. The audit is clip-aware: it skips offscreen
+    slides, collapsed accordions and masked word reveals, and it respects the containing block of absolute boxes.
+    A 0-height `overflow:hidden` FAQ body really does clip.
+  - `tools/stretchaudit.js 810 900,992,1100,1199` and `… 390 360,480,600,700,809` → elements that stop stretching,
+    lose centring or overflow when the width changes inside one breakpoint. Many "stops stretching" hits are
+    legitimate max-width caps; overflows and off-screen hits never are.
+  - `tools/slidertest.js` → click every slider arrow at 360/768/992 and confirm the slide changes.
+- **Replica px traps found by those audits** (scan the tree: replica nodes whose width is ≥ 300px on the phone or
+  ≥ 660px on the tablet, or whose stack height is a fixed px value while they hold text):
+  - Slides, CMS items, lead texts or titles frozen at the base width (360 / 780) overflow at 360 and leave a gap at
+    700. Set them to `100%`.
+  - A wrapper with a fixed height (a tablet `platform-grid` at 1120px) lets a card grow past it at 992 and overlap
+    the next section's heading. Set `height:auto`.
+  - Slider masks at `108%` / `104%` (copied from the live `margin:-15px` + padding trick) push the card to the right
+    and cut its icons. Set the mask to `100%` with no padding.
+  - Absolute overlays measured at 1440 come out as `top:198px` with a fixed px `width`/`height` and an `aspectRatio`.
+    The live rule was `bottom:18px; left:18px; right:18px; max-width:320px`, or insets of 15 on all four sides.
+    At 1199/1280/360 the panel then slides out of its photo or gets cut. `{width:null}` is refused, so pin it in
+    the code CSS: `top:auto; bottom:18px; height:auto; right:18px; width:auto; max-width:320px`. For a
+    four-inset overlay, also set `aspect-ratio:auto` and all four insets explicitly.
+  - Absolute arrows accept only px `left`. Centre or right-anchor them with CSS in the code file instead:
+    `left:calc(50% - 57px)` and `left:calc(100% - 76px)`.
+- **Text on photos**: Webflow often stacks 3 gradients in one `background-image` on a scrim. A light top gradient
+  is what makes dark text readable, and there is an alternating `top-dark` variant with light text. Framer's single
+  fill keeps only one layer, and the dark text ends up on a dark photo. Replicate the stack in CSS with the live
+  media queries (`max-width:991/767/479` are fine in code CSS). Use `:nth-child(odd/even)` for the alternating
+  variant, and set text colour through `--framer-text-color`.
+- **Smooth scroll (Lenis) and page navigation**: Framer shows the next page while Lenis keeps forcing the old
+  scrollY for 1–2s, so the new page opens at the footer. Listen on `window` in the capture phase, because Framer's
+  own document-level handler has already called `preventDefault`. For an internal link to another path: destroy
+  Lenis, then `scrollTo(0,0)` on the frames after `location.pathname` changes. On init, set
+  `history.scrollRestoration="manual"` and `scrollTo(0,0)` unless there is a hash.
+- **Webflow tablet starts at 992, Framer tablet at 1199.** At 992–1199 live shows the desktop layout and Framer
+  shows the tablet one. That is acceptable as long as nothing overlaps or clips, but say so to the designer.
 
 ## 11. Inner pages pipeline (after Home is approved)
 
