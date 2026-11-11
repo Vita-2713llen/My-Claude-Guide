@@ -349,3 +349,10 @@ Converter rules learned in QA:
 | Element pinned with px `top` from the 390 measurement leaves a gap at 360 | live used `top:48%; bottom:0` — in Framer use `bottom:0` + `height:%` (absolute `top` must be px) |
 | CMS list shows fewer items on tablet | each breakpoint replica has its own `collectionList.limit` — check all three |
 | Footer columns on tablet/phone | live centres them (tablet grid 1.3fr 1fr 1fr, gap 24; phone single centred column) — check `foot-nav` per breakpoint |
+| Headings break lines differently from live although width, size and tracking match | Framer stores a fixed `opsz` axis in every variable-font preset (`"opsz" 48`); live uses optical sizing auto (opsz = font-size). Presets refuse to drop the axis — inject `.framer-text,.framer-text *{font-variation-settings:normal!important;font-optical-sizing:auto!important}` (weight still follows font-weight). Check with `tools/fontaxes.js` / `tools/lines.js` |
+| Text that wraps on live stays on one line in Framer | auto-width text renders `white-space:pre` — give the text a width (`100%` / `1fr`) on the breakpoint/variant where live wraps |
+| Card heights measured at 390 are wrong at 360 | live cards keep a ratio (e.g. 330→248) — set px height + `aspectRatio` (aspect ratio is refused with auto height) |
+| Centred title with max-width sits at the left on tablet | the title wrap is centred by its PARENT on live — set the parent stack `stackAlignment:center` per breakpoint |
+| Grid item spanning 2 columns must be centred (`justify-self:center`) | `gridItemHorizontalAlignment` did not apply — use CSS `justify-self:center` for that breakpoint |
+| Row reversed only on tablet (media right, text left) | live `flex-direction:row-reverse` at one breakpoint — CSS injection for that media query |
+| QA tools for adaptive work | `headw.js` (heading box/lines), `talign.js` (text-align), `rowgeo.js`/`kidsgeo.js` (children geometry), `secpair.js` (section side-by-side), `pricefee.js`-style targeted probes |
