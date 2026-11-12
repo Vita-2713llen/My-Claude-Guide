@@ -251,6 +251,40 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
   `history.scrollRestoration="manual"` and `scrollTo(0,0)` unless there is a hash.
 - **Webflow tablet starts at 992, Framer tablet at 1199.** At 992–1199 live shows the desktop layout and Framer
   shows the tablet one. That is acceptable as long as nothing overlaps or clips, but say so to the designer.
+- **QA agent: run it after every publish.** `.claude/agents/framer-qa.md` (the `framer-qa` subagent) runs
+  `tools/qa_all.sh`, which works in three steps:
+  1. `crawl.js` writes `pages.json` with every static page and every CMS item.
+  2. `motionaudit.js` runs on its own, because motion timing is CPU-sensitive.
+  3. The layout audits run in parallel: visaudit at 15 widths, wordbreak, centerstuck, iconcenter, sliders, burger,
+     nav-to-top and heights.
+
+  The agent then fixes each finding, republishes and re-checks. Delegate to it (or run the script yourself) before
+  you tell the designer anything is done. Test **every CMS item**, not one per template: items differ in text
+  length, and the one you skipped is the one that clips.
+- **Content must wrap, never clip.** In Framer, auto-width text is `white-space:pre`. A title that fits at 1440
+  is cut off at 360 by its `overflow:hidden` wrapper instead of wrapping onto the next line.
+  - Give every title or name text a real width: `100%`, or `1fr` when the parent stack is horizontal. Give every
+    `auto` parent up the chain `100%`.
+  - Do not use a global `white-space:pre-wrap`. It broke button labels, which then wrapped and clipped. Scope it to
+    heading containers only: `[data-framer-component-type="RichTextContainer"]:has(h1,h2,h3,h4):not(a *):not(button *)`.
+  - After a bulk width patch, read the linter's "Horizontal stack … child with width=100%" list and switch those
+    children to `1fr`. A 100% child in a row pushes the avatar or icon out.
+- **Load animation must start at first paint, on every page.** The motion code boots only after the Framer bundle
+  has loaded (around 1.6 s), so a JS-only load animation means a blank or static first screen and "slow text".
+  Use two layers:
+  - **CSS first.** Put `@keyframes` on `[data-load=words|fade-in|fade-in-item|line-grow]` in the SSR `<style>`,
+    under `prefers-reduced-motion:no-preference`.
+  - **Early inline script.** Render it with `dangerouslySetInnerHTML` **after** `<Component/>`, because a `<script>`
+    placed between the pre-hide style and the page root breaks `#vd-pre + *`. On DOMContentLoaded it marks every
+    first-screen text, button and image `data-vd-in` and gives each an inline staggered `vdLoadFade` animation.
+
+  The JS boot must then skip anything inside or containing `[data-vd-in]` or `[data-load]`. That covers the
+  universal reveal pick, the heading split, the batch items and the IX3 one-shot load actions. If it does not skip
+  them, the block jumps a second time at around 2.3 s. Target: the first screen fully shown by about 1 s (live is
+  1.5–2 s).
+- **Reveal speed.** Use `REVEAL {duration:.6, delay:.05}` with trigger `top 88%`, and cap stagger in long batches
+  (`b.length>4 ? {amount:.3} : .08`). Otherwise a 20-row specimen card takes 2 s to appear and the designer calls
+  the text slow.
 
 ## 11. Inner pages pipeline (after Home is approved)
 
@@ -433,3 +467,5 @@ Converter rules learned in QA:
 | Live hero is `min-height:100vh` with an `aspect-ratio` media + `max-height:100%`; Framer hero was fixed 900px and the picture stopped short of the right edge on wide screens | section `height:auto; minHeight:"100vh"` (tablet/phone replicas: their own `minHeight` px — they inherit vh otherwise); media bottom-anchored (`top:null, bottom:0`) with CSS `height:min(56.22vw,100%)`. Framer's aspectRatio + maxHeight shrinks the WIDTH instead — don't combine them |
 | Image inside a ratio box is 106% wide for parallax — copying 106% to the height too made rows 30px taller | parallax overscan is width-only on live: image `width:106%`, `height:100%` |
 | Absolute child must fill a ratio box (`height:100%`) but its direct parent is a 0-height CMS item | give the absolute child its own `height:px + aspectRatio` instead of `%` |
+| motionaudit says LOAD-SLOW on several CMS pages at once | it ran in parallel with other Playwright audits — re-run one page alone (`earlydom.js`) before changing timing; real slowness shows up there too |
+| Linter: "Horizontal stack has multiple direct children and a child with width=100%" after a wrap fix | the walk-up set a row child (testimonial-who next to an avatar, channel text next to a 40px tile) to 100% — use `1fr` for children of horizontal stacks |

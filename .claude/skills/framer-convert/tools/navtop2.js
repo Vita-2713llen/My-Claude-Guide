@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 const W = +(process.argv[2] || 1440);
 (async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: W, height: 900 } });
   for (const [pg, sel] of [['/', 'nav a:has-text("About")'], ['/services', 'a:has-text("About")'], ['/about-us', 'a:has-text("Services")']]) {
-    await p.goto('https://adaptable-event-041934.framer.app' + pg, { waitUntil: 'load' }); await p.waitForTimeout(1500);
+    await p.goto((process.env.BASE || 'https://adaptable-event-041934.framer.app') + pg, { waitUntil: 'load' }); await p.waitForTimeout(1500);
     await p.mouse.move(500, 400); for (let i = 0; i < 12; i++) { await p.mouse.wheel(0, 600); await p.waitForTimeout(40); }
     await p.waitForTimeout(300); // still gliding
     const links = await p.evaluate(() => [...document.querySelectorAll('a')].filter((a) => { const r = a.getBoundingClientRect(); return r.top > 0 && r.top < 120 && r.width > 0; }).map((a) => a.textContent.trim() + '|' + a.getAttribute('href')));

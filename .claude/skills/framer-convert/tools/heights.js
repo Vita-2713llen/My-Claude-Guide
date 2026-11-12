@@ -1,7 +1,8 @@
 // Page heights + horizontal overflow, live vs Framer, at 1440/810/390
 const { chromium } = require('playwright');
-const L = 'https://noverde-128.webflow.io', F = 'https://adaptable-event-041934.framer.app';
+const L = process.env.LIVE || 'https://noverde-128.webflow.io', F = process.env.BASE || 'https://adaptable-event-041934.framer.app';
 const pages = ['/', '/about-us', '/services', '/services/carbon-footprint', '/our-team', '/team/tess-okonkwo', '/pricing', '/our-impact', '/our-impact/clean-energy', '/contact-us', '/blog', '/blog/diversion-rates-are-over-claimed', '/404'];
+if (require('fs').existsSync(__dirname + '/pages.json')) { pages.length = 0; pages.push(...JSON.parse(require('fs').readFileSync(__dirname + '/pages.json')), '/404'); }
 const widths = (process.argv[2] || '1440,810,390').split(',').map(Number);
 (async () => {
   const b = await chromium.launch();

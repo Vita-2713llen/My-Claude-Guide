@@ -2,6 +2,7 @@
 const { chromium } = require('playwright');
 const widths = (process.argv[2] || '1440,992,390').split(',').map(Number);
 const pages = process.argv.slice(3).length ? process.argv.slice(3) : ['/', '/about-us', '/services', '/our-team', '/team/tess-okonkwo', '/pricing', '/our-impact', '/our-impact/clean-energy', '/contact-us', '/blog', '/blog/diversion-rates-are-over-claimed'];
+if (!process.argv.slice(3).length && require('fs').existsSync(__dirname + '/pages.json')) { pages.length = 0; pages.push(...JSON.parse(require('fs').readFileSync(__dirname + '/pages.json')), '/404'); }
 const BASE = process.env.BASE || 'https://adaptable-event-041934.framer.app';
 (async () => { const b = await chromium.launch();
   for (const W of widths) for (const pg of pages) { const p = await b.newPage({ viewport: { width: W, height: 900 } });

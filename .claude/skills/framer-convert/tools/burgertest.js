@@ -2,7 +2,7 @@
 // node burgertest.js <width> <repeats>
 const { chromium } = require('playwright');
 const W = +(process.argv[2] || 390), REP = +(process.argv[3] || 10);
-const BASE = 'https://adaptable-event-041934.framer.app';
+const BASE = process.env.BASE || 'https://adaptable-event-041934.framer.app';
 (async () => {
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: W, height: 800 } });

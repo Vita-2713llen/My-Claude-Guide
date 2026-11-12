@@ -5,6 +5,7 @@
 const { chromium } = require('playwright');
 const widths = (process.argv[2] || '360,390,480,640,768,810,900,992,1100,1200,1280').split(',').map(Number);
 const pages = process.argv.slice(3).length ? process.argv.slice(3) : ['/', '/about-us', '/services', '/services/carbon-footprint', '/our-team', '/team/tess-okonkwo', '/pricing', '/our-impact', '/our-impact/clean-energy', '/contact-us', '/blog', '/blog/diversion-rates-are-over-claimed', '/404', '/style-guide', '/licenses', '/changelog'];
+if (require('fs').existsSync(__dirname + '/pages.json')) { pages.length = 0; pages.push(...JSON.parse(require('fs').readFileSync(__dirname + '/pages.json')), '/404'); }
 const BASE = process.env.BASE || 'https://adaptable-event-041934.framer.app';
 const audit = () => {
   const W = innerWidth, out = [];

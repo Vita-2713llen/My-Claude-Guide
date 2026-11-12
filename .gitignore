@@ -41,3 +41,8 @@ __pycache__/
 # Local/secret config — never commit (MCP keys, tokens)
 .claude/settings.local.json
 .mcp.json
+
+# framer-convert QA run outputs (project-specific)
+.claude/skills/framer-convert/tools/pages.json
+.claude/skills/framer-convert/tools/qa_*.out
+.claude/skills/framer-convert/tools/fin_*.out
