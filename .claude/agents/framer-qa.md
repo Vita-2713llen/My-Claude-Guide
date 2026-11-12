@@ -57,6 +57,8 @@ Then read every `qa_*.out` and handle each finding:
 | `qa_center.out` | centred text off-centre | The parent is `stackAlignment:"start"` while a max-width wrapper is centred on live. Set the parent to `"center"` on that replica. |
 | `qa_icon.out` | dx/dy > 1 px | A glyph wrapper keeps the Webflow line-height padding. Set it to `padding:0`, or centre it with CSS. |
 | `qa_interact.out` | slider did not move / burger < 20/20 / page not at top | See SKILL.md §8, "burger" and "Lenis navigation". |
+| `qa_click*.out` | `DEAD` / `MISSING` | A live accordion, tab, switch or dropdown that does nothing in Framer. Write the handler in the motion file (SKILL.md §6, "Every live interaction must exist in Framer"). |
+| (manual, every run) | burger and logo | Open the burger at 360 on live with a touch tap and on Framer, and compare screenshots, including the All Pages panel open and scrolled. Check that the logo goes to `/` in every header state. |
 | `qa_heights.out` | page height Δ > 10 px vs live | Run `sections.js` → `anchors.js` → `tree.js` to find which block grows. |
 
 After a batch of tree fixes, read the linter warnings that `api.tree.patch` returns. In particular:

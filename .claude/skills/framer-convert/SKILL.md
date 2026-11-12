@@ -123,6 +123,34 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
   (gap 2) AND the CTA (gap 8 before it). A pill inside a padded wrapper gives 13px left / 6px right — the designer sees it.
 - Name header/footer nodes with the live classes (`head-nav-link`, `head-nav-link head-drop-trigger`, `head-chevron`,
   `head-drop-item`, `button button-solid`, `foot-link`, `foot-button`) so the generated hover CSS reaches them.
+- **The logo always links to Home (`/`).** That applies to every header variant (Top, Scrolled, Mobile, Mobile Open,
+  Mobile Pages) and to the footer logo. Verify it by clicking the logo, not by reading the tree: probe
+  `elementFromPoint` over the whole logo, icon included, on 360, 810 and 1440.
+- **Burger = the live burger, measured.** Open it on live at 360 with `hasTouch:true, isMobile:true`, because a
+  Webflow dropdown ignores a mouse click in headless. Copy these:
+  - the bar height (live 52 px inside 12 px padding);
+  - the first link's top (live 78);
+  - the row heights;
+  - the **All Pages submenu panel**: live is `max-height:219px; overflow-y:auto`, a short scrolling panel. Ours grew
+    to its full 15 links, so Contact, Licensing and 404 fell below the screen and the designer saw "no links".
+    Use `[data-framer-name="Pages list"]{max-height:219px;overflow-y:auto;overscroll-behavior:contain}` and keep it
+    in Lenis `prevent`;
+  - the chevron flip when open, with `transform:rotate(180deg)!important`. Framer's svg class overrides it
+    otherwise.
+
+  Check: every submenu link is reachable by scrolling the panel (`elementFromPoint` hits each `a`).
+- **Every live interaction must exist in Framer.** The About FAQ had the tree (head, answer-wrap at 0 px, the + bars)
+  but no click handler, so it never opened. For every live accordion, tab, switch or dropdown, write the handler
+  (GSAP `height: auto`, rotate the + bar 90 → 0, `aria-expanded`), then run `tools/clickaudit.js <w>`. It clicks the
+  same class on live and Framer and reports `DEAD` or `MISSING`.
+- **Form selects:** Webflow's `padding-right:40px` (room for the arrow) lands on the FormSelectNode wrapper **and** on
+  the `<select>`. The select shrinks by 40 px and the chevron sits 50 px from the edge. Use node padding
+  `8px 15px 8px 15px`.
+- **Column dividers become nothing when columns stack.** A desktop `border-left` between side-by-side items (office
+  channels) draws a stray vertical line on phone and tablet, where the items stack. Override it on the 810 and 390
+  replicas. Do not set the width to `0px`, which makes the linter report "Border is incomplete"; set
+  `borderColor:"rgba(0,0,0,0)"` instead. Live has no border there (`liveoff.js`-style check of computed borders
+  per width).
 - Footer = the live footer: services column is a CMS list (live order, e.g. Number desc, limit 4) of a
   `Footer Service Link` component; Company / Legal columns at the live x positions; never leave
   `/services/:<collectionId>` links without a collection item (they publish as broken `/:<slugVarId>` hrefs).
