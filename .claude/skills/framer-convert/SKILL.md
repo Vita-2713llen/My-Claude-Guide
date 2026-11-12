@@ -269,6 +269,17 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
     heading containers only: `[data-framer-component-type="RichTextContainer"]:has(h1,h2,h3,h4):not(a *):not(button *)`.
   - After a bulk width patch, read the linter's "Horizontal stack … child with width=100%" list and switch those
     children to `1fr`. A 100% child in a row pushes the avatar or icon out.
+  - **The heading `pre-wrap` rule breaks every heading inside an `auto` wrapper, at every breakpoint.** Framer
+    renders an auto-width stack as `width:min-content`. With `white-space:pre` that was one line. With `pre-wrap`
+    it becomes the longest word, so the desktop page banner read "What / it / costs", one word per line. That cost
+    +150–470 px per page. So after any wrap or white-space change, check the **desktop** widths too, not only the
+    widths you fixed:
+    - `tools/headlines.js 1440,1100,1920` compares heading line counts with live and names the narrow wrapper.
+    - `heights.js` shows the same regression as `d +150…+470 <<<` on every page with a banner.
+
+    Fix it in the tree, on every breakpoint: set the heading text to `100%`, and set each `auto` parent up the chain
+    to `100%` (or `1fr` when its parent is a horizontal stack). To find the candidates, walk the tree for a
+    RichTextNode containing `<h1–h4>` that has an `auto` ancestor before any px-wide frame.
 - **Load animation must start at first paint, on every page.** The motion code boots only after the Framer bundle
   has loaded (around 1.6 s), so a JS-only load animation means a blank or static first screen and "slow text".
   Use two layers:
@@ -285,6 +296,26 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 - **Reveal speed.** Use `REVEAL {duration:.6, delay:.05}` with trigger `top 88%`, and cap stagger in long batches
   (`b.length>4 ? {amount:.3} : .08`). Otherwise a 20-row specimen card takes 2 s to appear and the designer calls
   the text slow.
+- **Boot after hydration, animate the container.** A Framer page ships every breakpoint as SSR copies
+  (`.ssr-variant` siblings). React swaps them for the live variant around 0.8–1 s, which is often *after* the
+  override's `useEffect` and `rAF` have run `boot()`. Two failures follow:
+  - GSAP hid nodes that were then thrown away, so the blog cards never revealed.
+  - React re-applied the component root's `opacity:1` while GSAP's `translateY(24px) scale(.985)` stayed. The card
+    sat 24 px low until the visitor scrolled.
+
+  The fix has three parts:
+  1. In `useEffect`, watch with a MutationObserver for removed nodes that are, or contain, `.ssr-variant`. Start
+     `boot()` after 200 ms without removals, or at 1.5 s at the latest. Do not wait for "no `.ssr-variant +
+     .ssr-variant`": the header keeps its copies for good, so that wait always times out.
+  2. When a target is a component root whose parent is a lone `*-container` div, animate the container.
+  3. Measure the trigger's top **before** `gsap.set(from)`. If it is already above the `top N%` line, `play()` now,
+     because the `y:24` offset pushes a border card under the start line and it never fires.
+- **The early-load CSS must not unhide hidden states.** `[data-vd-in] :is(h1…h6,p,…){opacity:1!important}` also
+  showed the pricing "alt" figures, which the tree keeps at `opacity:0`, absolute, in the same spot. Every tier
+  showed two overlapping prices. Give hidden alternates `visibility:hidden!important` (the switch still reads their
+  `textContent`). Then screenshot every element whose hidden state comes from the tree.
+- **Hover-only reveals must be visible without hover.** Live shows the service tags under 992 px. The desktop
+  hover rule hid them on phone, so add `@media (max-width:991.98px){[data-framer-name="service-list-tag"]{opacity:1!important;transform:none!important}}`.
 
 ## 11. Inner pages pipeline (after Home is approved)
 
@@ -469,3 +500,6 @@ Converter rules learned in QA:
 | Absolute child must fill a ratio box (`height:100%`) but its direct parent is a 0-height CMS item | give the absolute child its own `height:px + aspectRatio` instead of `%` |
 | motionaudit says LOAD-SLOW on several CMS pages at once | it ran in parallel with other Playwright audits — re-run one page alone (`earlydom.js`) before changing timing; real slowness shows up there too |
 | Linter: "Horizontal stack has multiple direct children and a child with width=100%" after a wrap fix | the walk-up set a row child (testimonial-who next to an avatar, channel text next to a 40px tile) to 100% — use `1fr` for children of horizontal stacks |
+| Tree patches + `publish()` in ONE exec program: `changedNodeCount:1`, and the published CSS still had the old `width:min-content` | publish in a **separate** exec call after the patches, then verify the live CSS (`rules.js`: the rule that sets `width` on the element) before you believe the fix |
+| `s.replace(a, b)` on the motion file turned `$$(` into `$(` and killed `boot()` (".map is not a function") — every animation stopped | `String.replace` treats `$$` in the replacement as `$`. Edit code files with `s.split(a).join(b)`, and after every motion publish load one page and check `pageerror` (`dbg.js`) |
+| burgertest 16/20 and nav-to-top "click fail" in the full QA run | they ran in parallel with eight Playwright audits — re-run alone. navtop2 below 992 must click a footer link (header links live in the burger) and only a link that `elementFromPoint` returns |
