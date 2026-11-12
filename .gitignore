@@ -46,3 +46,4 @@ __pycache__/
 .claude/skills/framer-convert/tools/pages.json
 .claude/skills/framer-convert/tools/qa_*.out
 .claude/skills/framer-convert/tools/fin_*.out
+.claude/skills/framer-convert/tools/qa_run.log
