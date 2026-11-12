@@ -29,7 +29,8 @@ const sample = (fold) => {
       const cs = getComputedStyle(x); if (cs.visibility === 'hidden' || cs.display === 'none') return;
       if (cs.display !== 'contents' && /(hidden|clip)/.test(cs.overflow + cs.overflowX + cs.overflowY)) { const q = x.getBoundingClientRect(); if (q.width >= 1 && q.height >= 1 && (r.left >= q.right || r.right <= q.left || r.top >= q.bottom || r.bottom <= q.top)) return; }
     }
-    let op = 1, ty = 0; for (let x = e; x && x !== document.body; x = x.parentElement) { const cs = getComputedStyle(x); op *= +cs.opacity; if (cs.transform !== 'none') ty += new DOMMatrix(cs.transform).m42; }
+    let op = 1; for (let x = e; x && x !== document.body; x = x.parentElement) op *= +getComputedStyle(x).opacity;
+    const ty = r.top + scrollY; // on-screen position (what the user sees), not a sum of ancestor matrices
     const k = t.replace(/noverde/gi, 'verdova').toLowerCase().slice(0, 40); if (!(k in out)) out[k] = { op: +op.toFixed(2), y: Math.round(ty) };
   });
   return out;
