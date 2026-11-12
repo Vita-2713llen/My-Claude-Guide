@@ -310,6 +310,11 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
   2. When a target is a component root whose parent is a lone `*-container` div, animate the container.
   3. Measure the trigger's top **before** `gsap.set(from)`. If it is already above the `top N%` line, `play()` now,
      because the `y:24` offset pushes a border card under the start line and it never fires.
+  4. A late boot shows double animations that an early boot hid. The nodes React swapped in have no `data-vd-in`,
+     so at the start of `boot()` mark every first-screen unit again with the early script's selector. The
+     batch-reveal filter must also skip first-screen elements inside `[data-load=…]`, which the CSS keyframes
+     already animated. Otherwise the services list fades in at about 1 s, then its descriptions hide and fade a
+     second time at about 1.2 s (`LOAD-JUMP`).
 - **The early-load CSS must not unhide hidden states.** `[data-vd-in] :is(h1…h6,p,…){opacity:1!important}` also
   showed the pricing "alt" figures, which the tree keeps at `opacity:0`, absolute, in the same spot. Every tier
   showed two overlapping prices. Give hidden alternates `visibility:hidden!important` (the switch still reads their
