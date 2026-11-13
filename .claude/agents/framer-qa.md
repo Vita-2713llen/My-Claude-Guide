@@ -91,6 +91,18 @@ patterns:
   `*-container`.
 - A card on the first-screen border stays hidden until you scroll. Measure the trigger before the from-state.
 
+## Tier checks inside Desktop (1200–1919)
+
+Framer has one Desktop breakpoint from 1200px, but Webflow sites switch layouts at 1280, 1440 and 1920 too.
+
+- Run `tools/textx.js 1300 all` and `tools/textx.js 1440 all`. Compare the counts: if 1300 is much worse than
+  1440, a container or tier rule is missing.
+- Run `tools/geosnap.js` before and after any refactor (`--cmp before after`). It must say `GEO OK`.
+- Click every interactive block (reel, accordion, tabs, slider arrows) at 1600, 1440, 1300, 1200, 1100, 900 and
+  390, live vs Framer. Live often swaps the whole block at 1440, so check which block is visible too.
+- Check that every visible image has natural width ÷ drawn width ≥ 1. Tall narrow cover images come out
+  pixelated otherwise.
+
 ## Report (in the user's language)
 
 - What you fixed, grouped by kind, with the published version id.
