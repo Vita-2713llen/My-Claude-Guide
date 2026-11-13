@@ -164,6 +164,19 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
   replicas. Do not set the width to `0px`, which makes the linter report "Border is incomplete"; set
   `borderColor:"rgba(0,0,0,0)"` instead. Live has no border there (`liveoff.js`-style check of computed borders
   per width).
+- **Template utility pages are NOT part of the client site: ask before building or linking them.** A Webflow template
+  ships Licensing (licenses), Changelog, Style Guide, Template Instructions, Password, and "Template by … / Powered
+  by Webflow" credits. Before converting, and again before the footer and the burger "All Pages" list are built,
+  **ask the designer** two things:
+  1. Which pages are skipped? Default: all utility pages.
+  2. What replaces their footer column and menu links: other real pages, or contact details (email, phone,
+     address, socials)?
+
+  Never copy the template's "Legal: Licensing / Changelog / Style Guide" column as it is. On Verdova the designer
+  had said not to build them, and they still ended up in the footer.
+
+  Check: grep the published footer, burger and sitemap for `licenses|changelog|style-guide|template|webflow`. Any
+  hit the designer did not approve is a defect.
 - Footer = the live footer: services column is a CMS list (live order, e.g. Number desc, limit 4) of a
   `Footer Service Link` component; Company / Legal columns at the live x positions; never leave
   `/services/:<collectionId>` links without a collection item (they publish as broken `/:<slugVarId>` hrefs).
