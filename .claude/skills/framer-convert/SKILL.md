@@ -544,6 +544,11 @@ Converter rules learned in QA:
 
 ## 9. Corrections log (do these right the first time)
 
+- **Breakpoint names are ALWAYS `Desktop` / `Tablet` / `Mobile` — MANDATORY.** On every page, CMS template and
+  layout template (primary = Desktop, `810–1199.98` = Tablet, `≤809.98` = Mobile). Never leave Framer's default
+  `Breakpoint 2/3`. Rename in the first replay pass (patch `name` on each breakpoint frame — renaming is safe, unlike
+  moving the range) and re-check with a tree walk before handing over.
+
 - **992–1199 needs the DESKTOP layout but Framer renders the TABLET DOM there.** Layers hidden in the tablet replica
   (e.g. `testimonial-photo` + its `-image`) are not in the DOM at all, so CSS cannot bring them back. Recipe: make
   them `visible:true` (and absolute, as on desktop) in the tablet replica, hide them with CSS for 810–991.98, and
