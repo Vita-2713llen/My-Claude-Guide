@@ -20,6 +20,6 @@ timeout 3500 node iconcenter.js 360,768,992,1440 > qa_icon.out 2>&1 &
 timeout 3000 node heights.js 1440,810,390,360 > qa_heights.out 2>&1 &
 wait
 echo "4/5 interactions (alone)"
-(timeout 900 node slidertest.js; timeout 300 node logolink.js; timeout 3000 node clickaudit.js 1440; timeout 3000 node clickaudit.js 390; timeout 600 node burgertest.js 390 20; timeout 300 node navtop2.js 1440; timeout 300 node navtop2.js 390) > qa_interact.out 2>&1
+(timeout 900 node slidertest.js; timeout 300 node arrowpairs.js; timeout 120 node menuclose.js 992; timeout 120 node menuclose.js 390; timeout 300 node logolink.js; timeout 3000 node clickaudit.js 1440; timeout 3000 node clickaudit.js 390; timeout 600 node burgertest.js 390 20; timeout 300 node navtop2.js 1440; timeout 300 node navtop2.js 390) > qa_interact.out 2>&1
 echo "5/5 done"
 echo ALLDONE

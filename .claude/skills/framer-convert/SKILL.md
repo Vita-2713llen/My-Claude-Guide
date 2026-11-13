@@ -139,6 +139,19 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
     otherwise.
 
   Check: every submenu link is reachable by scrolling the panel (`elementFromPoint` hits each `a`).
+  - **A tap on a burger link must close the menu.** The header lives in the layout template and survives page
+    navigation, so the "Mobile Open" variant stays open on the new page. In the global capture click handler, when
+    the link is inside `Mobile Open` or `Mobile Pages`:
+    - remove `html.vd-ap`;
+    - send the Burger a real tap: `pointerdown` + `pointerup` (on the button and on `window`) + `click`, with
+      `clientX`/`clientY`. Framer variant taps ignore a bare `.click()`.
+
+    Check: click About, and a submenu link, at 390 and 992. The header must be back to `Mobile` (77 px) and the page
+    at the top.
+- **Absolute pairs (slider arrows) frozen in px on tablet/phone replicas drift off-centre between breakpoints.**
+  `left:342px` is centred only at exactly 810. Framer rejects `calc()` in `left`, and `centerX` is not a property.
+  Centre them with CSS under `@media (max-width:1199.98px)`: back `left:calc(50% - (w + gap/2))`, next
+  `left:calc(50% + gap/2)`, both `!important`. Then measure the **pair** (not the icons inside) at 360…1199.
 - **Every live interaction must exist in Framer.** The About FAQ had the tree (head, answer-wrap at 0 px, the + bars)
   but no click handler, so it never opened. For every live accordion, tab, switch or dropdown, write the handler
   (GSAP `height: auto`, rotate the + bar 90 → 0, `aria-expanded`), then run `tools/clickaudit.js <w>`. It clicks the
