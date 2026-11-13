@@ -1,0 +1,5 @@
+# What deploys to the server (paths relative to wp-content). One line = one theme/plugin/file.
+# Only these paths are synced to the server; the rest of wp-content on the server is not touched.
+themes/my-theme
+plugins/my-plugin
+mu-plugins/environment-guard.php

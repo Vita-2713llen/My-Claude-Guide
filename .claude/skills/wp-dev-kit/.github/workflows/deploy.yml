@@ -1,0 +1,145 @@
+# Deploy = GitHub Actions + Cloudways "Deployment via Git" (Deploy key + webhook):
+#   1. Actions builds the themes/plugins (npm, composer) and puts ONLY them into branch deploy/dev (or deploy/prod).
+#   2. Push to deploy/dev → GitHub webhook → public_html/gitautodeploy.php on Cloudways → Pull of that branch
+#      into public_html/wp-content (Cloudways pulls the code itself via the Deploy key). No Cloudways keys in GitHub.
+#
+# Which branches deploy is set ONCE in .deploy/environments.conf (bin/init-project.sh asks):
+#   DEV_BRANCH  (e.g. develop, dev, main, master) → build into deploy/dev  → webhook → Pull on DEV
+#   PROD_BRANCH (e.g. main, master; empty = no PROD yet) → deploy/prod → webhook → Pull on PROD
+# Push to other branches (feature/*) deploys nothing: job "deploy" will be Skipped.
+#
+# Variables (optional): PROD_DEPLOYERS — comma-separated logins allowed to deploy to PROD.
+# PHP: build and syntax check run on PHP_MIN from .deploy/environments.conf (the lowest version among environments).
+
+name: Deploy
+
+on:
+  push:
+    branches-ignore: ['deploy/**'] # deploy/* branches are pushed by this workflow itself
+  workflow_dispatch:
+
+permissions:
+  contents: write # to push deploy/* branches
+
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  # Which environment this branch maps to (from .deploy/environments.conf). Reads one file only — a few seconds.
+  route:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      env: ${{ steps.r.outputs.env }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .deploy/environments.conf
+          sparse-checkout-cone-mode: false
+      - id: r
+        run: |
+          set -euo pipefail
+          IFS='|' read -r DEV PROD < <( . .deploy/environments.conf >/dev/null 2>&1 || true
+                                        echo "${DEV_BRANCH-}|${PROD_BRANCH-}" )
+          [[ -n "$DEV" ]] || { echo "::error::DEV_BRANCH is not set in .deploy/environments.conf"; exit 1; }
+          [[ -z "$PROD" || "$DEV" != "$PROD" ]] || { echo "::error::DEV_BRANCH and PROD_BRANCH are the same ($DEV) in .deploy/environments.conf"; exit 1; }
+          case "$GITHUB_REF_NAME" in
+            "$DEV")  ENV=dev ;;
+            "$PROD") [[ -n "$PROD" ]] && ENV=prod || ENV="" ;;
+            *)       ENV="" ;;
+          esac
+          echo "env=$ENV" >> "$GITHUB_OUTPUT"
+          if [[ -n "$ENV" ]]; then echo "Branch $GITHUB_REF_NAME → deploy/$ENV"
+          else echo "Branch $GITHUB_REF_NAME does not deploy (DEV_BRANCH=$DEV, PROD_BRANCH=${PROD:-none})."; fi
+
+  deploy:
+    needs: route
+    if: needs.route.outputs.env != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TARGET_ENV: ${{ needs.route.outputs.env }}
+
+    steps:
+      # PROD guard for private repos on GitHub Free, which have no branch protection:
+      # variable PROD_DEPLOYERS = comma-separated logins; a push to PROD_BRANCH by anyone not listed does not deploy.
+      - name: Who may deploy to PROD
+        if: env.TARGET_ENV == 'prod' && vars.PROD_DEPLOYERS != ''
+        env:
+          ALLOWED: ${{ vars.PROD_DEPLOYERS }}
+        run: |
+          list=" $(tr 'A-Z,' 'a-z ' <<<"$ALLOWED") "
+          me="$(tr 'A-Z' 'a-z' <<<"$GITHUB_ACTOR")"
+          [[ "$list" == *" $me "* ]] || { echo "::error::$GITHUB_ACTOR is not in PROD_DEPLOYERS — PROD deploy cancelled."; exit 1; }
+
+      - uses: actions/checkout@v4
+
+      # Build and check on the lowest PHP among environments (PHP_MIN), so code and vendor/ work everywhere from it up
+      - name: PHP_MIN from .deploy/environments.conf
+        id: php
+        run: |
+          v="$( . .deploy/environments.conf >/dev/null 2>&1; echo "${PHP_MIN:-8.2}" )"
+          [[ "$v" =~ ^8\.[0-9]+$ ]] || { echo "::error::PHP_MIN='$v' in .deploy/environments.conf must be 8.x"; exit 1; }
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ steps.php.outputs.version }}
+          tools: composer
+          coverage: none
+
+      - name: PHP syntax check (PHP ${{ steps.php.outputs.version }})
+        run: bash bin/php-lint.sh
+
+      # Node for the npm build: .nvmrc / .node-version of the first theme/plugin in .deploy/targets that has one; otherwise 22
+      - name: Node version
+        id: node
+        run: |
+          v=""; from=""
+          while IFS= read -r t; do
+            for f in "$t/.nvmrc" "$t/.node-version"; do
+              [[ -f "$f" ]] || continue
+              x="$(tr -d ' v\r\n' <"$f")"
+              if [[ -z "$v" ]]; then v="$x"; from="$f"
+              elif [[ "$x" != "$v" ]]; then echo "::warning::$f asks for Node $x, but all targets are built on Node $v (from $from). Use one Node version."; fi
+              break
+            done
+          done < <(sed -e 's/#.*$//' -e 's/[[:space:]]*$//' -e '/^$/d' .deploy/targets)
+          echo "version=${v:-22}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.node.outputs.version }}
+
+      - name: Build release into deploy/${{ env.TARGET_ENV }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          BR="deploy/$TARGET_ENV"
+          REL="$RUNNER_TEMP/release"
+          URL="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git ls-remote --exit-code --heads "$URL" "$BR" >/dev/null; then
+            git clone --quiet --depth 1 --branch "$BR" "$URL" "$REL"
+          else
+            git init --quiet -b "$BR" "$REL"
+            git -C "$REL" remote add origin "$URL"
+          fi
+
+          bash bin/release.sh "$REL"
+
+          cd "$REL"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes in the release — $BR unchanged, no Pull."
+          else
+            git commit --quiet -m "Deploy ${GITHUB_SHA::7} from ${GITHUB_REF_NAME}" \
+              -m "$(git -C "$GITHUB_WORKSPACE" log -1 --format=%s)"
+            git push --quiet origin "$BR"
+            git show --stat --format='%h %s' HEAD | head -50 || true
+            echo "::notice::$BR updated — the webhook will trigger a Pull on Cloudways."
+          fi
