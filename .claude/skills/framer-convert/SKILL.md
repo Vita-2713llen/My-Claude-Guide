@@ -18,7 +18,13 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 3. Never execute downloaded page scripts in jsdom/Node; render with Chromium and block `script/fetch/xhr` if a static
    snapshot is needed.
 4. Rename the brand everywhere the user asks (copy, alt, meta, footer ©, testimonials) — grep the source for the old name.
-5. Drop pages the user excludes (Style Guide, Licensing, Changelog, Password, …) and remove their links.
+5. **Every email on the Framer site is `info@example.com` — MANDATORY, no exceptions.** Visible text, `mailto:`
+   hrefs (frame links AND TextRun links inside rich text), form error/success copy, CMS fields (team emails +
+   their `mailto:` link fields), input placeholders, code files. Do it in the first replay pass, then re-scan the
+   whole tree (walk every node, JSON-stringify every attribute, regex for emails) — replica breakpoints can carry
+   their own text overrides, so fix those with `tree.replaceText(replicaId, old, new)` too. QA fails if any other
+   address remains (`emailaudit`: grep the published HTML of every page for `@` addresses ≠ info@example.com).
+6. Drop pages the user excludes (Style Guide, Licensing, Changelog, Password, …) and remove their links.
 
 ## 1. Tokens and text styles — nothing raw
 
@@ -537,6 +543,21 @@ Converter rules learned in QA:
 - Instance link controls to CMS detail pages sometimes need a string `href` attempt before the `{href, collectionItem}` object is accepted.
 
 ## 9. Corrections log (do these right the first time)
+
+- **Card hover reveals (corner "fold" + darkening "wash") are part of 1:1 — replay them, never leave the layers at 0×0.**
+  The replay measures hidden-by-transform layers (`transform: scale(0)`) as 0×0, so the fold/arrow come out with
+  0px sizes and no hover. Fix: give the layers their real native sizes (from live CSS, per breakpoint) and add the hover
+  to `PRE_CSS`: base `transform:scale(0); transform-origin:100% 0`, `@media (hover:hover){card:hover fold{scale(1)}
+  card:hover wash{opacity:1}}`, timings sampled from live (in ≈450ms ease-out, out ≈300ms). Verify with a timed
+  sampler (scale/opacity at 60/160/300/500ms after `mouse.move`, and after leave) at 1440/1100/900/500 on live AND
+  Framer — `hovaudit.js` must cover every card list (Home posts, /blog journal cards, related posts).
+- **Component variant layers are renamed per breakpoint** (`post` → `post tablet`, `journal-card` → `journal-card
+  tablet`). CSS selectors on a component root must be prefix-matched (`[data-framer-name^="journal-card"]`,
+  `[data-framer-name^="post"]:not([data-framer-name^="post-"])`), or the rule silently dies below 1200.
+- **Absolute children pinned to the edge the source pins.** Live `testimonial-plate` is `bottom:40px` inside a card
+  whose height is `100vh − 160px`; the replay pinned it `top:300px` (the measurement at 900px tall), so on a shorter
+  window the plate ran past the card and got clipped. When a container's height depends on the viewport, copy the
+  live `top/bottom/left/right` pins (computed style), never the measured offset; check at 2–3 window heights.
 
 | Mistake | Correct |
 |---|---|

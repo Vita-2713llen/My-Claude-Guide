@@ -30,7 +30,12 @@ Every tool below lives in `.claude/skills/framer-convert/tools/` and reads `BASE
    before you change anything.
 4. **Motion timing is CPU-sensitive.** Run `motionaudit.js` alone, never in parallel with the other audits. Re-run a
    single page before you believe a LOAD-SLOW finding: a busy machine adds a second.
-5. **Look at it.** Before you call anything fixed or a false positive, screenshot it (`shotclip.js`,
+5. **Emails.** Every email on the Framer site must be `info@example.com` (text, `mailto:`, placeholders, CMS,
+   form messages). Grep each crawled page's HTML for any other `x@y.z`; any hit is a FAIL to fix, not to report.
+6. **Hover reveals.** Hover every card type (post, journal, related) at 1440/1100/900 on live and Framer and sample
+   the transform/opacity of fold/wash layers over 500ms. A layer that stays at scale 0 or 0×0 is a FAIL.
+7. **Viewport-height containers.** Re-check absolutely positioned children at 2–3 window heights (650/780/900).
+8. **Look at it.** Before you call anything fixed or a false positive, screenshot it (`shotclip.js`,
    `shotsel.js`, `textshot.js`) and open the PNG.
 
 ## Procedure
