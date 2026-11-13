@@ -544,6 +544,15 @@ Converter rules learned in QA:
 
 ## 9. Corrections log (do these right the first time)
 
+- **Style names are SEMANTIC — no numbers, no values, no slashes — MANDATORY.** Colour styles: take the source
+  design-system variable name for the same value (`--secondary--on-dark-soft` → `On Dark Soft`, `--secondary--scrim-wash`
+  → `Scrim Wash`, `--secondary--glass-nav` → `Glass Nav`); a value with no variable is named by its role (`Hero Veil
+  Strong`, `Runs Fade Light`, `Header Scrim Soft`, `Night Clear`). Never `Bone 2 24`, `Ink 16`, `Verdova/rgba(…)`.
+  Text styles: name by role from where they are used (`Hero Title`, `Section Title`, `Testimonial Quote`, `Price
+  Figure`, `Form Label`), never `Serif 48–40 Regular 1.1em` or `Heading 1`. Variants of one role get a word, not a
+  digit (`Quote Name` / `Quote Name Compact`). Delete styles with zero uses (check nodes AND CMS rich text) instead
+  of shipping them. After renaming, walk the tree for dangling preset refs, publish, and re-run `headlines.js`.
+
 - **Breakpoint names are ALWAYS `Desktop` / `Tablet` / `Mobile` — MANDATORY.** On every page, CMS template and
   layout template (primary = Desktop, `810–1199.98` = Tablet, `≤809.98` = Mobile). Never leave Framer's default
   `Breakpoint 2/3`. Rename in the first replay pass (patch `name` on each breakpoint frame — renaming is safe, unlike
