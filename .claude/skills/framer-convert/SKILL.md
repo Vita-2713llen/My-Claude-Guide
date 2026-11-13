@@ -157,6 +157,57 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
   `left:342px` is centred only at exactly 810. Framer rejects `calc()` in `left`, and `centerX` is not a property.
   Centre them with CSS under `@media (max-width:1199.98px)`: back `left:calc(50% - (w + gap/2))`, next
   `left:calc(50% + gap/2)`, both `!important`. Then measure the **pair** (not the icons inside) at 360…1199.
+- **A scrolling list gets no border.** The burger "Pages list" (max-height 219, overflow auto) had a border-bottom.
+  The border sits on the visible edge of the scroll box, so it looks like a divider between two items. Framer draws
+  borders in `::after`, so a probe must read `getComputedStyle(e, "::after")`. Remove it with
+  `borderColor: "rgba(0,0,0,0)"`; `borderBottom: 0` gives "Border is incomplete".
+- **Card grids whose column count changes inside one Framer breakpoint.** Webflow pricing is 2+1 at 810–991, with
+  the third card 380 px and centred, and 3 in a row from 992. Framer tablet covers 810–1199.
+  - On the tablet replica, the lone last card spans **all** grid columns (`gridItemColumnSpan` = the column count)
+    with `gridItemHorizontalAlignment: "center"`. Spanning 2 leaves it on the left.
+  - At 992–1199, CSS in `PRE_CSS`:
+    `@media (min-width:992px) and (max-width:1199.98px){list{grid-template-columns:repeat(3,minmax(0,1fr))!important} list>*{grid-column:auto/span 1!important;width:100%!important;justify-self:stretch!important;align-self:stretch!important}}`
+  - Check the cards' x-ranges against live at 810, 992 and 1100 (`pcards.js` style), then take a screenshot.
+- **Never freeze an aspect-ratio picture in px on replicas.** The hero media is 16:9 on live. The 390 and 810
+  replicas froze it at 219 and 455 px, so it was 219 px tall at 600 (live 337), with a 118 px empty band above it.
+  - Fix it with `height:auto; aspect-ratio:16/9; max-height:100%; min-height:0; overflow:hidden` under
+    `@media (max-width:1199.98px)`.
+  - Without `min-height:0` and `overflow:hidden`, the content min-size makes the box taller than the ratio.
+  - Live desktop hero sections are `100vh` from 992, so add `min-height:100vh` to the hero section at 992–1199.
+- **Live `max-height` steps inside one Framer breakpoint.** `metrics-media` is 300 px ≤479, 320 px at 480–767, and
+  314 px as a row (`metrics-card` row, media right) at 768–991. Framer phone (<810) froze 300 px in a column.
+  1. Read the live CSS rules for the class: download `site.css` and find every `@media` block that names it.
+  2. Reproduce each step with a CSS media query.
+- **`fr` widths in a Framer stack are not CSS-grid `fr`.** A live grid of `1.05fr 1fr` became a stack with media
+  `1.05fr` and panel `1fr`. The panel's content min-width won, and the media came out 30 px narrower. Pin the
+  basis: `media{flex:0 0 calc((100% - gap) * 1.05 / 2.05)} panel{flex:1 1 0}`. Measure both columns against live.
+- **Image-fill audit: `tools/imgfill.js`** (in `qa_all.sh`). It reports where a photo leaves a strip that live
+  does not. Two cases are not real strips:
+  - A box mid-reveal, with a transform on an ancestor. The tool now skips these.
+  - An offset against a whole `section`, because the text above is taller or the layout differs.
+
+  Compare the image **size** with live first. A strip inside the image's own card or wrap is always real.
+- **Blog Previous / Next on a CMS detail page.**
+  - The button link is `{href: "/blog/:<slugFieldId>", collectionItem: tree.ref("previousItemId.<slugFieldId>", <itemId>)}`.
+  - Visibility is `visible: {from: tree.ref("previousItemId", page), transforms: [{name: "isSet"}]}`.
+  - The order is the collection item order. Reorder the items to live's order first.
+  - Framer does not wrap: the first post has no Previous and the last has no Next, while Webflow wraps. Tell the
+    designer.
+- **Navigation inside the same template replays the load animation.** Post → next post keeps the page component
+  mounted, so `boot()` does not run again. The motion file therefore runs a route watcher:
+  - A 50 ms interval on `location.pathname`.
+  - It waits until the **same** `h1` element gets new text, so that it does not animate the old page while the new
+    chunk loads.
+  - Then it replays `vdLoadFade` on the first-screen units: `animation:none`, a reflow, then the animation with a
+    stagger.
+  - It sets `__vdReplayAt`, so a cross-template boot right after it does not animate twice.
+
+  Check: click Next at 390 and 1440. The `h1` must go op0, then fade in within about 1 s, with the page at the top.
+- **Runs and attachment rows: gaps and wrapping.** Each name is `1fr`, so it wraps instead of pushing the size out.
+  Each fixed spacer is 10 px. Hidden phone spacers must be visible on the replica. A row with `gap` needs
+  `stackDistribution:"start"`, because Framer refuses `gap` with space-between.
+- **Hover-only transforms on phone.** At ≤991, `service-list-media` / `-image` must be `transform:none` and the
+  tag must be `opacity:1`, as on live.
 - **Every live interaction must exist in Framer.** The About FAQ had the tree (head, answer-wrap at 0 px, the + bars)
   but no click handler, so it never opened. For every live accordion, tab, switch or dropdown, write the handler
   (GSAP `height: auto`, rotate the + bar 90 → 0, `aria-expanded`), then run `tools/clickaudit.js <w>`. It clicks the
