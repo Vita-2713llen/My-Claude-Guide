@@ -544,6 +544,23 @@ Converter rules learned in QA:
 
 ## 9. Corrections log (do these right the first time)
 
+- **992–1199 needs the DESKTOP layout but Framer renders the TABLET DOM there.** Layers hidden in the tablet replica
+  (e.g. `testimonial-photo` + its `-image`) are not in the DOM at all, so CSS cannot bring them back. Recipe: make
+  them `visible:true` (and absolute, as on desktop) in the tablet replica, hide them with CSS for 810–991.98, and
+  rebuild the desktop geometry for 992–1199 in `PRE_CSS` (sticky pin, absolute stacked cards, plate pins, desktop type
+  sizes copied from Framer's own 1440 computed styles). Move any JS gate (`matchMedia("(min-width: 1200px)")`) of that
+  section's motion to 992. Check visible children recursively — a visible wrapper with a hidden image is still empty.
+- **Prefix selectors collide with sibling names.** `[data-framer-name^="post"]:not([data-framer-name^="post-"])` also
+  matched the section `posts` → extra padding on the section and every card's hover firing when the section is
+  hovered. Use `:is([data-framer-name="post"],[data-framer-name^="post "])` (exact name OR name + variant suffix).
+  After adding a prefix rule, list every element it matches on the page before publishing.
+- **Free the instance wrappers too.** A card inside a list item sits in `ssr-variant > *-container`; Framer gives the
+  container and the grid rows fixed heights (`grid-template-rows:360px`). When CSS changes the card's height or
+  aspect-ratio, also set `grid-template-rows:none; grid-auto-rows:auto` on the grid and `height:auto` on the item and
+  its `[class*="-container"]` descendants, or the card overflows its cell.
+- **In-between widths QA tool:** `midwidths.js` prints every section's box, display, grid columns, pins and padding at
+  1150/1000/900/800/700/500 for live and Framer — diff them line by line before saying a width is done.
+
 - **Card hover reveals (corner "fold" + darkening "wash") are part of 1:1 — replay them, never leave the layers at 0×0.**
   The replay measures hidden-by-transform layers (`transform: scale(0)`) as 0×0, so the fold/arrow come out with
   0px sizes and no hover. Fix: give the layers their real native sizes (from live CSS, per breakpoint) and add the hover
