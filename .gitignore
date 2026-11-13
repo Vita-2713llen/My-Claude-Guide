@@ -45,3 +45,7 @@ __pycache__/
 !.claude/skills/qa-check/**
 !.claude/skills/html-to-wordpress/
 !.claude/skills/html-to-wordpress/**
+
+# WordPress dev kit (Local → GitHub → Cloudways) — ships with the project.
+!.claude/skills/wp-dev-kit/
+!.claude/skills/wp-dev-kit/**

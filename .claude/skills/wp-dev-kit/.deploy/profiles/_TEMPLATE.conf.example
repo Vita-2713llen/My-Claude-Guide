@@ -1,0 +1,9 @@
+# Profile template. Name the file exactly as the plugin slug (folder in wp-content/plugins), e.g. my-plugin.conf.
+# The profile loads if the plugin is active on the source or the target.
+#
+# CONTENT_EXTRA_TABLES="$CONTENT_EXTRA_TABLES my_table"      # content tables (for --mode=content)
+# CONTENT_OPTIONS="$CONTENT_OPTIONS myplugin_layout_*"       # content options
+# KEEP_TABLES="$KEEP_TABLES my_log my_entries"               # transactional — the target server keeps its own
+# KEEP_POST_TYPES="$KEEP_POST_TYPES my_submission"           # transactional post types
+# PRESERVE_OPTIONS="$PRESERVE_OPTIONS myplugin_api_key"      # environment settings
+# if dst_has my-plugin; then add_hook '*' 'my-plugin rebuild'; fi

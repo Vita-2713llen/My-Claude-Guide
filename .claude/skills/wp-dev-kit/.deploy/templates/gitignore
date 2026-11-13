@@ -1,0 +1,59 @@
+# The repository is the wp-content folder. It works as a whitelist:
+# everything is ignored, then only our own code is allowed back in.
+# Custom themes/plugins are written in by bin/init-project.sh (and into .deploy/targets as well).
+
+/*
+
+# --- WordPress folders/files that never go to Git (data: moved by files-sync / db-sync) ---
+/uploads/
+/upgrade/
+/ai1wm-backups/
+/languages/
+/themes/*
+/plugins/*
+/mu-plugins/*
+debug.log
+
+# --- Kit files ---
+!/.gitignore
+!/.github/
+!/.deploy/
+!/bin/
+!/README.md
+!/CLAUDE.md
+!/PROJECT.md
+!/.claude/
+.claude/settings.local.json
+!/.env.example
+
+# --- Themes: custom only ---
+!/themes/
+/themes/*
+# @custom-themes — list maintained by bin/init-project.sh
+!/themes/my-theme/
+# @end
+
+# --- Plugins: custom only ---
+!/plugins/
+/plugins/*
+# @custom-plugins — list maintained by bin/init-project.sh
+!/plugins/my-plugin/
+# @end
+
+# --- MU plugins: our own only (add yours below: !/mu-plugins/<name>.php, and a folder as !/mu-plugins/<name>/;
+#     the same paths go to .deploy/targets — skill wp-add-code) ---
+!/mu-plugins/
+/mu-plugins/*
+!/mu-plugins/environment-guard.php
+
+# --- Junk inside allowed folders ---
+node_modules/
+node_modules/*
+vendor/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/

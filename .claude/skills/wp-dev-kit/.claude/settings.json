@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(bash bin/local-env.sh:*)",
+      "Bash(git ls-remote:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(gh auth status:*)",
+      "Bash(gh run watch:*)"
+    ],
+    "ask": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh secret set:*)",
+      "Bash(gh variable set:*)"
+    ],
+    "deny": [
+      "Bash(ALLOW_PROD_WRITE=1:*)",
+      "Bash(export ALLOW_PROD_WRITE:*)",
+      "Read(./.env)",
+      "Read(~/.ssh/id_*)"
+    ]
+  }
+}

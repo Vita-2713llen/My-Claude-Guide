@@ -1,0 +1,17 @@
+# What does NOT go into the release (branch deploy/<env>, which Cloudways pulls).
+# dist/ and vendor/ are NOT excluded: there is no build on the server, so they must be in the release.
+.git
+.github/
+node_modules/
+.DS_Store
+.env
+.env.*
+*.log
+.gitignore
+.editorconfig
+.eslintrc*
+.prettierrc*
+.stylelintrc*
+phpcs.xml*
+phpunit.xml*
+tests/
