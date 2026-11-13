@@ -359,8 +359,18 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
   own document-level handler has already called `preventDefault`. For an internal link to another path: destroy
   Lenis, then `scrollTo(0,0)` on the frames after `location.pathname` changes. On init, set
   `history.scrollRestoration="manual"` and `scrollTo(0,0)` unless there is a hash.
-- **Webflow tablet starts at 992, Framer tablet at 1199.** At 992–1199 live shows the desktop layout and Framer
-  shows the tablet one. That is acceptable as long as nothing overlaps or clips, but say so to the designer.
+- **Webflow desktop starts at 992, Framer desktop at 1200.** At 992–1199 live shows the desktop layout and Framer
+  shows the tablet one. The designer opens 992 and calls it bad, so do not leave it. Give every section whose live
+  layout changes at 992 a CSS block under `@media (min-width:992px) and (max-width:1199.98px)` in `PRE_CSS`, and
+  compare it with live at 992 and 1100. Typical changes are a 3-column card grid, a title-left / lead-right
+  header grid, 3 channel columns with `border-left` dividers, and 2 office cards side by side. Grid children
+  need `width:100%; justify-self:stretch`, or the cards shrink to their content.
+  - **Do NOT move the Framer breakpoint to 992 through the API.** Patching the primary frames to `width:992px`
+    updates the SSR CSS ranges at once. The compiled page JS keeps `(min-width: 1200px)` for every page that is not
+    open in the designer's editor, because only that page recompiles. Hydration then switches 992–1199 back to
+    tablet, and the page flashes desktop, then tablet. Reopening the session, republishing, content tweaks and
+    `getRect` did not recompile the other pages. If you ever need it, check every page module for
+    `max-width: 1199.98px` after publishing (`modsloaded.js`) and revert at once if any remain.
 - **QA agent: run it after every publish.** `.claude/agents/framer-qa.md` (the `framer-qa` subagent) runs
   `tools/qa_all.sh`, which works in three steps:
   1. `crawl.js` writes `pages.json` with every static page and every CMS item.
