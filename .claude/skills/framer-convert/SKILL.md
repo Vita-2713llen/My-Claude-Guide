@@ -544,6 +544,8 @@ Converter rules learned in QA:
 
 ## 9. Corrections log (do these right the first time)
 
+- **The shared header+footer layout template is named `Main Layout`** (not "Site Chrome" or any internal jargon).
+
 - **Style names are SEMANTIC — no numbers, no values, no slashes — MANDATORY.** Colour styles: take the source
   design-system variable name for the same value (`--secondary--on-dark-soft` → `On Dark Soft`, `--secondary--scrim-wash`
   → `Scrim Wash`, `--secondary--glass-nav` → `Glass Nav`); a value with no variable is named by its role (`Hero Veil
