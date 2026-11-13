@@ -148,6 +148,11 @@ Talk to the designer **in Ukrainian**. Site copy stays **English**. CLAUDE.md "P
 
     Check: click About, and a submenu link, at 390 and 992. The header must be back to `Mobile` (77 px) and the page
     at the top.
+- **Bottom-anchored background pictures must stay bottom-anchored on every replica.** The consult landscape is
+  `bottom:0; height:34%` of the section on live. The 390 replica froze it as `top:743px; height:383px`, which left a
+  95 px empty strip at 360 and overflowed the section at 600. On tablet and phone replicas set
+  `{top:null, bottom:"0px", height:"<live % of section>"}` (measure the live ratio at 2–3 widths). Check
+  `gapBottom = section.bottom − image.bottom` is 0 at 360, 600 and 810 (`land.js`-style probe).
 - **Absolute pairs (slider arrows) frozen in px on tablet/phone replicas drift off-centre between breakpoints.**
   `left:342px` is centred only at exactly 810. Framer rejects `calc()` in `left`, and `centerX` is not a property.
   Centre them with CSS under `@media (max-width:1199.98px)`: back `left:calc(50% - (w + gap/2))`, next
