@@ -544,6 +544,20 @@ Converter rules learned in QA:
 
 ## 9. Corrections log (do these right the first time)
 
+- **Ported `:hover` rules must hit the layer that paints, not a component wrapper.** `HOVER_CSS` maps live classes to
+  `data-framer-name~=class`. When the live element became a component INSTANCE (`foot-button` → Submit Button), the
+  name sits on the square instance wrapper: `.foot-button:hover{background-color:…}` painted a square dark box behind
+  the rounded button ("радіуси зникають на ховер"). The component's own hover variant already does the colour, so
+  drop background/border/shadow from such rules (keep text colour only) — or retarget to the inner variant layer.
+  Check with `hoverradius.js`: every element that gets a hover background must keep live's border-radius.
+- **Every live `:hover` rule needs a Framer twin — diff the class list.** `.case-link:hover` (gap 10→15px + underline
+  0.14→ink, 0.4s `cubic-bezier(.2,.8,.2,1)`) was simply missing. After porting, grep live.css for `:hover` classes and
+  confirm each one exists in `HOVER_CSS`/`PRE_CSS`; Framer borders live in `::after`, so hover border colours go on
+  `[name]:hover::after`.
+- **Absolute layers measured at 0×0 get pinned by `left:<card width>px`.** The post/journal fold kept `left:447px`
+  from the measurement, so on any other card width it sat OUTSIDE the card (on the neighbour). Copy the live pins
+  (`top:-1px; right:-1px` / `top:0; right:0`) and null the measured `left` on the primary AND every replica.
+
 - **Favicons are part of the conversion — MANDATORY.** Read the live `<link rel="icon">` / `apple-touch-icon` tags,
   download into a `dl_*` dir and LOOK at them (brand text must match the renamed brand; a pure mark is fine), then set
   `tree.root` `metadata.favicon` + `metadata.faviconDark` (live light/dark files) and `metadata.appleTouchIcon`
