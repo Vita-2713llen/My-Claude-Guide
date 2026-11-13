@@ -38,7 +38,9 @@ Every tool below lives in `.claude/skills/framer-convert/tools/` and reads `BASE
 8. **Favicons.** The published home page must not reference `default-favicon` or `default-touch-icon`.
 9. **Names.** Breakpoints are `Desktop/Tablet/Mobile`; colour and text style names contain no digits, values or
    slashes. List them with a tree read; any violation is a FAIL to fix.
-10. **Look at it.** Before you call anything fixed or a false positive, screenshot it (`shotclip.js`,
+10. **Tags + components.** `node tagaudit.js` must print TAG OK; the repeated-frame inventory (see skill) must be
+   empty — any raw repeated frame or untagged frame is a FAIL.
+11. **Look at it.** Before you call anything fixed or a false positive, screenshot it (`shotclip.js`,
    `shotsel.js`, `textshot.js`) and open the PNG.
 
 ## Procedure

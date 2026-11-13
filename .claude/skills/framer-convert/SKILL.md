@@ -544,6 +544,23 @@ Converter rules learned in QA:
 
 ## 9. Corrections log (do these right the first time)
 
+- **SUPER HARD RULE — every repeated element is a COMPONENT.** Buttons, section CTAs, page banners, FAQ items,
+  testimonial cards, list rows (price/consult/ledger/metrics), chips, slider arrows, logo items… anything that appears
+  twice (same structure, on one page or across pages) becomes a `ComponentNode` with variables for what differs
+  (text, link, image, variant) and every copy is an INSTANCE. Never leave a raw frame copy (e.g. a hand-built
+  `button button-hero` frame next to the `Button` component). Inventory with a tree walk grouped by cleaned layer
+  name + child signature (≥2 copies), build components in the first pass, and re-run the inventory before handing
+  over — zero raw groups allowed. Keep inner layer names identical (motion/CSS select by name) and remember the
+  instance root carries the variant name, so selectors that relied on the old root name need the wrapper name.
+- **SUPER HARD RULE — every layer has a semantic tag.** Text: `h1`–`h6`/`p` on every RichTextNode (exactly ONE visible
+  `h1` per page). Frames: `section` (page sections), `header`/`nav`/`footer` (chrome, menus, footer link columns),
+  `article` (cards, incl. component variant roots of card components), `aside` (sidebars/TOC), `figure` (image
+  wrappers without text), `button` (clickable non-links: accordions, slider arrows, tabs, toggles, dropdown trigger,
+  form submit component roots), `form`/`label` (forms), explicit `div` for pure layout wrappers — the Tag field is
+  never left empty. Layers with a link render as `<a href>` — do not tag them. Verify with `tagaudit.js` (one h1,
+  no nested interactive, no `cursor:pointer` element that is not a/button) after publishing, then click-test the
+  elements you turned into `button` (they keep their JS handlers).
+
 - **Ported `:hover` rules must hit the layer that paints, not a component wrapper.** `HOVER_CSS` maps live classes to
   `data-framer-name~=class`. When the live element became a component INSTANCE (`foot-button` → Submit Button), the
   name sits on the square instance wrapper: `.foot-button:hover{background-color:…}` painted a square dark box behind
