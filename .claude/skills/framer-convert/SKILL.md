@@ -544,6 +544,12 @@ Converter rules learned in QA:
 
 ## 9. Corrections log (do these right the first time)
 
+- **Favicons are part of the conversion — MANDATORY.** Read the live `<link rel="icon">` / `apple-touch-icon` tags,
+  download into a `dl_*` dir and LOOK at them (brand text must match the renamed brand; a pure mark is fine), then set
+  `tree.root` `metadata.favicon` + `metadata.faviconDark` (live light/dark files) and `metadata.appleTouchIcon`
+  (180×180 webclip) via `tree.assetReference(url)`. Publish and curl the home page: no `default-favicon` /
+  `default-touch-icon` may remain. Social share image (`metadata.socialImage`) is agreed in seo-check, not invented.
+
 - **The shared header+footer layout template is named `Main Layout`** (not "Site Chrome" or any internal jargon).
 
 - **Style names are SEMANTIC — no numbers, no values, no slashes — MANDATORY.** Colour styles: take the source

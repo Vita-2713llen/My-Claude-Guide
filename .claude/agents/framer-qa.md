@@ -35,9 +35,10 @@ Every tool below lives in `.claude/skills/framer-convert/tools/` and reads `BASE
 6. **Hover reveals.** Hover every card type (post, journal, related) at 1440/1100/900 on live and Framer and sample
    the transform/opacity of fold/wash layers over 500ms. A layer that stays at scale 0 or 0×0 is a FAIL.
 7. **Viewport-height containers.** Re-check absolutely positioned children at 2–3 window heights (650/780/900).
-8. **Names.** Breakpoints are `Desktop/Tablet/Mobile`; colour and text style names contain no digits, values or
+8. **Favicons.** The published home page must not reference `default-favicon` or `default-touch-icon`.
+9. **Names.** Breakpoints are `Desktop/Tablet/Mobile`; colour and text style names contain no digits, values or
    slashes. List them with a tree read; any violation is a FAIL to fix.
-9. **Look at it.** Before you call anything fixed or a false positive, screenshot it (`shotclip.js`,
+10. **Look at it.** Before you call anything fixed or a false positive, screenshot it (`shotclip.js`,
    `shotsel.js`, `textshot.js`) and open the PNG.
 
 ## Procedure
