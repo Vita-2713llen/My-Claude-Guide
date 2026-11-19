@@ -17,7 +17,8 @@ message of every conversion. Do not open, measure or touch anything in Framer be
    one-line meaning tied to the niche. Avoid the source name, its obvious anagrams and generic words.
 3. **Check every candidate against the Framer Marketplace** before showing it:
    - search `site:framer.com/marketplace "<name>"` (WebSearch) and open
-     `https://www.framer.com/marketplace/templates/<name-lowercase>/` (HTTP 404 = free, 200 = taken);
+     `https://www.framer.com/marketplace/templates/<name-lowercase>/` — the page ALWAYS answers HTTP 200 (soft 404),
+     so judge by `<title>`: `Template unavailable — Framer Marketplace` = free, `<Name> — … Template for Framer` = taken;
    - also drop names that are an existing Framer template with a suffix (`<name>-template`, `<name>-studio`).
    Show only names that passed, 6–8 of them, with the check result. Never present an unchecked name.
 4. Ask the user (AskUserQuestion, up to 4 options + "Other") to pick one. Write the pick down in the session.
@@ -561,6 +562,11 @@ Converter rules learned in QA:
 - Instance link controls to CMS detail pages sometimes need a string `href` attempt before the `{href, collectionItem}` object is accepted.
 
 ## 9. Corrections log (do these right the first time)
+
+- **Marketplace name check: the status code lies.** `framer.com/marketplace/templates/<slug>/` returns HTTP 200 for
+  every slug (Noeta conversion: all 36 probes were 200). Read the `<title>`: `Template unavailable` = free; anything
+  else = taken (Nova, Lumora, Vireon were taken). Check `<slug>` and `<slug>-template`, then a WebSearch for near
+  matches (e.g. `stem`/`stem-capital` exist → drop `Stemora`-style names that just extend an existing template).
 
 - **SUPER HARD RULE — every repeated element is a COMPONENT.** Buttons, section CTAs, page banners, FAQ items,
   testimonial cards, list rows (price/consult/ledger/metrics), chips, slider arrows, logo items… anything that appears

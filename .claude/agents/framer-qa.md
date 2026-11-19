@@ -103,6 +103,11 @@ Framer has one Desktop breakpoint from 1200px, but Webflow sites switch layouts 
 - Check that every visible image has natural width ÷ drawn width ≥ 1. Tall narrow cover images come out
   pixelated otherwise.
 
+## Brand-name check (if the conversion renamed the brand)
+
+- The Framer Marketplace answers HTTP 200 even for missing templates. A name is free only if the page `<title>` is
+  `Template unavailable — Framer Marketplace`. Re-check the chosen name this way before the final publish.
+
 ## Report (in the user's language)
 
 - What you fixed, grouped by kind, with the published version id.
