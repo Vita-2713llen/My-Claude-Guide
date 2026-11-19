@@ -136,3 +136,10 @@ Framer has one Desktop breakpoint from 1200px, but Webflow sites switch layouts 
   optical size / OpenType features differ (static live fonts → pin opsz to the family default, clear cv features).
 - Grep the published HTML of every page for leftover template credits (128.digital, webflow, the old brand) on EVERY
   breakpoint copy — replica text overrides keep old credits after the primary was fixed.
+
+## Reference = design tool, per template (Germina lesson)
+- If a UPQODE design-tool version exists, compare against it, not live Webflow.
+- For every CMS detail template, dump computed styles of h2/h3/h4/p/blockquote/img and the gaps between rich-text children in BOTH (script: walk `blockquote.parentElement.children`, gap = top − previous bottom). Templates differ — never assume one body style.
+- Check every rich-text `img` has `naturalWidth > 0` on the published page (a `data:framer/asset-reference` src inside HTML-written CMS content publishes broken).
+- Check quotes in CMS bodies are still `<blockquote>` after any CMS rewrite (compare quote count with the source).
+- Burger: open, expand "All pages", screenshot (background must be opaque over a coloured hero), click a link, assert `<html>` lost the open class — at 390 AND 810, on a page with a coloured hero.
