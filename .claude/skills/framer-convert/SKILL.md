@@ -563,6 +563,14 @@ Converter rules learned in QA:
 - Instance link controls to CMS detail pages sometimes need a string `href` attempt before the `{href, collectionItem}` object is accepted.
 
 ## 9. Corrections log (do these right the first time)
+- **Header ink over light sections = a code override on the Header INSTANCE that returns a `variant` prop.**
+  (Civica `withHeaderInk`): read the background under the bar's mid-line with `document.elementsFromPoint` (skip the
+  header itself, walk up to the first opaque background, luminance > .5 = light) on scroll/resize + a 500ms interval
+  (page swaps fire no scroll), and return `<Component {...props} variant={light ? "Desktop Light" : "Desktop"}/>` only
+  at ≥1200 so the Tablet/Mobile replicas keep their Mobile variant.
+- **A RelativeOverlayNode dropdown cannot take a vw width** and must be a direct child of its trigger, so a full-width
+  mega-menu (live 1410px at 1440) is capped at a px width. Tell the designer, or position it with CSS in the override.
+- **Variants refuse `100vh` heights**; a full-screen mobile drawer variant needs a px height plus CSS `height:100dvh`.
 - **A grid cell whose stack is `width:1fr` + `stackAlignment:center` shrinks to min-content in Framer** (Civica
   footer columns on Tablet/Mobile read one letter per line, while the Desktop row was fine). Give stack children of
   a `layout:grid` replica `width:100%`; check every footer/card grid at 810 and 390 with a screenshot.
