@@ -564,6 +564,31 @@ Converter rules learned in QA:
 
 ## 9. Corrections log (do these right the first time)
 
+- **`measure.cjs` was missing from `tools/` (Civica) — it is back.** `node measure.cjs <liveUrl> <outDir> [1440,810,390]`
+  strips every `<script>` from the document, aborts script/xhr/fetch, measures ONE page at each width (viewport
+  resize, so keys match across widths) and writes `index.json` + `<Section>.json` in the shape `native.cjs` reads.
+  `CHROME=".civica-header|.section.footer" ONLY_CHROME=1` measures header/footer as their own sections.
+  `tools/pipeline_example.sh` runs measure → native → `resolve_site.py` for a whole site; `replay_tpl.js` is the
+  Framer side (fill `__JOBS__`). Never ship a pipeline step without the tool in `tools/`.
+- **Webflow loads Google fonts from a script (`WebFont.load`).** With scripts stripped, text measures in a fallback
+  font and every line break is wrong. `measure.cjs` reads the `families:[…]` list and injects a fonts.googleapis.com
+  stylesheet before measuring, then waits for `document.fonts.ready`.
+- **Intrinsic height must ignore `min-height`.** `autoH` measured with the CSS min-height made a `min-height:100vh`
+  hero look content-sized, so it was emitted `height:auto` without a minimum and collapsed to 229px. Measure autoH
+  with `min-height:0`; `native.cjs` maps a min-height equal to the measuring viewport height (VH=900) to `100vh`.
+- **`align-self:flex-end|center` on a child of a column** (Civica `records-aside`, right-aligned under a left title)
+  has no Framer equivalent. `native.cjs` `wrapSelfAligned` wraps such a child in a full-width row with
+  `stackDistribution:end|center`.
+- **Text-style and colour names are generated from roles, not sizes.** `resolve_site.py` names a colour after the
+  source CSS variable (`--secondary--surface-alt` → `Surface Alt`) or `<Base> <word>` for alpha variants (no digits),
+  merges near-identical presets (same font/weight/sizes, line-height ±0.08em) and names each preset after the class
+  that uses it most, with page prefixes expanded (`pr-` → Pricing, `ct-` → Contact).
+- **Framer MCP: every `exec` echoes the whole linter report** (15–30k tokens on a converted page). Delegate bulk
+  replays and sweeps to a subagent that returns a compact table, so the main context survives a 15-page site.
+- **The design tool's page list decides which pages exist.** When the designer says "дивись в тул", the design-tool
+  version lists the real pages (Civica: 15, no Style Guide / Licenses / Changelog) — utility pages absent there are
+  skipped. Copy and CMS still come from the LIVE site when the two differ.
+
 - **Marketplace name check: the status code lies.** `framer.com/marketplace/templates/<slug>/` returns HTTP 200 for
   every slug (Noeta conversion: all 36 probes were 200). Read the `<title>`: `Template unavailable` = free; anything
   else = taken (Nova, Lumora, Vireon were taken). Check `<slug>` and `<slug>-template`, then a WebSearch for near

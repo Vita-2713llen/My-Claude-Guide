@@ -23,6 +23,7 @@ const AUTO_M = process.env.AUTO_MARGIN && fs.existsSync(process.env.AUTO_MARGIN)
 const autoSide = (n) => { for (const c of (n.cls || '').split(/\s+/)) if (AUTO_M[c]) return AUTO_M[c]; return null; };
 const WIDTHS = idx.widths;
 const W0 = WIDTHS[0];
+const VH = Number(process.env.VH || 900);
 
 const px = (v) => parseFloat(v) || 0;
 const r2 = (v) => Math.round(v * 100) / 100;
@@ -108,7 +109,7 @@ function rotationOf(t) {
   const sc = r2(Math.sqrt(a * a + b * b));
   return { rotation: deg, scale: sc };
 }
-const FONT_MAP = [[/playfair/i, 'Playfair'], [/geist mono/i, 'Geist Mono'], [/inter/i, 'Inter']];
+const FONT_MAP = (process.env.FONT_MAP ? JSON.parse(process.env.FONT_MAP).map(([r, n]) => [new RegExp(r, 'i'), n]) : [[/playfair/i, 'Playfair'], [/geist mono/i, 'Geist Mono'], [/inter/i, 'Inter']]);
 function fontName(ff) {
   const f = (ff || '').split(',')[0].replace(/["']/g, '').trim();
   for (const [re, name] of FONT_MAP) if (re.test(f)) return name;
@@ -279,8 +280,9 @@ function presetFor(n, all) {
     let name = `Verdova/${fam} ${sizes} ${wname}${sig.textTransform === 'uppercase' ? ' Caps' : ''}${sig.fontStyle === 'italic' ? ' Italic' : ''}`;
     const taken = new Set(Object.values(PRESETS).map((p) => p.name));
     for (let i = 2; taken.has(name); i++) name = name.replace(/ #\d+$/, '') + ' #' + i;
-    PRESETS[key] = { key: 'p' + Object.keys(PRESETS).length, name, ...sig };
+    PRESETS[key] = { key: 'p' + Object.keys(PRESETS).length, name, users: [], ...sig };
   }
+  PRESETS[key].users.push((n.cls || '').split(/\s+/)[0] || n.tag);
   return '$preset:' + PRESETS[key].key;
 }
 
@@ -315,6 +317,33 @@ function wrapBoxedText(n) {
   n.children = [child];
 }
 
+
+function wrapSelfAligned(n) {
+  if (n.children) n.children.forEach(wrapSelfAligned);
+  if (n.kind !== 'box' || !n.children) return;
+  const b0 = n.bp[W0];
+  if (!b0 || b0.none || !/flex/.test(b0.st.display || '') || /^row/.test(b0.st.flexDirection)) return;
+  n.children = n.children.map((c) => {
+    const cb = c.bp[W0];
+    if (!cb || cb.none || /absolute|fixed/.test(cb.st.position)) return c;
+    const as = cb.st.alignSelf || 'auto';
+    if (!/^(flex-end|end|center)$/.test(as) || /center/.test(b0.st.alignItems) && as === 'center') return c;
+    const wrap = { k: c.k + ':al', tag: 'div', cls: ((c.cls || '').split(/\s+/)[0] || 'item') + '-align', attrs: {}, kind: 'box', children: [c], bp: {} };
+    for (const w of WIDTHS) {
+      const b = n.bp[w], k = c.bp[w];
+      if (!b || b.none || !k || k.none) { wrap.bp[w] = { ...(k || {}), none: true }; continue; }
+      const st = b.st;
+      const cx = b.r.x + px(st.paddingLeft) + px(st.borderLeftWidth), cw = b.r.w - px(st.paddingLeft) - px(st.paddingRight) - px(st.borderLeftWidth) - px(st.borderRightWidth);
+      const a2 = k.st.alignSelf || 'auto';
+      const jc = /end/.test(a2) ? 'flex-end' : a2 === 'center' ? 'center' : 'flex-start';
+      wrap.bp[w] = { r: { x: cx, y: k.r.y, w: cw, h: k.r.h }, none: false, dw: b.dw || 0, autoW: cw, autoH: k.r.h, pvis: 'visible',
+        st: { ...k.st, display: 'flex', flexDirection: 'row', justifyContent: jc, alignItems: 'flex-start', flexWrap: 'nowrap', position: 'static', paddingTop: '0px', paddingRight: '0px', paddingBottom: '0px', paddingLeft: '0px',
+          borderTopWidth: '0px', borderRightWidth: '0px', borderBottomWidth: '0px', borderLeftWidth: '0px', backgroundColor: 'rgba(0, 0, 0, 0)', backgroundImage: 'none', boxShadow: 'none', maxWidth: 'none', minHeight: '0px',
+          opacity: '1', visibility: 'visible', transform: 'none', columnGap: '0px', rowGap: '0px', gridTemplateColumns: 'none', overflowX: 'visible', overflowY: 'visible', zIndex: 'auto', cursor: 'auto', alignSelf: 'auto' } };
+    }
+    return wrap;
+  });
+}
 
 // An uneven grid that is more than one row (a quote card: text over [avatar | byline]; a lead card: [photo | text over byline])
 // has no native Framer form. Split it into its rows — or, when one child spans every row, into its columns — and wrap each
@@ -394,6 +423,8 @@ function build(sec) {
     if (!parent) {
       a.width = '100%';
       a.height = inflow(n, w).length && near(b.autoH, r.h, 1) ? 'auto' : P(r.h);
+      const rmh = px(st.minHeight);
+      if (rmh > 0 && inflow(n, w).length && near(r.h, rmh, 1.5)) { a.height = 'auto'; a.minHeight = near(rmh, VH, 2) ? '100vh' : P(rmh); }
       if (st.position === 'fixed') { a.position = 'fixed'; a.left = '0px'; a.right = '0px'; a.top = P(px(st.top)); a.bottom = null; a.zIndex = 10; }
       else if (st.position === 'sticky') { a.position = 'sticky'; a.positionStickyTop = P(px(st.top)); }
       else a.position = 'relative';
@@ -478,7 +509,7 @@ function build(sec) {
         else if ((PL.dir === 'h' || PL.grid) && PL.stretch && near(r.h, contentH, 1.5) && contentH > 0 && PL.selfH !== 'auto') a.height = '1fr';
         // a card stretched to the tallest in its row (equal-height cards): fill the row, so it follows whichever card is tallest
         else if ((PL.dir === 'h' || PL.grid) && PL.stretch && hasKids && b.autoH && b.autoH < r.h - 1 && !PL.overflowing) a.height = '1fr';
-        else if (hasKids && px(st.minHeight) && near(r.h, px(st.minHeight), 1)) { a.height = 'auto'; a.minHeight = P(px(st.minHeight)); }
+        else if (hasKids && px(st.minHeight) && near(r.h, px(st.minHeight), 1)) { a.height = 'auto'; a.minHeight = near(px(st.minHeight), VH, 2) ? '100vh' : P(px(st.minHeight)); }
         // a slider card stretched to its tallest neighbour: keep that height as a floor, so text that wraps one line more never clips
         else if (hasKids && b.autoH && b.autoH < r.h - 1 && PL.dir === 'h' && PL.overflowing) { a.height = 'auto'; a.minHeight = P(r.h); }
         else a.height = P(r.h);
@@ -771,6 +802,7 @@ const bundle = { $widths: WIDTHS };
 for (const name of idx.sections) {
   const sec = JSON.parse(fs.readFileSync(path.join(inDir, name + '.json'), 'utf8'));
   wrapBoxedText(sec.tree);
+  wrapSelfAligned(sec.tree);
   regrid(sec.tree);
   const spec = build(sec);
   bundle[name] = spec;
