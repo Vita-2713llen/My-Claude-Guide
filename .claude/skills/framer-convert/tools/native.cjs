@@ -120,7 +120,10 @@ function typeAttrs(s, opts = {}) {
   const name = fontName(s.fontFamily);
   const a = { fontName: name, fontWeight: Number(s.fontWeight) || 400, fontSize: P(fs_) };
   if (s.fontStyle === 'italic') a.fontStyle = 'italic';
-  if (name === 'Inter') a.fontVariationAxes = { opsz: Math.max(14, Math.min(32, Math.round(fs_))), wght: Number(s.fontWeight) || 400 };
+  // live Google fonts loaded via the css v1 API are STATIC instances (opsz = the family default: Inter 14, Newsreader 16);
+  // pin opsz to that default, never to the font size (that renders wider/narrower and changes every line break)
+  const OPSZ = JSON.parse(process.env.OPSZ || '{"Inter":14}');
+  if (OPSZ[name]) a.fontVariationAxes = { opsz: OPSZ[name], wght: Number(s.fontWeight) || 400 };
   if (!opts.run) {
     a.lineHeight = s.lineHeight === 'normal' ? '1.2em' : r2(px(s.lineHeight) / fs_ * 1000) / 1000 + 'em';
   }

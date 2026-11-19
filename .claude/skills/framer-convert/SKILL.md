@@ -563,6 +563,23 @@ Converter rules learned in QA:
 - Instance link controls to CMS detail pages sometimes need a string `href` attempt before the `{href, collectionItem}` object is accepted.
 
 ## 9. Corrections log (do these right the first time)
+- **Static vs variable web fonts decide every line break (Civica).** Webflow's `WebFont.load` / css v1 API serves
+  STATIC instances, which render at the family's default optical size (Newsreader ≈ opsz 16, Inter 14) whatever the
+  font size. Framer presets stored opsz = font size (and the old converter forced Inter opsz = size + cv03/cv04/cv09/
+  cv11 features), so headings wrapped one line earlier/later than live. Pin `fontVariationAxes.opsz` to the default on
+  every preset (`OPSZ='{"Inter":14,"Newsreader":16}'` for native.cjs), clear `openTypeFontFeatures`, and do NOT add a
+  global `font-optical-sizing:auto` rule. Verify by comparing rendered text widths live vs Framer.
+- **Replayed headings with two colour runs start with an empty line** (Values, Pricing: +20px per section). After a
+  replay, scan RichTextNodes whose first block is empty and rebuild them as one block with the runs.
+- **CMS rich text from scraped HTML: `<li>` and `<blockquote>` need a `<p>` inside** or Framer renders them unstyled
+  (16px / lh 1.2 / black). Write item HTML as `<li><p>…</p></li>` / `<blockquote><p>…</p></blockquote>`, give the body
+  a "Body Paragraph" preset with paragraph spacing 0 and put the heading→paragraph gap in CSS.
+- **Grid row-span is not published** — rebuild a tall-image-left gallery as a row (tall | column of two) instead.
+- **Fake Webflow inputs (`w-input` divs) → real `FormPlainTextInputNode` / `FormBooleanInputNode` radios** with live
+  names/placeholders, Placeholder token, Accent focus border; submit must be a `<button>` component without a link
+  (a Button with a link variable is refused as `formSubmitButtonId` → separate "Submit Button" component).
+- **Parallel page agents**: split pages AND component ownership between agents, keep the code file with ONE agent,
+  have page agents report motion needs (measured live behaviour + exact selectors) into one MOTION_NEEDS list.
 - **Header ink over light sections = a code override on the Header INSTANCE that returns a `variant` prop.**
   (Civica `withHeaderInk`): read the background under the bar's mid-line with `document.elementsFromPoint` (skip the
   header itself; the FIRST painting layer decides: <img>/<video>/background-image = dark scene, opaque colour = luminance

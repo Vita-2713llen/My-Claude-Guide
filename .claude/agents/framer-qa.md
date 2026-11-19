@@ -132,3 +132,7 @@ Framer has one Desktop breakpoint from 1200px, but Webflow sites switch layouts 
 - Card links inside lists must carry `collectionItem` bound to the list's slug.
 - Lottie: on the published site every `[data-animation-type=lottie]` spot must render (no empty boxes); check the console for failed JSON/ESM loads and that sources are framerusercontent, not the Webflow CDN.
 - Forms: publish status must have no "Form has no destinations" warning; destination = info@example.com.
+- Fonts: compare the rendered width of 3 headings + 3 body texts live vs Framer at 1440. A steady ±3–8% means the
+  optical size / OpenType features differ (static live fonts → pin opsz to the family default, clear cv features).
+- Grep the published HTML of every page for leftover template credits (128.digital, webflow, the old brand) on EVERY
+  breakpoint copy — replica text overrides keep old credits after the primary was fixed.
