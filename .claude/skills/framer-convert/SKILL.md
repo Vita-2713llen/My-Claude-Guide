@@ -563,6 +563,13 @@ Converter rules learned in QA:
 - Instance link controls to CMS detail pages sometimes need a string `href` attempt before the `{href, collectionItem}` object is accepted.
 
 ## 9. Corrections log (do these right the first time)
+- **Motion reference implementation: `tools/motion_example_Tovia.tsx`** (Civica → Tovia): load cascade via early
+  inline script + CSS keyframes, scroll reveals after hydration, pinned services rail, generic slider handler
+  (`w-slider-arrow` / `-arrow prev|next` + swipe), tabs, accordions (0↔auto), video play toggles, header ink override,
+  992–1199 / 1200–1279 / 1280–1439 CSS tiers, Lenis + navigation fix. Start a new site's motion from it, not from zero.
+- **Code can only drive layers that exist in the breakpoint's DOM.** Rail layers missing from the Tablet replica,
+  arrows hidden on Desktop, and tier cells hidden on Mobile could not be switched — make them visible (opacity 0 /
+  CSS-hidden) in every replica where live shows or switches them.
 - **Static vs variable web fonts decide every line break (Civica).** Webflow's `WebFont.load` / css v1 API serves
   STATIC instances, which render at the family's default optical size (Newsreader ≈ opsz 16, Inter 14) whatever the
   font size. Framer presets stored opsz = font size (and the old converter forced Inter opsz = size + cv03/cv04/cv09/
