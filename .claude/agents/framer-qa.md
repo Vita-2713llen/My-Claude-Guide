@@ -114,3 +114,10 @@ Framer has one Desktop breakpoint from 1200px, but Webflow sites switch layouts 
 - What remains and why: a live-site difference you kept on purpose, an editor-only setting such as a form's "Send
   To", or a known false positive with the screenshot that proves it.
 - Never claim "all clean" without the clean `qa_*.out` lines to back it.
+
+## Brand-name gate (Civica lesson)
+
+- Before signing off, confirm the new brand name is still free on the Framer Marketplace: fetch
+  `https://www.framer.com/marketplace/templates/<slug>/` and read the `<title>` — the status is always 200 (soft 404).
+  `Template unavailable — Framer Marketplace` = free; `<Name> — … Template for Framer` = taken. Retry empty titles.
+- grep the published HTML of every page for the OLD brand name (case-insensitive); zero hits required.
