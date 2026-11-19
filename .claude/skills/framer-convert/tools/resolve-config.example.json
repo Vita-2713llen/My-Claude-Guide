@@ -1,0 +1,7 @@
+{"livePrefix":"^https?://noeta-wcopilot\\.webflow\\.io",
+ "drop":["style-guide","licenses","changelog","password"],
+ "detail":{"solutions":"solutions","team":"team","values":"values","blog":"blog"},
+ "paths":{"solutions":"solutions","team":"team","values":"values","blog":"blog"},
+ "bases":{"36,67,255":"Accent","244,244,245":"Grey Light","17,17,19":"Text","255,255,255":"White","21,21,24":"Brand","10,18,54":"Accent Hover","249,250,255":"Surface Alt","150,164,250":"Accent On Dark","161,173,249":"Accent On Dark Soft","11,11,13":"Brand Deep","5,9,36":"Accent Deep","30,30,33":"Panel On Brand","20,21,29":"Panel Deep","8,10,17":"Panel Bar","15,17,24":"Panel Night","0,0,0":"Black","85,85,92":"Grey"},
+ "alphaBases":{"244,244,245":"Ink On Dark","17,17,19":"Ink"},
+ "extra":{"141,157,255":"Accent Glow","22,22,27":"Panel Raised","238,241,255":"Accent Wash","211,219,255":"Accent Pale","174,188,255":"Accent Soft","92,118,255":"Accent Bright","26,48,196":"Accent Royal","16,32,138":"Accent Navy","8,9,26":"Night","138,157,255":"Accent Glow Cool","12,12,15":"Brand Night","4,6,30":"Accent Abyss","219,197,197":"Blush","33,59,213":"Accent Strong"}}

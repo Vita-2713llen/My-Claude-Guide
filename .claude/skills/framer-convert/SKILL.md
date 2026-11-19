@@ -597,6 +597,27 @@ Converter rules learned in QA:
   version lists the real pages (Civica: 15, no Style Guide / Licenses / Changelog) — utility pages absent there are
   skipped. Copy and CMS still come from the LIVE site when the two differ.
 
+- **Pipeline for a live Webflow site (Noeta → Germina, 17 pages, ~5 000 layers, zero replay errors).** Tools in
+  `tools/`: `snap.cjs` (JS off) → `prep-live.cjs` (every body child except header/footer becomes a section — Webflow
+  pages put sections in `div`s, not only `<section>`; scripts removed, lazy images eager, `data-<brand>-*` attrs renamed)
+  → `measure-live.cjs` (my rebuild while `measure.cjs` was missing; the restored `measure.cjs` works too: Playwright, 1440/810/390, per element rect + computed
+  style + `dw` (width change over −20 px viewport) + `autoW/autoH` (fit-content / height:auto)) → `native.cjs`
+  **with a separate out dir per page** (`n/<page>/s`, it writes `spec-bundle.json` one level up and overwrites it) →
+  `resolve-all.cjs` (ONE design system for all pages: colour tokens named from the live CSS variables, alpha steps
+  named by words, presets merged by typography and named by the layer role; config `resolve-config.example.json`) →
+  `pkg.cjs` (gzip+base64 per page) → upload with `create_upload_url` → `replay-pages.js` (3–7 pages per exec).
+- **Rebranding must never touch URLs.** A blanket `noeta→germina` rewrote CDN image file names
+  (`…_noeta-about-team-1.jpeg`) → 403 on every CMS image. Rename only text nodes / alt / title, never `src`, `href` or
+  JSON values that are URLs (`(?<![\w/.-])Brand` + skip `*.jpg|png|webp|svg|json`).
+- **Deleting and re-inserting styles in ONE exec program gives "Name 2" duplicates.** The removed nodes still hold their
+  names inside the program, so every new token/preset was named `X 2` and the replay could not find them by name.
+  Delete in one program, insert in the next — or strip the ` 2` suffix right after.
+- **CMS from a live Webflow site: diff the item pages** (`cmsfields.cjs`): every element whose text / img src differs
+  between items is a field; then add list-card fields (`cmsdata.cjs`: per list, a value equal across its items is static
+  copy; the item root path must not carry its sibling index). Date fields need `YYYY-MM-DDT00:00:00.000Z` exactly.
+- **`tree.insert` aliases are always renamed and listed in `renamedIds`** (even 9-char ids) — a 700-node page returns
+  ~25 KB of output. Batch 3–7 pages per call and keep the returned result tiny.
+
 - **Marketplace name check: the status code lies.** `framer.com/marketplace/templates/<slug>/` returns HTTP 200 for
   every slug (Noeta conversion: all 36 probes were 200). Read the `<title>`: `Template unavailable` = free; anything
   else = taken (Nova, Lumora, Vireon were taken). Check `<slug>` and `<slug>-template`, then a WebSearch for near

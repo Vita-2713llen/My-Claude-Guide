@@ -108,6 +108,11 @@ Framer has one Desktop breakpoint from 1200px, but Webflow sites switch layouts 
 - The Framer Marketplace answers HTTP 200 even for missing templates. A name is free only if the page `<title>` is
   `Template unavailable — Framer Marketplace`. Re-check the chosen name this way before the final publish.
 
+## Rebrand leftovers
+
+- Grep every published page and CMS item for the OLD brand (case-insensitive) in visible text, alt, meta and
+  layer names — but never "fix" it inside asset URLs (CDN file names keep the old name; renaming them breaks images).
+
 ## Report (in the user's language)
 
 - What you fixed, grouped by kind, with the published version id.
