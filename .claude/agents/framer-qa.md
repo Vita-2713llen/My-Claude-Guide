@@ -130,3 +130,5 @@ Framer has one Desktop breakpoint from 1200px, but Webflow sites switch layouts 
 - Every live `w-dyn-list` must be a Collection List in Framer, not N static copies: open the canvas, check `collectionList` on each list frame and that the visible order/count equals live (limit/offset/sorting).
 - Open each detail template with at least two different items (`screenshot(..., { collectionItemId })`): titles, images, dates, rich text and "more" lists must change with the item; the current item must not appear in its own "more" list.
 - Card links inside lists must carry `collectionItem` bound to the list's slug.
+- Lottie: on the published site every `[data-animation-type=lottie]` spot must render (no empty boxes); check the console for failed JSON/ESM loads and that sources are framerusercontent, not the Webflow CDN.
+- Forms: publish status must have no "Form has no destinations" warning; destination = info@example.com.
