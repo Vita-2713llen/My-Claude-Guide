@@ -563,6 +563,14 @@ Converter rules learned in QA:
 - Instance link controls to CMS detail pages sometimes need a string `href` attempt before the `{href, collectionItem}` object is accepted.
 
 ## 9. Corrections log (do these right the first time)
+- **`publish()` can start failing with "Publishing is currently unavailable" while `status()` says ready** (Civica,
+  after ~25 publishes in one day). It is not the content (an older version failed too). Stop retrying, keep the work on
+  main, tell the designer to press Publish in the editor, and verify afterwards.
+- **Build the 404 page** on the Main Layout (Framer's default has no logo/favicon and the title "Page Not Found |
+  Framer"), and set every form's destination (`tree.patchFormDestinations`, email info@example.com) — the
+  "unverified recipient" warning can only be cleared in the editor.
+- **The early load script must mark every section that is on the first screen**, not only the first section, or the
+  second section's visible text never animates.
 - **Motion reference implementation: `tools/motion_example_Tovia.tsx`** (Civica → Tovia): load cascade via early
   inline script + CSS keyframes, scroll reveals after hydration, pinned services rail, generic slider handler
   (`w-slider-arrow` / `-arrow prev|next` + swipe), tabs, accordions (0↔auto), video play toggles, header ink override,
