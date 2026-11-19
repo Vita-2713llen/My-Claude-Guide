@@ -118,3 +118,5 @@ Framer has one Desktop breakpoint from 1200px, but Webflow sites switch layouts 
 ## Brand-name gate (Civica lesson)
 
 - grep the published HTML of every page for the OLD brand name (case-insensitive); zero hits required.
+- Screenshot every grid of cards/links (footer columns!) on the Tablet and Mobile replicas: a `1fr` stack child of a
+  grid collapses to min-content (one letter per line). Fix with `width:100%` on the replica.

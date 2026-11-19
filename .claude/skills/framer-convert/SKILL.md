@@ -563,6 +563,14 @@ Converter rules learned in QA:
 - Instance link controls to CMS detail pages sometimes need a string `href` attempt before the `{href, collectionItem}` object is accepted.
 
 ## 9. Corrections log (do these right the first time)
+- **A grid cell whose stack is `width:1fr` + `stackAlignment:center` shrinks to min-content in Framer** (Civica
+  footer columns on Tablet/Mobile read one letter per line, while the Desktop row was fine). Give stack children of
+  a `layout:grid` replica `width:100%`; check every footer/card grid at 810 and 390 with a screenshot.
+- **`tree.getRect` returns a 200×200 placeholder for sections of a page that is not laid out in the canvas** (only the
+  page open in the editor is measured). Never size breakpoint heights from it: sum the live section heights from the
+  measurement JSON (`m/<page>/<Section>.json → tree.bp[w].r.h`) + 300px per breakpoint.
+- **Big screenshots in the same exec as many patches time out** ("project stopped responding") — the patches usually
+  applied. Re-read the values, then screenshot in its own small exec.
 
 - **`measure.cjs` was missing from `tools/` (Civica) — it is back.** `node measure.cjs <liveUrl> <outDir> [1440,810,390]`
   strips every `<script>` from the document, aborts script/xhr/fetch, measures ONE page at each width (viewport
