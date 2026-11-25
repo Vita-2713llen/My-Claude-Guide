@@ -143,3 +143,10 @@ Framer has one Desktop breakpoint from 1200px, but Webflow sites switch layouts 
 - Check every rich-text `img` has `naturalWidth > 0` on the published page (a `data:framer/asset-reference` src inside HTML-written CMS content publishes broken).
 - Check quotes in CMS bodies are still `<blockquote>` after any CMS rewrite (compare quote count with the source).
 - Burger: open, expand "All pages", screenshot (background must be opaque over a coloured hero), click a link, assert `<html>` lost the open class — at 390 AND 810, on a page with a coloured hero.
+
+## Free-plan & feel gate (Germina lesson 2)
+- `tree.getNodesOfTypes("CustomCodeNode").length` must be 0 for templates; publish status errors must be empty.
+- Hover audit: every `a`/button class in the reference has the same hover in Framer (computed style diff on hover).
+- Scroll motion: sample transforms at small scroll steps — values must change continuously (no plateaus/jumps from marker chains).
+- Check 1920 and 1800 widths for full-bleed backgrounds stopping short and phone header leaking into desktop.
+- Sliders/tabs: only one state visible at a time (no stacked quotes/panes).
